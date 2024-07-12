@@ -1,0 +1,210 @@
+.hero{
+    position: relative;
+     background: linear-gradient(
+        to bottom, 
+        #334046 0%,
+        rgba(255, 255, 255, 0) 20%,
+        rgba(255, 255, 255, 0) 80%, /* Transparent to color transition */
+        #4d889b 100% /* Merged color at the bottom */
+    ),url('../../../public/bg_image/banner.jpg');
+   
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 60vh;
+    margin-top: -40px;
+    z-index: 0;
+    max-width: 100%;
+    display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+   
+}
+  
+  .hero-content {
+    max-width: 100%;
+    /* text-align: center; */
+    
+      padding: 20px;
+    border-radius: 10px;
+    
+    
+  }
+  
+  .hero h1 {
+    
+    font-family: 'Brush Script MT', cursive;
+
+    position: absolute;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    top:18%;
+    left:5%;
+    animation: text-flicker-out-glow 3s linear 0s 1 normal none;
+    background: linear-gradient(90deg,  rgb(228, 248, 12),#f4136d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  }
+  
+  .hero .pg {
+    position: absolute;
+    top:50%;
+    left: 5%;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: rgb(249, 249, 243);
+    font-weight: bolder;
+    
+    
+  }
+ 
+  
+  /* .hero-button {
+    position: absolute;
+    top: 80%;
+    right: 10%;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #A40F4A;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    
+  } */
+  
+  /* .hero-button:hover {
+    position: absolute;
+    
+    background-color: #1e2229;
+   
+  } */
+   
+  
+
+
+  @keyframes text-flicker-out-glow {
+			
+    0% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.6),0 0 60px rgba(0,0,0,.45),0 0 110px rgba(0,0,0,.25),0 0 100px rgba(0,0,0,.1);
+    }
+    13% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.6),0 0 60px rgba(0,0,0,.45),0 0 110px rgba(0,0,0,.25),0 0 100px rgba(0,0,0,.1);
+    }
+    14% {
+        opacity:0;
+        text-shadow:none;
+    }
+    15% {
+        opacity:0;
+        text-shadow:none;
+    }
+    16% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.55),0 0 60px rgba(0,0,0,.4),0 0 110px rgba(0,0,0,.2),0 0 100px rgba(0,0,0,.1);
+    }
+    22% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.55),0 0 60px rgba(0,0,0,.4),0 0 110px rgba(0,0,0,.2),0 0 100px rgba(0,0,0,.1);
+    }
+    23% {
+        opacity:0;
+        text-shadow:none;
+    }
+    24% {
+        opacity:0;
+        text-shadow:none;
+    }
+    25% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.55),0 0 60px rgba(0,0,0,.35),0 0 100px rgba(0,0,0,.1);
+    }
+    34% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.55),0 0 60px rgba(0,0,0,.35),0 0 100px rgba(0,0,0,.1);
+    }
+    35% {
+        opacity:0;
+        text-shadow:none;
+    }
+    39% {
+        opacity:0;
+        text-shadow:none;
+    }
+    40% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.55),0 0 60px rgba(0,0,0,.35);
+    }
+    42% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.55),0 0 60px rgba(0,0,0,.35);
+    }
+    43% {
+        opacity:0;
+        text-shadow:none;
+    }
+    44% {
+        opacity:0;
+        text-shadow:none;
+    }
+    45% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.45),0 0 60px rgba(0,0,0,.25);
+    }
+    50% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.45),0 0 60px rgba(0,0,0,.25);
+    }
+    54% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.45),0 0 60px rgba(0,0,0,.25);
+    }
+    55% {
+        opacity:0;
+        text-shadow:none;
+    }
+    69% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.45),0 0 60px rgba(0,0,0,.25);
+    }
+    70% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.45),0 0 60px rgba(0,0,0,.25);
+    }
+    71% {
+        opacity:0;
+        text-shadow:none;
+    }
+    78% {
+        opacity:0;
+        text-shadow:none;
+    }
+    79% {
+        opacity:1;
+        text-shadow:0 0 30px rgba(0,0,0,.25);
+    }
+    80% {
+        opacity:0;
+        text-shadow:none;
+    }
+    88% {
+        opacity:0;
+        text-shadow:none;
+    }
+    89% {
+        opacity:1;
+        text-shadow:none;
+    }
+    90% {
+        opacity:0;
+        text-shadow:none;
+    }
+    100% {
+        opacity:0;
+    }
+}
+  
