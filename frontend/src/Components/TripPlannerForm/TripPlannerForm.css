@@ -1,0 +1,128 @@
+
+.trip-planner-form{
+  background: url('../../../public/bg_image/bg-plantrip.jpg');
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    
+    padding-top: 20px;
+}
+.page {
+  
+    max-width: 600px;
+    margin: 0 auto;
+    /* margin-top: 10px; */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #3297c6c1;
+    height: auto;
+  }
+  
+  .trip-planner-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    
+  }
+  .budget{
+    position: relative;
+    
+  }
+  .budget .currency{
+    position:absolute;
+    bottom:0%;
+    left: 0%;
+    width: 15%;
+    
+    
+  }
+  .budget input{
+    position: relative;
+    left: 15% !important;
+    width: 85% !important;
+    
+  }
+
+  @media (max-width: 500px) {
+    .budget .currency{
+        width: 20%;
+      }
+      .budget input{
+        
+        left: 20% !important;
+        width: 80% !important;
+        
+      }
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-group input:not(.activity),
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  .activities{
+    display: flex;
+    gap: 5%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    
+
+  }
+  
+  .form-group textarea {
+    resize: vertical;
+  }
+  .trip-planner-form .buttons{
+    display: flex;
+    flex-direction: row;
+  } 
+  .trip-planner-form button {
+    
+    margin: 5px;
+    /* display: block; */
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.763);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .trip-planner-form .nxtBtn{
+    margin-top: 5px;
+    margin-left: 25%;
+  }
+  .trip-planner-form  .icon{
+    color: red;
+    transition: transform 1s ease-in-out;
+    
+  }
+  .trip-planner-form button:hover .icon{
+    translate: 200%;
+  }
+  .trip-planner-form .prvBtn:hover .icon{
+    translate: -200%;
+  }
+
+
+  .trip-planner-form button:hover {
+    
+    background-color: rgba(0, 0, 0, 0.562);
+   
+  }
+  

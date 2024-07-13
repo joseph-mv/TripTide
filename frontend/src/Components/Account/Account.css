@@ -21,11 +21,7 @@
     box-sizing: border-box;
 }
 
-html,
-body {
-    /* height: 80vh; */
-    overflow: hidden;
-}
+
 
 .container {
     position: relative;

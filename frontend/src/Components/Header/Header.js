@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FaMapLocation } from "react-icons/fa6";
 import { MdAccountCircle } from "react-icons/md";
 import { SiImessage } from "react-icons/si";
-import { AiFillHome, AiOutlineCompass, AiOutlineCarryOut, AiOutlineInfoCircle, AiOutlineContacts, AiOutlineUser } from 'react-icons/ai';
+import { AiFillHome,  AiOutlineInfoCircle } from 'react-icons/ai';
 import { BiTrip } from "react-icons/bi";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,4 +1,5 @@
 body{
+    min-height: 100vh;
     max-width: 100%;
     overflow-x: hidden;
     background: rgb(37,38,40);
