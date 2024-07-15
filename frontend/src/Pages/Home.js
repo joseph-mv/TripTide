@@ -5,6 +5,8 @@ import PopularDestinations  from'../Components/PopularDestinations/PopularDestin
 import Features from'../Components/Features/Features'
 import Footer from '../Components/Footer/Footer'
 
+
+
 function Home() {
   return (
     <div>

@@ -7,6 +7,7 @@ function TripPlan() {
     <div>
       <Header/>
       <TripPlannerForm/>
+      
     </div>
   )
 }
