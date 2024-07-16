@@ -1,9 +1,12 @@
 import React from "react";
 import "./Suggestions.css";
+import { useDispatch } from "react-redux";
 
 function Suggestions(props) {
 
-  const { suggestions, setSuggestions, formData, setFormData, place } = props;
+  const { suggestions, setSuggestions, place } = props;
+  // console.log(formData)
+  const dispatch=useDispatch()
 
   return (
     <div>
@@ -12,18 +15,9 @@ function Suggestions(props) {
           <li
             key={suggestion.id}
             onClick={(e) => {
-        
-              place
-                ? setFormData({
-                    ...formData,
-                    destination: suggestion.properties.full_address,
-                    desCoordinate: suggestion.properties.coordinates,
-                  })
-                : setFormData({
-                    ...formData,
-                    startingPoint: suggestion.properties.full_address,
-                    stCoordinates: suggestion.properties.coordinates,
-                  });
+
+              place ? dispatch({type:"DESTINATION_SUGGETION",payload:suggestion.properties}):dispatch({type:'STARTING_SUGGETION',payload:suggestion.properties})
+
               setSuggestions([]);
             }}
           >

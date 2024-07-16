@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import "./TripPlannerForm.css";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,66 +12,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Suggestions from "../../assets/Suggetions/Suggestions";
+import { pageVariants1,pageVariants2,pageTransition } from "../../animation/tripplan";
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
-const TripPlannerForm = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageVariants1 = {
-    initial: { opacity: 0.5, x: -100 },
-    in: { opacity: 1, x: 0 },
-    out: { opacity: 0.5, x: 100 },
-  };
-  const pageVariants2 = {
-    initial: { opacity: 0.5, x: 100 },
-    in: { opacity: 1, x: 0 },
-    out: { opacity: 0, x: -100 },
-  };
 
-  const pageTransition = {
-    type: "tween",
-    ease: "anticipate",
-    duration: 1,
-  };
-  const [formData, setFormData] = useState({
-    destination: "",
-    startDate: "",
-    endDate: "",
-    budget: "",
-    accommodation: "",
-    transportation: "",
-    activities: {
-      sightseeing: false,
-      adventure: false,
-      shopping: false,
-      dining: false,
-      relaxation: false,
-      cultural: false,
-      others: false,
-    },
-    notes: "",
-    numPeople: "",
-    startingPoint: "",
-  });
+const TripPlannerForm = () => {
+  const dispatch = useDispatch();
+  const formData = useSelector((state) => state.form);
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (e) => {
-    
-    const { name, value, type, checked } = e.target;
-    
-    if (type === "checkbox") {
-      setFormData({
-        ...formData,
-        activities: {
-          ...formData.activities,
-          [name]: checked,
-        },
-      });
-    } else {
-     
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
-    
+    dispatch({ type: "UPDATE", payload: e.target });
   };
   const validateForm = (e) => {
     // console.log(formData)
@@ -96,35 +49,32 @@ const TripPlannerForm = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.table(formData)
-    // Handle form submission logic here
-  };
+  
   const [minDate, setMinDate] = useState("");
   const [suggestions1, setSuggestions1] = useState([]);
   const [suggestions2, setSuggestions2] = useState([]);
 
   const fetchGeocodedResults = async (e) => {
-    
     try {
       const response = await axios.get(
-
         `https://api.mapbox.com/search/geocode/v6/forward?q=${
           formData[e.target.id]
         }&access_token=${mapboxToken}`
       );
-     if(e.target.id==='destination'){
-        
+      // console.log(response)
+      if (e.target.id === "destination") {
         setSuggestions1(response.data.features);
-     }else{
+      } else {
         setSuggestions2(response.data.features);
-     }
-      
-      
+      }
     } catch (error) {
       console.error("Error fetching geocoded suggestions:");
     }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.table(formData);
+    // Handle form submission logic here
   };
 
   useEffect(() => {
@@ -139,104 +89,106 @@ const TripPlannerForm = () => {
         <AnimatePresence mode="wait">
           <form onSubmit={handleSubmit}>
             {currentPage === 1 && (
-             
-                <motion.div
-                  className="page"
-                  key="page1"
-                  initial="initial"
-                  animate="in"
-                  exit="out"
-                  variants={pageVariants1}
-                  transition={pageTransition}
-                >
-                  <h2>Plan Your Trip</h2>
-                  <div className="form-group">
-                    <label htmlFor="destination">Destination:</label>
-                    <input
-                      type="text"
-                      id="destination"
-                      name="destination"
-                      value={formData.destination}
-                      onChange={(e) => {
-                        fetchGeocodedResults(e);
-                        handleChange(e);
-                      }}
-                      required
-                    />
-                    {suggestions1.length > 0&&formData.destination &&
-                    <Suggestions suggestions={suggestions1} setSuggestions={setSuggestions1} formData={formData} setFormData={setFormData} place={formData.destination}/>}
-                   
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="startingPoint">Starting Location:</label>
-                    <input
-                      type="text"
-                      id="startingPoint"
-                      name="startingPoint"
-                      value={formData.startingPoint}
-                      onChange={(e) => {
-                        
-                        fetchGeocodedResults(e);
-                        handleChange(e);
-                      }}
-                      required
-                    />
-                    {suggestions2.length > 0&&formData.startingPoint &&
-                    <Suggestions suggestions={suggestions2} setSuggestions={setSuggestions2} formData={formData} setFormData={setFormData} />}
-                    
-          
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="startDate">Start Date:</label>
-                    <input
-                      type="date"
-                      id="startDate"
-                      name="startDate"
-                      min={minDate}
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="endDate">End Date:</label>
-                    <input
-                      type="date"
-                      id="endDate"
-                      name="endDate"
-                      min={minDate}
-                      value={formData.endDate}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="numPeople">Number of People:</label>
-                    <input
-                      type="number"
-                      id="numPeople"
-                      name="numPeople"
-                      min={1}
-                      value={formData.numPeople}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <button
-                    className="nxtBtn"
-                    onClick={(e) => {
-                      // e.preventDefault()
-                      if (validateForm(e)) {
-                        setCurrentPage(2);
-                      }
+              <motion.div
+                className="page"
+                key="page1"
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants1}
+                transition={pageTransition}
+              >
+                <h2>Plan Your Trip</h2>
+                <div className="form-group">
+                  <label htmlFor="destination">Destination:</label>
+                  <input
+                    type="text"
+                    id="destination"
+                    name="destination"
+                    value={formData.destination}
+                    onChange={(e) => {
+                      fetchGeocodedResults(e);
+                      handleChange(e);
                     }}
-                  >
-                    Next{" "}
-                    <FontAwesomeIcon className="icon" icon={faAnglesRight} />
-                  </button>
-                </motion.div>
-              
+                    required
+                  />
+                  {suggestions1.length > 0 && formData.destination && (
+                    <Suggestions
+                      suggestions={suggestions1}
+                      setSuggestions={setSuggestions1}
+                      place={formData.destination}
+                    />
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="startingPoint">Starting Location:</label>
+                  <input
+                    type="text"
+                    id="startingPoint"
+                    name="startingPoint"
+                    value={formData.startingPoint}
+                    onChange={(e) => {
+                      fetchGeocodedResults(e);
+                      handleChange(e);
+                    }}
+                    required
+                  />
+                  {suggestions2.length > 0 && formData.startingPoint && (
+                    <Suggestions
+                      suggestions={suggestions2}
+                      setSuggestions={setSuggestions2}
+                    />
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="startDate">Start Date:</label>
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    min={minDate}
+                    value={formData.startDate}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="endDate">End Date:</label>
+                  <input
+                    type="date"
+                    id="endDate"
+                    name="endDate"
+                    min={minDate}
+                    value={formData.endDate}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="numPeople">Number of People:</label>
+                  <input
+                    type="number"
+                    id="numPeople"
+                    name="numPeople"
+                    min={1}
+                    value={formData.numPeople}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <button
+                  className="nxtBtn"
+                  onClick={(e) => {
+                    // e.preventDefault()
+                    if (validateForm(e)) {
+                      setCurrentPage(2);
+                    }
+                  }}
+                >
+                  Next <FontAwesomeIcon className="icon" icon={faAnglesRight} />
+                </button>
+              </motion.div>
             )}
             {currentPage === 2 && (
               <motion.div
@@ -404,7 +356,7 @@ const TripPlannerForm = () => {
                     Previous
                   </button>
                   <button type="submit">
-                    Plan Trip{" "}
+                    Plan Trip 
                     <FontAwesomeIcon className="icon" icon={faPaperPlane} />
                   </button>
                 </div>
