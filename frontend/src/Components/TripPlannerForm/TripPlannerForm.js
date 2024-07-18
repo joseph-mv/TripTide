@@ -13,7 +13,9 @@ import {
 import axios from "axios";
 import Suggestions from "../../assets/Suggetions/Suggestions";
 import { pageVariants1,pageVariants2,pageTransition } from "../../animation/tripplan";
+import {  useNavigate } from "react-router-dom";
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
+
 
 const TripPlannerForm = () => {
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ const TripPlannerForm = () => {
       const response = await axios.get(
         `https://api.mapbox.com/search/geocode/v6/forward?q=${
           formData[e.target.id]
-        }&access_token=${mapboxToken}`
+        }&types=place%2Clocality&language=en&access_token=${mapboxToken}`
       );
       // console.log(response)
       if (e.target.id === "destination") {
@@ -68,13 +70,13 @@ const TripPlannerForm = () => {
         setSuggestions2(response.data.features);
       }
     } catch (error) {
-      console.error("Error fetching geocoded suggestions:");
+      console.error("Error fetching geocoded suggestions:",error);
     }
   };
+  const navigate=useNavigate()
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.table(formData);
-    // Handle form submission logic here
+    navigate('/plan-details')
   };
 
   useEffect(() => {

@@ -1,0 +1,41 @@
+/* ConnectedCards.css */
+.connected-cards {
+  display: flex;
+  height: 30vh;
+  align-items: center;
+  justify-content: space-between;
+  background: url("../../../public/image/roadmap-fnal.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-color: yellow; */
+}
+
+.path {
+  flex-grow: 1;
+  height: 80%;
+  width: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  /* background-color: red; */
+  /* text-align: center; */
+  /* align-items: center; */
+  justify-content: space-evenly;
+  
+  
+}
+.path h3{
+  /* width: 100px; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5%;
+}
+
+.vehicleIcon{
+color: orange;
+height: 5vw;
+max-height: 50px;
+}

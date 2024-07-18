@@ -5,6 +5,7 @@ import './Hero.css'
 import PlanButton from '../../assets/PlanButton';
 import { useNavigate } from 'react-router-dom';
 
+
 function Hero() {
   const navigate = useNavigate();
   return (
@@ -22,7 +23,7 @@ function Hero() {
       <PlanButton  className='planButton'/></div>      
     
      
-    
+       
        
         </div>
   </section>

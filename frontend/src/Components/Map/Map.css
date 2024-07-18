@@ -1,0 +1,10 @@
+.map{
+    position:relative;
+    margin: 5px;
+    top: 0;
+    width: 80% ;
+    height: 40vh;
+    display: flex;
+    margin-left: auto;
+
+}
