@@ -22,6 +22,7 @@ const LocationCard = ({ name,startingPoint,destination }) => {
         
          const wikiId = response.data.features[0]?.properties?.context?.place?.wikidata_id || "";
         setWikidataId(wikiId);
+        // console.log('wikidata'+wikiId)
         const coords = response.data.features[0]?.properties?.coordinates || {};
        if(destination){
         dispath({

@@ -1,0 +1,17 @@
+var express = require('express');
+var router = express.Router();
+var tripPlanHelper=require('../Helpers/tripPlan-helper')
+
+
+
+router.get('/suggetions',(req,res)=>{
+   console.log('suggetions')
+   tripPlanHelper.searchAlong(req.query.coordinates,req.query.distance).then((response)=>{
+      res.json(response)
+   })
+   
+})
+
+
+
+module.exports=router

@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from 'axios';
 const Journey = () => {
-// const [data, setData] = useState({})
+const [data, setData] = useState({})
 const [distance,setDistance]=useState()
 const [duration,setDuration]=useState()
 const [errMsg,setErrMsg]=useState('')
@@ -38,7 +38,7 @@ const navigate=useNavigate()
 }
 
    useEffect(() => {
-    console.log(coordinates)
+    
     const getDirections = async (start, end) => {
       if(start.longitude){
         // console.log(start)
@@ -49,24 +49,43 @@ const navigate=useNavigate()
             const response = await axios.get(url);
             const data = response.data;
             setErrMsg('')
-            // setData(data)
-            let length=data.routes[0].geometry.coordinates.length
-            let midCoordinate=data.routes[0].geometry.coordinates[Math.floor(length/2)]
-            let midCoordinateObj={longitude:midCoordinate[0],latitude:midCoordinate[1]}
-            dispatch({
-              type:'MID_POINT',
-              payload:midCoordinateObj
-            })
+            setData(data)
+            // console.log(data)
+            let route=data.routes[0]
+            let length=route.geometry.coordinates.length
+            // console.log(length+' len')
+            // let midCoordinate=route.geometry.coordinates[Math.floor(length/2)]
+            // let midCoordinateObj={longitude:midCoordinate[0],latitude:midCoordinate[1]}
+            // console.log(midCoordinateObj)
+            // dispatch({
+            //   type:'MID_POINT',
+            //   payload:midCoordinateObj
+            // })
             // console.log(midCoordinate)
-            let distance=((data.routes[0].distance)/1000).toFixed(2)
+            let distance=((route.distance)/1000).toFixed(2)
             setDistance(distance+' Km')
-            let time=formatDuration(data.routes[0].duration)
+            let time=formatDuration(route.duration)
             setDuration(time)
+            let coordinates=[]
+            
+            for (let i=Math.floor(length/10);i<length;i+=Math.floor(length/10)){
+              // console.log('i:'+i)
+              coordinates.push(route.geometry.coordinates[i])
+            }
+            // console.log(coordinates)
+            dispatch({
+              type:'COORDINATES',
+              payload:coordinates
+            })
+            dispatch({
+              type:'DISTANCE',
+              payload:distance
+            })
             
     
         } catch (error){
             console.error('Error fetching directions:', error);
-           let msg=error.response.data.message
+           let msg=error.response?.data?.message
            setErrMsg(msg)
         }
       }
@@ -78,7 +97,7 @@ const navigate=useNavigate()
   
   }, [coordinates.startingPoint,coordinates.destination])
    
-    console.log(coordinates)
+    // console.log(coordinates)
    return (
     <div>
       <div className="connected-cards">

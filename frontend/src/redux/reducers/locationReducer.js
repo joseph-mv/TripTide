@@ -2,13 +2,17 @@
 const initialState = {
     destination: {},
     startingPoint: {},
-    midPoint:{}
+    // midPoint:{},
+    coordinates:[],
+    distance:''
   };
   
   
   const SET_DESTINATION = 'SET_DESTINATION';
   const SET_STARTING_POINT = 'SET_STARTING_POINT';
-  const MID_POINT='MID_POINT'
+  // const MID_POINT='MID_POINT'
+  const COORDINATES='COORDINATES'
+  const DISTANCE='DISTANCE'
   
   
  
@@ -24,11 +28,22 @@ const initialState = {
           ...state,
           startingPoint: action.payload
         };
-        case MID_POINT:
-        return {
-          ...state,
-          midPoint: action.payload
-        };
+        // case MID_POINT:
+        // return {
+        //   ...state,
+        //   midPoint: action.payload
+        // };
+        case COORDINATES:
+          return {
+            ...state,
+            coordinates:action.payload
+          }
+          case DISTANCE:
+            return {
+             ...state,
+              distance: action.payload
+            }
+
       default:
         return state;
     }
