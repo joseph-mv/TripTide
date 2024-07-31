@@ -1,3 +1,4 @@
 module.exports={
-    TOURIST_Collection:'TourisrtLocations'
+    TOURIST_Collection:'TouristLocations',
+    User_Collection:'Users',
 }

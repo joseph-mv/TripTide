@@ -20,34 +20,74 @@ const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
 const TripPlannerForm = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.form);
+  const coordinates=useSelector((state)=>state.location)
+ dispatch({
+  type:'RESET_ LOCATION'
+ })
+//  console.log(coordinates)
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (e) => {
     dispatch({ type: "UPDATE", payload: e.target });
+    setIdxSugg1(pre=>0)
+    setIdxSugg2(pre=>0)
   };
+  const handleKeyDown=(e)=>{
+    // console.log(e.target)
+    if(e.key==='ArrowDown'){
+      if(e.target.id==="destination"){
+        setIdxSugg1(pre=>(pre+1)%suggestions1.length)
+      }else if(e.target.id==='startingPoint'){
+        
+        setIdxSugg2(pre=>(pre+1)%suggestions2.length)
+      }
+    }
+    else if(e.key==='ArrowUp'){
+      if(e.target.id==='destination'){
+        setIdxSugg1(pre=>(pre+suggestions1.length-1)%suggestions1.length)
+      }
+      else if(e.target.id==='startingPoint'){
+        setIdxSugg2(pre=>(pre+suggestions2.length-1)%suggestions2.length)
+      }
+    }
+    else if(e.key==='Enter'){
+      if(e.target.id==='destination'&&idxSugg1>=0){
+        dispatch({type:"DESTINATION_SUGGETION",payload:suggestions1[idxSugg1].properties})
+        setSuggestions1([])
+        setIdxSugg1(-1)
+      }
+     else if(e.target.id==='startingPoint'&&idxSugg2>=0){
+        dispatch({type:"STARTING_SUGGETION",payload:suggestions2[idxSugg2].properties})
+        setSuggestions2([])
+        setIdxSugg2(-1)
+      }
+
+    }
+  }
   const validateForm = (e) => {
     // console.log(formData)
     const { destination, startingPoint, startDate, endDate, numPeople } =
       formData;
     if (
       !destination ||
-      !startingPoint ||
-      !startDate ||
-      !endDate ||
-      !numPeople
+      !startingPoint
+      //  ||
+      // !startDate ||
+      // !endDate ||
+      // !numPeople
     ) {
       //   alert('Please fill out all fields.');
       return false;
     }
-    if (new Date(startDate) > new Date(endDate)) {
-      alert("Start date cannot be later than end date.");
-      e.preventDefault();
-      return false;
-    }
-    if (numPeople < 1) {
-      return false;
-    }
+    // if (new Date(startDate) > new Date(endDate)) {
+    //   alert("Start date cannot be later than end date.");
+    //   e.preventDefault();
+    //   return false;
+    // }
+    // if (numPeople < 1) {
+    //   return false;
+    // }
     return true;
   };
 
@@ -55,7 +95,9 @@ const TripPlannerForm = () => {
   const [minDate, setMinDate] = useState("");
   const [suggestions1, setSuggestions1] = useState([]);
   const [suggestions2, setSuggestions2] = useState([]);
-
+  const [idxSugg1,setIdxSugg1]=useState(-1)
+  
+  const [idxSugg2,setIdxSugg2]=useState(-1)
   const fetchGeocodedResults = async (e) => {
     try {
       const response = await axios.get(
@@ -112,6 +154,7 @@ const TripPlannerForm = () => {
                       fetchGeocodedResults(e);
                       handleChange(e);
                     }}
+                    onKeyDown={handleKeyDown}
                     required
                   />
                   {suggestions1.length > 0 && formData.destination && (
@@ -119,12 +162,14 @@ const TripPlannerForm = () => {
                       suggestions={suggestions1}
                       setSuggestions={setSuggestions1}
                       place={formData.destination}
+                      idx={idxSugg1}
                     />
                   )}
                 </div>
-
+                  
                 <div className="form-group">
                   <label htmlFor="startingPoint">Starting Location:</label>
+                  
                   <input
                     type="text"
                     id="startingPoint"
@@ -134,12 +179,14 @@ const TripPlannerForm = () => {
                       fetchGeocodedResults(e);
                       handleChange(e);
                     }}
+                    onKeyDown={handleKeyDown}
                     required
                   />
                   {suggestions2.length > 0 && formData.startingPoint && (
                     <Suggestions
                       suggestions={suggestions2}
                       setSuggestions={setSuggestions2}
+                      idx={idxSugg2}
                     />
                   )}
                 </div>
@@ -182,10 +229,11 @@ const TripPlannerForm = () => {
                 <button
                   className="nxtBtn"
                   onClick={(e) => {
-                    // e.preventDefault()
+                    e.preventDefault()
                     if (validateForm(e)) {
                       setCurrentPage(2);
                     }
+                    // setCurrentPage(2);
                   }}
                 >
                   Next <FontAwesomeIcon className="icon" icon={faAnglesRight} />

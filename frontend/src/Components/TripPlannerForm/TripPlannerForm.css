@@ -58,6 +58,11 @@
         
       }
   }
+  .form-group #transportation option {
+    
+    /* background-color: red; */
+    width: 80% !important
+  }
 
   .form-group label {
     display: block;

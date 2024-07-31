@@ -3,26 +3,33 @@ import LocationCard from "../LocationCard/LocationCard";
 import { useDispatch, useSelector } from "react-redux";
 import "./Jouney.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateRight, faMotorcycle } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
 // import Map from "../Map/Map";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
+
+
 const Journey = () => {
-const [data, setData] = useState({})
+
+
 const [distance,setDistance]=useState()
 const [duration,setDuration]=useState()
 const [errMsg,setErrMsg]=useState('')
-const navigate=useNavigate()
+const [routeNum,setRouteNum]=useState(0)
+const [routes,setRoutes]=useState([])
+
   const formData = useSelector((state) => state.form);
   const coordinates=useSelector((state)=>state.location)
   const dispatch=useDispatch()
-
-  if(!coordinates.startingPoint.latitude){
-    navigate('/trip-plan')
-  }
-  
+  const navigate = useNavigate();
+ 
+// console.log(coordinates)
+  // if(!coordinates.startingPoint.latitude){
+  //   navigate('/trip-plan')
+  // }
+ 
    function formatDuration(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -36,10 +43,16 @@ const navigate=useNavigate()
     }
     return result.trim();
 }
+function handleRouteChange(){
+  dispatch({type:'RESET_ PLACE'})
+  dispatch({type:'REMOVE_DESTINATIONS'})
+  setRouteNum((prev)=>(prev+1)%routes.length)
+}
 
    useEffect(() => {
-    
+    // console.log("journey")
     const getDirections = async (start, end) => {
+      
       if(start.longitude){
         // console.log(start)
         const accessToken=process.env.REACT_APP_MAPBOX_TOKEN
@@ -48,41 +61,12 @@ const navigate=useNavigate()
         try {
             const response = await axios.get(url);
             const data = response.data;
+            console.log(data);
             setErrMsg('')
-            setData(data)
-            // console.log(data)
-            let route=data.routes[0]
-            let length=route.geometry.coordinates.length
-            // console.log(length+' len')
-            // let midCoordinate=route.geometry.coordinates[Math.floor(length/2)]
-            // let midCoordinateObj={longitude:midCoordinate[0],latitude:midCoordinate[1]}
-            // console.log(midCoordinateObj)
-            // dispatch({
-            //   type:'MID_POINT',
-            //   payload:midCoordinateObj
-            // })
-            // console.log(midCoordinate)
-            let distance=((route.distance)/1000).toFixed(2)
-            setDistance(distance+' Km')
-            let time=formatDuration(route.duration)
-            setDuration(time)
-            let coordinates=[]
-            
-            for (let i=Math.floor(length/10);i<length;i+=Math.floor(length/10)){
-              // console.log('i:'+i)
-              coordinates.push(route.geometry.coordinates[i])
-            }
-            // console.log(coordinates)
-            dispatch({
-              type:'COORDINATES',
-              payload:coordinates
-            })
-            dispatch({
-              type:'DISTANCE',
-              payload:distance
-            })
-            
-    
+            // setData(data)
+            setRoutes(data.routes)
+            // console.log(data.routes)
+       
         } catch (error){
             console.error('Error fetching directions:', error);
            let msg=error.response?.data?.message
@@ -96,8 +80,43 @@ const navigate=useNavigate()
    getDirections(coordinates.startingPoint,coordinates.destination)
   
   }, [coordinates.startingPoint,coordinates.destination])
-   
-    // console.log(coordinates)
+  // console.log(routes.length)
+
+  useEffect(() => {
+    if(routes.length>0){
+      let route=routes[routeNum]
+      let routeGeometry=route.geometry
+      let length=route.geometry.coordinates.length
+      
+      let distance=((route.distance)/1000).toFixed(2)
+      setDistance(distance+' Km')
+      let time=formatDuration(route.duration)
+      setDuration(time)
+      let coordinates=[]
+      // console.log(length)
+
+      for (let i=Math.floor(length/10);i<length&&length>10;i+=Math.floor(length/10)){
+        // console.log('i:'+i)
+        coordinates.push(route.geometry.coordinates[i])
+      }
+      console.log(coordinates)
+
+      dispatch({
+        type:'ROUTE_GEOMETRY',
+        payload:routeGeometry
+      })
+      dispatch({
+        type:'COORDINATES',
+        payload:coordinates
+      })
+      dispatch({
+        type:'DISTANCE',
+        payload:distance
+      })
+    }
+  }, [routes,routeNum])
+  
+    // console.log(routes)
    return (
     <div>
       <div className="connected-cards">
@@ -110,17 +129,27 @@ const navigate=useNavigate()
           >
             <FontAwesomeIcon className="vehicleIcon" icon={faMotorcycle} />
           </motion.span>
+          
           <h3>
             {distance ? (
               (
                 <>
                     <span>{distance}</span> <span>{duration}</span>
+              
                 </>
             )
                 
             ) :<span>{errMsg}</span> }
+            {routes.length>1&&<div className="route">
+          <h3>Route {routeNum+1}</h3>
+         <button onClick={handleRouteChange} >  <FontAwesomeIcon className="routeArrow" icon={faArrowRotateRight} /> </button>
+         </div>}
+         
+         
         </h3>
+        
            </div>
+           
 
         <LocationCard name={formData.destination} destination/>
       </div>

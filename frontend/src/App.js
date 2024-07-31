@@ -6,8 +6,12 @@ import Authenticate from './Pages/Authenticate';
 import TripPlan from './Pages/TripPlan';
 import PlanDetails from './Pages/PlanDetails';
 import Temp from './Pages/Temp';
+import Verification from './Pages/Verification';
+import ForgotPassword from './Pages/ForgotPassword';
+
 
 function App() {
+ 
   return (
     <div>
     
@@ -17,6 +21,8 @@ function App() {
         <Route path="/authenticate" element={< Authenticate/>} />
         <Route path='/trip-plan' element={<TripPlan/>}/>
         <Route path='/plan-details' element={<PlanDetails/>} />
+        <Route path="/verify-email" element={<Verification/>} />
+        <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path='/temp' element={<Temp/>}/>
         
       </Routes>

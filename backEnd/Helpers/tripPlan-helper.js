@@ -13,7 +13,7 @@ module.exports ={
     return new Promise(async (resolve, reject) => {
         try {
             const width = Math.max(10, Math.min(parseFloat(distance) / 20, 200));
-            console.log(width);
+            // console.log(width);
             var touristLocations = [];
             var seen = new Set();
 
@@ -36,6 +36,8 @@ module.exports ={
                 // Push the promise of the database query to the promises array
                 promises.push(
                     db.get().collection(collection.TOURIST_Collection).find(query).toArray().then((response) => {
+                    //    console.log('db response')
+                        // console.log(response);
                         response.forEach(element => {
                             if (!seen.has(element.siteLabel)) {
                                 seen.add(element.siteLabel);
@@ -49,7 +51,7 @@ module.exports ={
             // Wait for all the promises to resolve
             await Promise.all(promises);
 
-            // console.log(touristLocations);
+            console.log(touristLocations);
             // console.log(touristLocations.length);
 
             resolve(touristLocations);

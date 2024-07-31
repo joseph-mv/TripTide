@@ -10,7 +10,16 @@ import { AiFillHome,  AiOutlineInfoCircle } from 'react-icons/ai';
 import { BiTrip } from "react-icons/bi";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [userName, setUserName] = useState(localStorage.getItem("user_Name"));
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_Name");
+    localStorage.removeItem("user _id");
+    setToken(""); 
+    setUserName("");
+    // navigate("/login");
+  };
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -65,7 +74,8 @@ const Header = () => {
         <Link className='link'to="/trips"><BiTrip />&nbsp;&nbsp;Trips</Link>
         <Link className='link' to="/about"> <AiOutlineInfoCircle />&nbsp;&nbsp;About</Link>
         <Link className='link'to="/contact"> <SiImessage />&nbsp;&nbsp;Contact</Link>
-        <Link className='link' to="/authenticate"><MdAccountCircle />&nbsp;&nbsp;Account</Link>
+        <Link className='link' to="/authenticate"><MdAccountCircle />&nbsp;&nbsp;{userName?userName:'Account'}</Link>
+        <button onClick={handleLogout}>logout</button>
       </nav>
     </header>
     <motion.div className='travelFlag' animate={wavingAnimation} />

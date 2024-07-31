@@ -19,3 +19,8 @@
   .suggestions-list li:hover {
     background-color: #188bc0;
   }
+
+  .suggestions-list .highlight {
+    background-color: #188bc0;
+    
+  }

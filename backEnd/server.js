@@ -22,18 +22,20 @@ db.connect((err)=>{
 
   
 var tripRouter=require('./routes/tripPlan')
-// var usersRouter = require('./routes/users');
+var userRouter = require('./routes/user');
 // var adminRouter = require('./routes/admin');
 
 
 
 app.use(cors())
 
+
 // app.use(logger('dev'));
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use('/', tripRouter);
+app.use('/user', userRouter);
 // app.use('/admin', adminRouter);
 // Start server
 const PORT = process.env.PORT || 5000;
