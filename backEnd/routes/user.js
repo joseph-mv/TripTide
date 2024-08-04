@@ -40,7 +40,7 @@ router.post('/sign-up', async (req, res) => {
 router.get('/verify-email', async (req, res) => {
   // console.log(req.query)
   userHelper.verifyEmail(req.query.token).then((response) => {
-    // console.log(response)
+    
     res.json(response)
   }).catch((error) => {
     // console.log(error)

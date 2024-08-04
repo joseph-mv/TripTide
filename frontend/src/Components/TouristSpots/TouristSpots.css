@@ -22,7 +22,7 @@
     background-color: #f9f9f9e0; /* Slight background color change on hover */
   }
   
-  .card.expanded {
+ .card.expanded {
     transform: scale(1.05); /* Slightly increase size when expanded */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     height: 40vh;
@@ -40,7 +40,7 @@
     scrollbar-width: none; /* For Firefox */
     -ms-overflow-style: none;  /* For Internet Explorer and Edge */
   }
-  .card.card.expanded{
+ .card.expanded{
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
   .checkbox {
@@ -86,9 +86,11 @@
   }
   
   .card-content {
-    /* position: relative; */
+    
     display: none;
     margin-top: 10px;
+    position: absolute;
+    top: 0;
     
   }
   

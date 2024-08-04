@@ -52,7 +52,7 @@ function SuggestedLocations() {
       {loading? <div class="loader"></div> :''}
       <div className="destination-container" >
       {coordinates.destinations?.map((destination,index)=>(
-        <TouristSpots checked={false} destination={destination} index={index}/>
+        <TouristSpots  destination={destination} index={index}/>
       ))}
       </div>
       
