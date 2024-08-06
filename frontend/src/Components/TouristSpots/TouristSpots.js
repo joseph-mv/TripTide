@@ -22,6 +22,7 @@ function TouristSpots({ destination, index }) {
     alert("More details clicked");
   };
   const handleCheckboxChange = (event, place, index) => {
+    event.stopPropagation();
     const id = place._id;
     // console.log(place, index,id)
     if (selectedPlaces[id]) {
@@ -74,6 +75,7 @@ function TouristSpots({ destination, index }) {
           type="checkbox"
           id="cardCheckbox"
           onChange={(e) => handleCheckboxChange(e, destination, index + 1)}
+          onClick={e=>e.stopPropagation()}
           className="checkbox"
         />
         <label for="checkbox" className="checkbox-label"></label>

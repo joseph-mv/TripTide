@@ -9,7 +9,31 @@ const getRectangleCorners=require("../utils/mapRectangle")
 
 
 module.exports ={
-  searchAlong: (coordinates, distance) => {
+ 
+  searchAlong: (coordinates, distance,activities
+  ) => {
+console.log((activities))
+
+const locationType={
+    sightseeing:["Tourist Attraction","Natural Park","Tourist Destination","Waterfall","Nature Reserve","Dam","Lake"],
+  adventure: ["Hiking","Caves","Amusement Park","Lake" ,"Campsite"],
+  shopping: ["City"],
+  relaxation: ["Beach","Resort"],
+  cultural: ["Historical monument","Museum"],
+  others:["Zoo","Desert"]
+}
+var typeLabelArr=[]
+const a=true
+console.log(a)
+for (let key in activities){
+    
+    if(activities[key]==='true'){
+       
+        typeLabelArr=[...typeLabelArr,...locationType[key]]
+    }
+}
+console.log('type',typeLabelArr)
+
     return new Promise(async (resolve, reject) => {
         try {
             const width = Math.max(10, Math.min(parseFloat(distance) / 20, 200));
@@ -23,6 +47,7 @@ module.exports ={
             for (let i = 0; i < 9; i++) {
                 let polygonCoordinates = await getRectangleCorners(coordinates[i], coordinates[i + 1], width);
                 const query = {
+                    typeLabel: { $in: typeLabelArr },
                     'location.coordinates': {
                         $geoWithin: {
                             $geometry: {
@@ -51,7 +76,7 @@ module.exports ={
             // Wait for all the promises to resolve
             await Promise.all(promises);
 
-            console.log(touristLocations);
+            // console.log(touristLocations);
             // console.log(touristLocations.length);
 
             resolve(touristLocations);

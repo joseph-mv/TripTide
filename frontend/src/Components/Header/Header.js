@@ -25,19 +25,26 @@ const Header = () => {
   };
   const shadowAnimation = {
     filter: [
-      "drop-shadow(10px 10px 10px rgb(248, 15, 15))",
-      "drop-shadow(1px 1px 10px rgb(248, 15, 15,0.75))",
-      "drop-shadow(5px 5px 10px rgb(248, 15, 15,0.25))",
-      "drop-shadow(5px 5px 10px rgb(248, 15, 0))",
-      
+      "drop-shadow(0px 0px 0px rgba(248, 15, 15, 0))",
+      "drop-shadow(2px 2px 2px rgba(248, 15, 15, 0.25))",
+      "drop-shadow(5px 5px 5px rgba(248, 15, 15, 0.5))",
+      "drop-shadow(7px 7px 7px rgba(248, 15, 15, 0.75))",
+      "drop-shadow(10px 10px 10px rgba(248, 15, 15, 1))",
+      "drop-shadow(7px 7px 7px rgba(248, 15, 15, 0.75))",
+      "drop-shadow(5px 5px 5px rgba(248, 15, 15, 0.5))",
+      "drop-shadow(2px 2px 2px rgba(248, 15, 15, 0.25))",
+     
     ],
     transition: {
-      duration: 5,
-      ease: "easeInOut",
-      repeat: Infinity,
-    }
+      filter: {
+        duration: 5,
+        ease: "easeInOut",
+        repeat: Infinity,
+      },
+    },
   };
-  const wavingAnimation = {
+  
+const wavingAnimation = {
     x: [0, 5, -5, 0], 
     skewX: [0, 5, -5, 0], 
     transition: {

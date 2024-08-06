@@ -12,6 +12,7 @@
 }
 
 .path {
+  
   flex-grow: 1;
   height: 80%;
   width: auto;
@@ -25,6 +26,11 @@
   justify-content: space-evenly;
   
   
+}
+.dateDiv{
+  color: orange;
+  display: flex;
+  justify-content:space-between;
 }
 .path>h3{
   /* width: 100px; */
@@ -71,4 +77,9 @@ max-height: 50px;
 }
 .route button:hover .routeArrow{
   transform: rotate(180deg);
+}
+@media (max-width: 768px){
+  .path{
+    flex-shrink: 5;
+  }
 }

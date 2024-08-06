@@ -8,7 +8,8 @@ import TouristSpots from "../TouristSpots/TouristSpots";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function SuggestedLocations() {
   const coordinates = useSelector((state) => state.location);
-  // console.log(coordinates)
+  const formData = useSelector((state)=> state.form)
+  // console.log('form',formData.activities)
   const dispatch=useDispatch()
 
  
@@ -24,6 +25,7 @@ function SuggestedLocations() {
           params: {
             coordinates: coordinates.coordinates,
             distance: coordinates.distance,
+            activities:formData.activities
           },
         });
         // console.log('suggetions response')

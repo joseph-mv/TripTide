@@ -29,6 +29,7 @@ const TripPlannerForm = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (e) => {
+    // console.log(e.target.value)
     dispatch({ type: "UPDATE", payload: e.target });
     setIdxSugg1(pre=>0)
     setIdxSugg2(pre=>0)
@@ -341,18 +342,7 @@ const TripPlannerForm = () => {
                         Shopping
                       </label>
                     </div>
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="dining"
-                          checked={formData.activities.dining}
-                          onChange={handleChange}
-                        />
-                        Dining
-                      </label>
-                    </div>
+                   
                     <div>
                       <label>
                         <input

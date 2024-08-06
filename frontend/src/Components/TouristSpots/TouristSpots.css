@@ -4,7 +4,7 @@
     position: relative;
     margin: 15px;
     width: 200px;
-    max-width: 45vw;
+    max-width: 40vw;
     padding: 20px;
     background-color: white;
     border: 1px solid #ccc;
@@ -89,8 +89,7 @@
     
     display: none;
     margin-top: 10px;
-    position: absolute;
-    top: 0;
+    
     
   }
   

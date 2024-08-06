@@ -9,7 +9,6 @@ const initialState={
           sightseeing: false,
           adventure: false,
           shopping: false,
-          dining: false,
           relaxation: false,
           cultural: false,
           others: false,

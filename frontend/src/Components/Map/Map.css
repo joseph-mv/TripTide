@@ -4,15 +4,17 @@
 } */
 
 .map-container {
-    position: relative;
+    position: absolute;
     width: 100%;
+    top: calc(30vh + 350px);
     height: 100vh; /* Full viewport height */
     margin: auto;
+    /* background-color: aqua; */
 }
 
 .map-position {
     position: absolute; /* Position the map within its container */
-    top: 50px; /* Adjust vertical position */
+    top: 0px; /* Adjust vertical position */
     left: 20px; /* Adjust horizontal position */
     width: calc(100% - 40px); /* Adjust width considering left/right margins */
     height: 500px; /* Adjust height here */

@@ -5,8 +5,9 @@ var tripPlanHelper=require('../Helpers/tripPlan-helper')
 
 
 router.get('/suggetions',(req,res)=>{
-   // console.log('suggetions')
-   tripPlanHelper.searchAlong(req.query.coordinates,req.query.distance).then((response)=>{
+   // console.log('suggetions',req.query)
+   tripPlanHelper.searchAlong(req.query.coordinates,req.query.distance,req.query.activities
+   ).then((response)=>{
       // console.log(response)
       res.json(response)
    })
