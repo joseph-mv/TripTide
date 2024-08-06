@@ -12,22 +12,24 @@
 }
 
 .popup-content {
-  background-color: rgb(0, 0, 0);
+  background-color: #161a1c;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   width: 360px;
   text-align: center;
   color: white;
-  border: 3px ridge #e11d1da6;
+  border: 3px ridge #ed1616;
 
 }
 .popup-content h2{
   color: orange;
+  
 }
 
 
 .popup-content p{
+  font-size: 0.9rem;
   text-align: justify;
 }
 

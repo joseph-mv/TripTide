@@ -24,12 +24,6 @@ const Journey = () => {
   const coordinates = useSelector((state) => state.location)
   const dispatch = useDispatch()
 
-  // console.log((formData))
-  // console.log(coordinates)
-  // if(!coordinates.startingPoint.latitude){
-  //   navigate('/trip-plan')
-  // }
-
   function formatDuration(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);

@@ -31,8 +31,8 @@ const TripPlannerForm = () => {
   const handleChange = (e) => {
     // console.log(e.target.value)
     dispatch({ type: "UPDATE", payload: e.target });
-    setIdxSugg1(pre=>0)
-    setIdxSugg2(pre=>0)
+    setIdxSugg1(0)
+    setIdxSugg2(0)
   };
   const handleKeyDown=(e)=>{
     // console.log(e.target)
@@ -66,33 +66,7 @@ const TripPlannerForm = () => {
 
     }
   }
-  const validateForm = (e) => {
-    // console.log(formData)
-    const { destination, startingPoint, startDate, endDate, numPeople } =
-      formData;
-    if (
-      !destination ||
-      !startingPoint
-      //  ||
-      // !startDate ||
-      // !endDate ||
-      // !numPeople
-    ) {
-      //   alert('Please fill out all fields.');
-      return false;
-    }
-    // if (new Date(startDate) > new Date(endDate)) {
-    //   alert("Start date cannot be later than end date.");
-    //   e.preventDefault();
-    //   return false;
-    // }
-    // if (numPeople < 1) {
-    //   return false;
-    // }
-    return true;
-  };
 
-  
   const [minDate, setMinDate] = useState("");
   const [suggestions1, setSuggestions1] = useState([]);
   const [suggestions2, setSuggestions2] = useState([]);
@@ -118,8 +92,18 @@ const TripPlannerForm = () => {
   };
   const navigate=useNavigate()
   const handleSubmit = (e) => {
+ if(currentPage===2){
+  navigate('/plan-details')
+ }
+ const {startDate, endDate}=formData
+  if (new Date(startDate) > new Date(endDate)) {
+      alert("Start date cannot be later than end date.");
+      e.preventDefault();
+      return false;
+    }
     e.preventDefault();
-    navigate('/plan-details')
+    setCurrentPage(pre=>1+(pre)%2)
+    
   };
 
   useEffect(() => {
@@ -224,18 +208,13 @@ const TripPlannerForm = () => {
                     min={1}
                     value={formData.numPeople}
                     onChange={handleChange}
-                    required
+                   
                   />
                 </div>
-                <button
+                <button id="nxtBtn"
+                 type="submit"
                   className="nxtBtn"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (validateForm(e)) {
-                      setCurrentPage(2);
-                    }
-                    // setCurrentPage(2);
-                  }}
+                  
                 >
                   Next <FontAwesomeIcon className="icon" icon={faAnglesRight} />
                 </button>
@@ -298,8 +277,8 @@ const TripPlannerForm = () => {
                     <option value="bike">Bike</option>
                     <option value="car">Car</option>
                     <option value="bus">Bus</option>
-                    <option value="train">Train</option>
-                    <option value="plane">Plane</option>
+                    {/* <option value="train">Train</option>
+                    <option value="plane">Plane</option> */}
                     <option value="other">Other</option>
                   </select>
                 </div>

@@ -15,16 +15,14 @@ module.exports ={
 console.log((activities))
 
 const locationType={
-    sightseeing:["Tourist Attraction","Natural Park","Tourist Destination","Waterfall","Nature Reserve","Dam","Lake"],
+    sightseeing:["Natural Park","Waterfall","Nature Reserve","Dam","Lake"],
   adventure: ["Hiking","Caves","Amusement Park","Lake" ,"Campsite"],
   shopping: ["City"],
   relaxation: ["Beach","Resort"],
   cultural: ["Historical monument","Museum"],
   others:["Zoo","Desert"]
 }
-var typeLabelArr=[]
-const a=true
-console.log(a)
+var typeLabelArr=["Tourist Attraction","Tourist Destination"]
 for (let key in activities){
     
     if(activities[key]==='true'){
@@ -32,7 +30,7 @@ for (let key in activities){
         typeLabelArr=[...typeLabelArr,...locationType[key]]
     }
 }
-console.log('type',typeLabelArr)
+// console.log('type',typeLabelArr)
 
     return new Promise(async (resolve, reject) => {
         try {

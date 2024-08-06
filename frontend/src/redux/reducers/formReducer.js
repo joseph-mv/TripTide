@@ -38,7 +38,7 @@ const formReducer = (state = initialState, action) => {
         };
         case'DESTINATION_SUGGETION': return{...state,destination:action.payload?.full_address, desCoordinate:action.payload?.coordinates}
         case'STARTING_SUGGETION': return{...state,startingPoint:action.payload?.full_address,strCoordinate:action.payload?.coordinates}
-     
+        case 'RESET_FORM' :return initialState
       default:
         return state;
     }

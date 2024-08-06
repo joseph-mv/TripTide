@@ -15,9 +15,11 @@ function SuggestedLocations() {
  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log(loading)
   useEffect(() => {
     // console.log('suggest')
     const fetchData = async () => {
+      setLoading(true)
       try {
         // console.log("fetching destinations");
         // console.log(coordinates);
@@ -56,6 +58,7 @@ function SuggestedLocations() {
       {coordinates.destinations?.map((destination,index)=>(
         <TouristSpots  destination={destination} index={index}/>
       ))}
+      {(!loading && coordinates.destinations?.length===0) && <div className="error">"Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search."</div>}
       </div>
       
       
