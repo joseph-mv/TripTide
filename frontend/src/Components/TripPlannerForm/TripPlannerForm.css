@@ -1,6 +1,12 @@
 
 .trip-planner-form{
-  background: url('../../../public/bg_image/bg-plantrip.jpg');
+  background:linear-gradient(
+    to bottom, 
+    #334046 0%,
+    rgba(20, 17, 17, 0.005) 20%,
+    rgba(12, 12, 12, 0) 80%, 
+       #26728b 100% 
+), url('../../../public/bg_image/bg-plantrip.jpg');
     background-size: cover;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -58,6 +64,11 @@
         
       }
   }
+  .form-group #transportation option {
+    
+    /* background-color: red; */
+    width: 80% !important
+  }
 
   .form-group label {
     display: block;
@@ -82,6 +93,7 @@
     
 
   }
+
   
   .form-group textarea {
     resize: vertical;

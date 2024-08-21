@@ -18,10 +18,12 @@ const LocationCard = ({ name,startingPoint,destination }) => {
         const response = await axios.get(
           `https://api.mapbox.com/search/geocode/v6/forward?q=${name}&types=place&language=en&access_token=${mapboxToken}`
         );
+        // console.log(response)
         //   console.log(response.data.features[0].properties.coordinates)
         
          const wikiId = response.data.features[0]?.properties?.context?.place?.wikidata_id || "";
         setWikidataId(wikiId);
+        // console.log('wikidata'+wikiId)
         const coords = response.data.features[0]?.properties?.coordinates || {};
        if(destination){
         dispath({
@@ -40,7 +42,7 @@ const LocationCard = ({ name,startingPoint,destination }) => {
         
         
       } catch (error) {
-        console.error("Error fetching geocoded suggestions:", error);
+        // console.error("Error fetching geocoded suggestions:", error);
       }
     };
 

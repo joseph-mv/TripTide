@@ -3,8 +3,8 @@
      background: linear-gradient(
         to bottom, 
         #334046 0%,
-        rgba(255, 255, 255, 0) 20%,
-        rgba(255, 255, 255, 0) 80%, /* Transparent to color transition */
+        rgba(20, 17, 17, 0.359) 20%,
+        rgba(12, 12, 12, 0.33) 80%, /* Transparent to color transition */
         #4d889b 100% /* Merged color at the bottom */
     ),url('../../../public/bg_image/banner.jpg');
    
@@ -33,7 +33,7 @@
   
   .hero h1 {
     
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
     position: absolute;
     font-size: 3rem;

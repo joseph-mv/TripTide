@@ -12,6 +12,7 @@
 }
 
 .path {
+  
   flex-grow: 1;
   height: 80%;
   width: auto;
@@ -26,16 +27,61 @@
   
   
 }
-.path h3{
+.dateDiv{
+  color: orange;
+  display: flex;
+  justify-content:space-between;
+  gap: 10px;
+}
+.path>h3{
   /* width: 100px; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 5%;
+  color: white;
+  /* margin-top: 30px; */
+  margin-bottom: 5px;
 }
 
 .vehicleIcon{
 color: orange;
 height: 5vw;
 max-height: 50px;
+}
+.route{
+  font-size: 1rem;
+  display: flex;
+  gap: 10px;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 5px
+ 
+}
+
+.route button{
+  background-color: orange;
+  color: black;
+  
+  padding:0 10px ;
+  border: none;
+  border-radius: 20%;
+  cursor: pointer;
+ 
+}
+.route button:hover{
+  
+  color: white;
+}
+.routeArrow{
+  transition: transform 2s ease-in-out;
+}
+.route button:hover .routeArrow{
+  transform: rotate(180deg);
+}
+@media (max-width: 768px){
+  .path{
+    flex-shrink: 5;
+  }
 }

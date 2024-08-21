@@ -7,6 +7,7 @@
     overflow: hidden; /* Ensures the image stays within rounded corners */
     width: 30vw;
     max-width: 200px;
+    min-width: 100px;
     height: 30vh;
     
 }
@@ -27,7 +28,7 @@
 
 .location-details h2 {
     color: #333333;
-    font-size: 1.3rem;
+    font-size: 1.2em;
     margin-bottom: 10px;
 }
 

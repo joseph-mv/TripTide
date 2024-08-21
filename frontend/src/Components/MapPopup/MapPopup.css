@@ -1,0 +1,38 @@
+.mapPopup-container {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 10;
+    /* background-color: red; */
+    overflow-y: hidden;
+    
+   
+}
+
+.mapPopup-position {
+    position: absolute; /* Position the map within its container */
+    top: 0px; /* Adjust vertical position */
+    left: 5%; /* Adjust horizontal position */
+    width: 90%;
+    height: 50vh;
+    border-radius: 10px;
+
+}
+.mapPopup-position .closeBtn{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 20px;
+    padding: 5px 8px;
+    font-weight: bold;
+    color: red;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+    &:hover{
+        transform: scale(1.1);
+    }
+}

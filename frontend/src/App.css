@@ -2,6 +2,9 @@ body{
     min-height: 100vh;
     max-width: 100%;
     overflow-x: hidden;
-    background: rgb(37,38,40);
+    /* background: rgb(37,38,40); */
 background: linear-gradient(180deg, rgba(37,38,40,1) 0%, rgba(85,125,141,1) 53%, rgba(61,152,180,1) 100%);
+background-repeat: no-repeat;
+background-size: cover;
+background-attachment: fixed;
 }

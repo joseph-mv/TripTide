@@ -2,8 +2,16 @@ import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import "./Account.css"; // Make sure to import your CSS
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
+import axios from 'axios';
+import 'boxicons/css/boxicons.min.css';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Account = () => {
+  const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(false);
 
   const toggle = () => {
@@ -12,9 +20,13 @@ const Account = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+
       setIsSignIn(true);
     }, 200);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+
+    }
   }, []);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,19 +36,68 @@ const Account = () => {
 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false)
+
   const handleSignup = async (e) => {
-    console.log(name, email);
+    // console.log(name, email);
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
+    setLoading(true)
+    try {
+      const response = await axios.post(`${BASE_URL}/user/sign-up`, {
+        name,
+        email,
+        password,
+      })
+      setLoading(false)
+      // console.log(response);
+      if (response.data.msg) {
+        toast.success(response.data.msg);
+        console.log(response.data.msg);
+      }
+      else {
+        setError(response.data.error)
+      }
+      // Handle successful registration, e.g., redirect to login page
+    } catch (error) {
+      setLoading(false)
+      console.error(error);
+
+      // Handle registration error
+    }
+
   };
-  const [loginemail, setLoginEmail] = useState("");
-  const [loginpassword, setLoginPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginshowPassword, setLoginShowPassword] = useState(false);
 
-  const handleLogin=async(e)=>{
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${BASE_URL}/user/login`, { loginEmail, loginPassword });
+      // Handle successful login
+      console.log(response.data);
+      if (response.data.status) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('refreshToken', response.data.refreshToken)
+        localStorage.setItem("user_Id", response.data.userId)
+        localStorage.setItem('user_Name', response.data.userName)
+        navigate('/');
+      }
+      else {
+        alert(response.data.loggedError)
+      }
+    } catch (error) {
+      // Handle login error
+      console.error(error);
+    }
+  }
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    navigate("/forgot-password")
 
   }
 
@@ -70,13 +131,16 @@ const Account = () => {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setError("")
+                      setEmail(e.target.value)
+                    }}
                     required
                     placeholder="Email"
                   />
                 </div>
 
-                
+
 
                 <div className="input-group">
                   <i className="bx bxs-lock-alt"></i>
@@ -84,13 +148,16 @@ const Account = () => {
                     placeholder="Password"
                     type={showPassword ? "text" : "password"}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                      setError("")
+                    }}
                     required
                   />
-                 {password&&<button className="showHideBtn"
+                  {password && <button className="showHideBtn"
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    
+                    onClick={() => { setShowPassword(!showPassword) }}
+
                   >
                     <i
                       className={
@@ -105,13 +172,16 @@ const Account = () => {
                     placeholder="Confirm password"
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value)
+                      setError("")
+                    }}
                     required
                   />
-                  {confirmPassword&&<button className="showHideBtn"
+                  {confirmPassword && <button className="showHideBtn"
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    
+
                   >
                     <i
                       className={
@@ -120,8 +190,8 @@ const Account = () => {
                     ></i>
                   </button>}
                 </div>
-                {{ error } && <p>{error}</p>}
-                <button type="submit">Sign up</button>
+                {{ error } && <p className="error">{error}</p>}
+                <button type="submit" disabled={loading}>{loading && <div class="loading"></div>} Sign Up</button>
                 <p>
                   <span>Already have an account?</span>
                   <b onClick={toggle} className="pointer">
@@ -131,24 +201,25 @@ const Account = () => {
               </form>
             </div>
           </div>
+          <ToastContainer />
         </div>
         {/* END SIGN UP */}
         {/* SIGN IN */}
         <div className="col align-items-center flex-col sign-in">
           <div className="form-wrapper align-items-center">
-            <form onSubmit={handleLogin}></form>
-            <div className="form sign-in">
-              <div className="input-group">
-                <i className="bx bxs-user"></i>
-                <input type="email" value={loginemail} onChange={(e)=>setLoginEmail(e.target.value)} placeholder="Email" required/>
-              </div>
-              <div className="input-group">
-                <i className="bx bxs-lock-alt"></i>
-                <input type={loginshowPassword?'text':'password'} value={loginpassword} onChange={(e)=>setLoginPassword(e.target.value)} placeholder="Password" required/>
-                {loginpassword&&<button className="showHideBtn"
+            <form onSubmit={handleLogin}>
+              <div className="form sign-in">
+                <div className="input-group">
+                  <i className="bx bxs-user"></i>
+                  <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="Email" required />
+                </div>
+                <div className="input-group">
+                  <i className="bx bxs-lock-alt"></i>
+                  <input type={loginshowPassword ? 'text' : 'password'} value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="Password" required />
+                  {loginPassword && <button className="showHideBtn"
                     type="button"
                     onClick={() => setLoginShowPassword(!loginshowPassword)}
-                    
+
                   >
                     <i
                       className={
@@ -156,18 +227,19 @@ const Account = () => {
                       }
                     ></i>
                   </button>}
+                </div>
+                <button type="submit">Sign in</button>
+                <p>
+                  <b className="pointer" onClick={handleForgotPassword}>Forgot password?</b>
+                </p>
+                <p>
+                  <span>Don't have an account?</span>
+                  <b onClick={toggle} className="pointer">
+                    Sign up here
+                  </b>
+                </p>
               </div>
-              <button type="submit">Sign in</button>
-              <p>
-                <b>Forgot password?</b>
-              </p>
-              <p>
-                <span>Don't have an account?</span>
-                <b onClick={toggle} className="pointer">
-                  Sign up here
-                </b>
-              </p>
-            </div>
+            </form>
           </div>
         </div>
         {/* END SIGN IN */}

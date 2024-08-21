@@ -3,107 +3,160 @@ import LocationCard from "../LocationCard/LocationCard";
 import { useDispatch, useSelector } from "react-redux";
 import "./Jouney.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateRight, faMotorcycle,faCarSide,faVanShuttle, } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
-// import Map from "../Map/Map";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-const Journey = () => {
-// const [data, setData] = useState({})
-const [distance,setDistance]=useState()
-const [duration,setDuration]=useState()
-const [errMsg,setErrMsg]=useState('')
-const navigate=useNavigate()
-  const formData = useSelector((state) => state.form);
-  const coordinates=useSelector((state)=>state.location)
-  const dispatch=useDispatch()
+import WarningPopup from "../WarningPopup/WarningPopup";
 
-  if(!coordinates.startingPoint.latitude){
-    navigate('/trip-plan')
-  }
-  
-   function formatDuration(seconds) {
+
+const Journey = () => {
+
+
+  const [distance, setDistance] = useState()
+  const [travelTime, setTravelTime] = useState()
+  const [errMsg, setErrMsg] = useState('')
+  const [routeNum, setRouteNum] = useState(0)
+  const [routes, setRoutes] = useState([])
+
+  const formData = useSelector((state) => state.form);
+  const coordinates = useSelector((state) => state.location)
+  const dispatch = useDispatch()
+
+  function formatDuration(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
 
     let result = "";
     if (hours > 0) {
-        result += `${hours}h `;
+      result += `${hours}h `;
     }
     if (minutes > 0) {
-        result += `${minutes}m`;
+      result += `${minutes}m`;
     }
     return result.trim();
-}
-
-   useEffect(() => {
-    console.log(coordinates)
+  }
+  function handleRouteChange() {
+    dispatch({ type: 'RESET_ PLACE' })
+    dispatch({ type: 'REMOVE_DESTINATIONS' })
+    setRouteNum((prev) => (prev + 1) % routes.length)
+  }
+  
+  useEffect(() => {
+    // console.log("journey")
     const getDirections = async (start, end) => {
-      if(start.longitude){
+
+      if (start.longitude) {
         // console.log(start)
-        const accessToken=process.env.REACT_APP_MAPBOX_TOKEN
+        const accessToken = process.env.REACT_APP_MAPBOX_TOKEN
         const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
-    
+
         try {
-            const response = await axios.get(url);
-            const data = response.data;
-            setErrMsg('')
-            // setData(data)
-            let length=data.routes[0].geometry.coordinates.length
-            let midCoordinate=data.routes[0].geometry.coordinates[Math.floor(length/2)]
-            let midCoordinateObj={longitude:midCoordinate[0],latitude:midCoordinate[1]}
-            dispatch({
-              type:'MID_POINT',
-              payload:midCoordinateObj
-            })
-            // console.log(midCoordinate)
-            let distance=((data.routes[0].distance)/1000).toFixed(2)
-            setDistance(distance+' Km')
-            let time=formatDuration(data.routes[0].duration)
-            setDuration(time)
-            
-    
-        } catch (error){
-            console.error('Error fetching directions:', error);
-           let msg=error.response.data.message
-           setErrMsg(msg)
+          const response = await axios.get(url);
+          const data = response.data;
+          // console.log(data);
+          setErrMsg('')
+          // setData(data)
+          setRoutes(data.routes)
+          // console.log(data.routes)
+
+        } catch (error) {
+          console.error('Error fetching directions:', error);
+          let msg = error.response?.data?.message
+          setErrMsg(msg)
         }
       }
-      
-      
+
+
     };
 
-   getDirections(coordinates.startingPoint,coordinates.destination)
-  
-  }, [coordinates.startingPoint,coordinates.destination])
-   
-    console.log(coordinates)
-   return (
+    getDirections(coordinates.startingPoint, coordinates.destination)
+
+  }, [coordinates.startingPoint, coordinates.destination])
+  // console.log(routes.length)
+
+  useEffect(() => {
+    if (routes.length > 0) {
+      let route = routes[routeNum]
+      let routeGeometry = route.geometry
+      let length = route.geometry.coordinates.length
+
+      let distance = ((route.distance) / 1000).toFixed(2)
+      setDistance(distance + ' Km')
+      let time = formatDuration(route.duration)
+      setTravelTime(time)
+      let coordinates = []
+      // console.log(length)
+
+      for (let i = Math.floor(length / 10); i < length && length > 10; i += Math.floor(length / 10)) {
+        // console.log(i)
+        coordinates.push(route.geometry.coordinates[i])
+        
+      }
+      coordinates.push(route.geometry.coordinates[length-1])
+      // console.log(coordinates.length)
+
+      dispatch({
+        type: 'ROUTE_GEOMETRY',
+        payload: routeGeometry
+      })
+      dispatch({
+        type: 'COORDINATES',
+        payload: coordinates
+      })
+      dispatch({
+        type: 'DISTANCE',
+        payload: distance
+      })
+    }
+  }, [routes, routeNum])
+
+
+ 
+  return (
     <div>
-      <div className="connected-cards">
-        <LocationCard name={formData.startingPoint} startingPoint/>
+    {travelTime &&  <WarningPopup travelTime={travelTime} startDate={formData.startDate} endDate={formData.endDate} />
+    }  <div className="connected-cards">
+        <LocationCard name={formData.startingPoint} startingPoint />
         <div className="path">
+          <div className="dateDiv">
+            <h5>{formData?.startDate.split('-').reverse().join('/')}
+            </h5>
+            <h5>{formData?.endDate.split('-').reverse().join('/')}
+            </h5>
+              </div >
+        
           <motion.span
-          style={{width:'100px'}}
-            animate={{ x:`1000px`, rotate: [0, -20, 20, 0] }}
-            transition={{ duration:10 , ease: "linear", repeat: Infinity }}
+            style={{ width: '100px' }}
+            animate={{ x: `1000px`, rotate: [0, -20, 20, 0] }}
+            transition={{ duration: 10, ease: "linear", repeat: Infinity }}
           >
-            <FontAwesomeIcon className="vehicleIcon" icon={faMotorcycle} />
+            <FontAwesomeIcon className="vehicleIcon" icon={formData.transportation==='bike'?faMotorcycle:formData.transportation==='car'?faCarSide:faVanShuttle} />
           </motion.span>
+
           <h3>
             {distance ? (
               (
                 <>
-                    <span>{distance}</span> <span>{duration}</span>
-                </>
-            )
-                
-            ) :<span>{errMsg}</span> }
-        </h3>
-           </div>
+                  <span>{distance}</span> <span>{travelTime}</span>
 
-        <LocationCard name={formData.destination} destination/>
+                </>
+              )
+
+            ) : <span>{errMsg}</span>}
+            {routes.length > 1 && <div className="route">
+              <h3>Route {routeNum + 1}</h3>
+              <button onClick={handleRouteChange} >  <FontAwesomeIcon className="routeArrow" icon={faArrowRotateRight} /> </button>
+            </div>}
+
+
+          </h3>
+
+        </div>
+
+
+        <LocationCard name={formData.destination} destination />
       </div>
 
       {/* <Map/> */}

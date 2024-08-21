@@ -1,0 +1,67 @@
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.popup-content {
+  background-color: #161a1c;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 360px;
+  text-align: center;
+  color: white;
+  border: 3px ridge #ed1616;
+
+}
+.popup-content h2{
+  color: orange;
+  
+}
+
+
+.popup-content p{
+  font-size: 0.9rem;
+  text-align: justify;
+}
+
+.close-button, .change-date-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #3D98B4 0%, #3D78B4 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.close-button {
+  background: linear-gradient(135deg, #3D98B4 0%, #3D78B4 100%);
+}
+
+.change-date-button {
+  background: linear-gradient(135deg, #A5AAB3 0%, #8A8F99 100%);
+  margin-left: 10px;
+}
+
+.close-button:hover, .change-date-button:hover {
+  background: linear-gradient(135deg, #316f83 0%, #295e7a 100%);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.change-date-button:hover {
+  background: linear-gradient(135deg, #7d848e 0%, #6b717b 100%);
+}

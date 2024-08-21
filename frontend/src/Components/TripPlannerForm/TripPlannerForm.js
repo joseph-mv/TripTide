@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import "./TripPlannerForm.css";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,56 +10,79 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Suggestions from "../../assets/Suggetions/Suggestions";
-import { pageVariants1,pageVariants2,pageTransition } from "../../animation/tripplan";
-import {  useNavigate } from "react-router-dom";
+import {
+  pageVariants1,
+  pageVariants2,
+  pageTransition,
+} from "../../animation/tripplan";
+import { useNavigate } from "react-router-dom";
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
-
 
 const TripPlannerForm = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.form);
+  dispatch({
+    type: "RESET_ LOCATION",
+  });
+  //  console.log(coordinates)
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (e) => {
+    // console.log(e.target.value)
     dispatch({ type: "UPDATE", payload: e.target });
+    setIdxSugg1(0);
+    setIdxSugg2(0);
   };
-  const validateForm = (e) => {
-    // console.log(formData)
-    const { destination, startingPoint, startDate, endDate, numPeople } =
-      formData;
-    if (
-      !destination ||
-      !startingPoint ||
-      !startDate ||
-      !endDate ||
-      !numPeople
-    ) {
-      //   alert('Please fill out all fields.');
-      return false;
+  const handleKeyDown = (e) => {
+    // console.log(e.target)
+    if (e.key === "ArrowDown") {
+      if (e.target.id === "destination") {
+        setIdxSugg1((pre) => (pre + 1) % suggestions1.length);
+      } else if (e.target.id === "startingPoint") {
+        setIdxSugg2((pre) => (pre + 1) % suggestions2.length);
+      }
+    } else if (e.key === "ArrowUp") {
+      if (e.target.id === "destination") {
+        setIdxSugg1(
+          (pre) => (pre + suggestions1.length - 1) % suggestions1.length
+        );
+      } else if (e.target.id === "startingPoint") {
+        setIdxSugg2(
+          (pre) => (pre + suggestions2.length - 1) % suggestions2.length
+        );
+      }
+    } else if (e.key === "Enter") {
+      if (e.target.id === "destination" && idxSugg1 >= 0) {
+        dispatch({
+          type: "DESTINATION_SUGGETION",
+          payload: suggestions1[idxSugg1].properties,
+        });
+        setSuggestions1([]);
+        setIdxSugg1(-1);
+      } else if (e.target.id === "startingPoint" && idxSugg2 >= 0) {
+        dispatch({
+          type: "STARTING_SUGGETION",
+          payload: suggestions2[idxSugg2].properties,
+        });
+        setSuggestions2([]);
+        setIdxSugg2(-1);
+      }
     }
-    if (new Date(startDate) > new Date(endDate)) {
-      alert("Start date cannot be later than end date.");
-      e.preventDefault();
-      return false;
-    }
-    if (numPeople < 1) {
-      return false;
-    }
-    return true;
   };
 
-  
   const [minDate, setMinDate] = useState("");
   const [suggestions1, setSuggestions1] = useState([]);
   const [suggestions2, setSuggestions2] = useState([]);
+  const [idxSugg1, setIdxSugg1] = useState(-1);
 
+  const [idxSugg2, setIdxSugg2] = useState(-1);
   const fetchGeocodedResults = async (e) => {
     try {
       const response = await axios.get(
         `https://api.mapbox.com/search/geocode/v6/forward?q=${
           formData[e.target.id]
-        }&types=place%2Clocality&language=en&access_token=${mapboxToken}`
+        }&types=street%2Clocality%2Cplace%2Cregion%2Cdistrict&language=en&access_token=${mapboxToken}`
       );
       // console.log(response)
       if (e.target.id === "destination") {
@@ -70,13 +91,22 @@ const TripPlannerForm = () => {
         setSuggestions2(response.data.features);
       }
     } catch (error) {
-      console.error("Error fetching geocoded suggestions:",error);
+      console.error("Error fetching geocoded suggestions:", error);
     }
   };
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
+    if (currentPage === 2) {
+      navigate("/plan-details");
+    }
+    const { startDate, endDate } = formData;
+    if (new Date(startDate) > new Date(endDate)) {
+      alert("Start date cannot be later than end date.");
+      e.preventDefault();
+      return false;
+    }
     e.preventDefault();
-    navigate('/plan-details')
+    setCurrentPage((pre) => 1 + (pre % 2));
   };
 
   useEffect(() => {
@@ -112,6 +142,7 @@ const TripPlannerForm = () => {
                       fetchGeocodedResults(e);
                       handleChange(e);
                     }}
+                    onKeyDown={handleKeyDown}
                     required
                   />
                   {suggestions1.length > 0 && formData.destination && (
@@ -119,12 +150,14 @@ const TripPlannerForm = () => {
                       suggestions={suggestions1}
                       setSuggestions={setSuggestions1}
                       place={formData.destination}
+                      idx={idxSugg1}
                     />
                   )}
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="startingPoint">Starting Location:</label>
+
                   <input
                     type="text"
                     id="startingPoint"
@@ -134,12 +167,14 @@ const TripPlannerForm = () => {
                       fetchGeocodedResults(e);
                       handleChange(e);
                     }}
+                    onKeyDown={handleKeyDown}
                     required
                   />
                   {suggestions2.length > 0 && formData.startingPoint && (
                     <Suggestions
                       suggestions={suggestions2}
                       setSuggestions={setSuggestions2}
+                      idx={idxSugg2}
                     />
                   )}
                 </div>
@@ -176,18 +211,9 @@ const TripPlannerForm = () => {
                     min={1}
                     value={formData.numPeople}
                     onChange={handleChange}
-                    required
                   />
                 </div>
-                <button
-                  className="nxtBtn"
-                  onClick={(e) => {
-                    // e.preventDefault()
-                    if (validateForm(e)) {
-                      setCurrentPage(2);
-                    }
-                  }}
-                >
+                <button id="nxtBtn" type="submit" className="nxtBtn">
                   Next <FontAwesomeIcon className="icon" icon={faAnglesRight} />
                 </button>
               </motion.div>
@@ -249,8 +275,8 @@ const TripPlannerForm = () => {
                     <option value="bike">Bike</option>
                     <option value="car">Car</option>
                     <option value="bus">Bus</option>
-                    <option value="train">Train</option>
-                    <option value="plane">Plane</option>
+                    {/* <option value="train">Train</option>
+                    <option value="plane">Plane</option> */}
                     <option value="other">Other</option>
                   </select>
                 </div>
@@ -293,18 +319,7 @@ const TripPlannerForm = () => {
                         Shopping
                       </label>
                     </div>
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="dining"
-                          checked={formData.activities.dining}
-                          onChange={handleChange}
-                        />
-                        Dining
-                      </label>
-                    </div>
+
                     <div>
                       <label>
                         <input
@@ -358,7 +373,7 @@ const TripPlannerForm = () => {
                     Previous
                   </button>
                   <button type="submit">
-                    Plan Trip 
+                    Plan Trip
                     <FontAwesomeIcon className="icon" icon={faPaperPlane} />
                   </button>
                 </div>

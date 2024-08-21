@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./Suggestions.css";
 import { useDispatch } from "react-redux";
 
 function Suggestions(props) {
-
-  const { suggestions, setSuggestions, place } = props;
+  
+  const listRef = useRef(null);
+  
+  const { suggestions, setSuggestions, place,idx } = props;
+  const highlightedItem=listRef.current?.children[idx]
+  highlightedItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // console.log(suggestions)
   // console.log(formData)
+  // console.log(index)
   const dispatch=useDispatch()
 
   return (
     <div>
-      <ul className="suggestions-list">
-        {suggestions.map((suggestion) => (
+      <ul className="suggestions-list" ref={listRef}>
+        {suggestions.map((suggestion,index) => (
           <li
-            key={suggestion.id}
+            key={index}
+            className={index===idx?'highlight':''}
             onClick={(e) => {
 
               place ? dispatch({type:"DESTINATION_SUGGETION",payload:suggestion.properties}):dispatch({type:'STARTING_SUGGETION',payload:suggestion.properties})

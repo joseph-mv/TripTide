@@ -4,9 +4,14 @@ import './Hero.css'
 
 import PlanButton from '../../assets/PlanButton';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 
 function Hero() {
+  const dispatch=useDispatch()
+  dispatch({
+    type:'RESET_FORM'
+  })
   const navigate = useNavigate();
   return (
     <div>

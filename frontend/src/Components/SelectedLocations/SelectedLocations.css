@@ -1,0 +1,171 @@
+/* TouristSpotsList.css */
+.tourist-spots-list {
+  overflow-y: scroll;
+  padding: 0 10px;
+  width: min-content;
+  height: 100vh;
+  flex-shrink: 0;
+  border-radius: 25px;
+  margin-left: 2%;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  -webkit-overflow-scrolling: touch; 
+}
+
+.tourist-spots-list::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.distance-text {
+  position: absolute;
+  margin-bottom: 10px;
+  z-index: 5;
+  color: orange;
+  /* font-size: larger; */
+  font-weight: bolder;
+}
+.icon-container i {
+  color: #151414;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.tourist-spots-list .spot {
+  position: relative;
+  border: 1px solid #250808;
+  background-color: white;
+  border-radius: 8px;
+  padding: 5px 16px;
+  margin: 5px 16px 5px 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+  width: 200px;
+  /* min-height: 80px; */
+}
+.tourist-spots-list .startingPoint {
+  padding-top: 10px;
+  /* overflow: hidden; */
+  /* height: 80px; */
+  font-size: 0.9rem;
+  color: black;
+}
+
+.spot:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.spot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spot-index {
+  font-weight: bold;
+  color: #333;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ff0000;
+  transform: rotateX(30deg);
+  &:hover {
+    transform: rotateX(0deg);
+    color: #0a0b0b;
+  }
+}
+
+.spot-body {
+  /* margin-top: 8px; */
+}
+
+.site-label {
+  font-size: 1rem;
+  margin: 0;
+  color: #0a0b0b;
+}
+
+.type-label {
+  font-size: 14px;
+  margin: 4px 0 0 0;
+  color: orange;
+}
+
+@media (max-width: 800px) {
+  .tourist-spots-list {
+    display: flex;
+    flex-direction: row;
+    margin-left: 0;
+    height: 20vh;
+
+    overflow-x: scroll; 
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+
+    width: 100%;
+    scrollbar-width: auto;
+    align-items: center;
+  }
+  .tourist-spots-list::-webkit-scrollbar {
+    height: 8px;
+    /* background-color: white; */
+  }
+  .tourist-spots-list::-webkit-scrollbar-track {
+    background: #4499b6; /* Color of the track (part the scrollbar slides on) */
+    border-radius: 10px; /* Rounded corners of the track */
+  }
+
+  .tourist-spots-list::-webkit-scrollbar-thumb {
+    background: #f1ce06; /* Color of the draggable part of the scrollbar */
+    border-radius: 10px; /* Rounded corners of the thumb */
+  }
+
+  .tourist-spots-list::-webkit-scrollbar-thumb:hover {
+    background: #dde408; /* Color of the thumb when hovered */
+  }
+  /* .icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    
+  
+  } */
+  
+  .distance-text {
+    top: -10px;
+    text-align: center;
+  }
+
+  .icon-container i {
+    transform: rotate(-90deg) scaleY(1.5);
+    /* transform: scaleX(2); */
+  }
+
+  .spot{
+    min-width: 180px;
+    height: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* margin-left: 0; */
+  
+  }
+
+  .type-label {
+    position: absolute;
+    top: 70%;
+  
+  }
+
+}

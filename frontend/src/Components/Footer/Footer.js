@@ -1,16 +1,39 @@
-// src/components/Footer.js
 import React from 'react';
+import './Footer.css';
 
-const Footer = () => (
-  <footer>
-    <div>Privacy Policy | Terms of Service</div>
-    <div>Follow us on:
-      <a href="https://facebook.com">Facebook</a>
-      <a href="https://twitter.com">Twitter</a>
-      <a href="https://instagram.com">Instagram</a>
-    </div>
-    <div>Contact us: info@tripnest.com</div>
-  </footer>
-);
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-logo">
+          <h1>TripTide</h1> 
+        </div>
+        <div className="footer-links">
+          <ul>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#terms">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div className="footer-social">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-twitter"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-instagram"></i>
+          </a>
+          
+        </div>
+        <div className="footer-info">
+          <p>&copy; {new Date().getFullYear()} TripTide. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
 export default Footer;
