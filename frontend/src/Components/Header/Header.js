@@ -114,7 +114,11 @@ const Header = () => {
             <MdAccountCircle />
             &nbsp;&nbsp;{userName ? userName : "Account"}
           </Link>
-        {/* {<button onClick={handleLogout}>logout</button>} */}
+          <Link onClick={handleLogout} className="link" to="/authenticate">
+            
+          &nbsp;&nbsp; &nbsp;&nbsp;{userName ? 'Logout' : ""}
+          </Link>
+       
         </nav>
       </header>
       <motion.div className="travelFlag" animate={wavingAnimation} />

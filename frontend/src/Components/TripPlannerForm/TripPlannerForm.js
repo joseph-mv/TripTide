@@ -149,7 +149,7 @@ const TripPlannerForm = () => {
                     <Suggestions
                       suggestions={suggestions1}
                       setSuggestions={setSuggestions1}
-                      place={formData.destination}
+                      destination={formData.destination}
                       idx={idxSugg1}
                     />
                   )}

@@ -6,7 +6,7 @@ function Suggestions(props) {
   
   const listRef = useRef(null);
   
-  const { suggestions, setSuggestions, place,idx } = props;
+  const { suggestions, setSuggestions, destination,idx } = props;
   const highlightedItem=listRef.current?.children[idx]
   highlightedItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   // console.log(suggestions)
@@ -23,7 +23,7 @@ function Suggestions(props) {
             className={index===idx?'highlight':''}
             onClick={(e) => {
 
-              place ? dispatch({type:"DESTINATION_SUGGETION",payload:suggestion.properties}):dispatch({type:'STARTING_SUGGETION',payload:suggestion.properties})
+              destination ? dispatch({type:"DESTINATION_SUGGETION",payload:suggestion.properties}):dispatch({type:'STARTING_SUGGETION',payload:suggestion.properties})
 
               setSuggestions([]);
             }}
