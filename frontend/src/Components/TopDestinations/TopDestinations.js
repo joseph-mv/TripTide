@@ -2,61 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './TopDestinations.css'; // Assuming you have separate CSS for TopDestinations
 import axios from 'axios';
 import mustVisitPlaces from '../../utils/mustVisitPlaces';
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 const TopDestinations = () => {
-  // var destinations = [
-  //   {
-  //     name: 'Paris',
-  //     image: 'path/to/paris.jpg',
-  //     description: 'The city of light with stunning architecture and rich history.',
-  //   },
-  //   {
-  //     name: 'New York',
-  //     image: 'path/to/new-york.jpg',
-  //     description: 'The bustling city with iconic landmarks and diverse culture.',
-  //   },
-  //   {
-  //     name: 'Tokyo',
-  //     image: 'path/to/tokyo.jpg',
-  //     description: 'A vibrant metropolis blending traditional culture with modern innovation.',
-  //   },
-  //   {
-  //     name: 'Sydney',
-  //     image: 'path/to/sydney.jpg',
-  //     description: 'Famous for its beautiful harbor and stunning beaches.',
-  //   },
-  //   {
-  //     name: 'Rome',
-  //     image: 'path/to/rome.jpg',
-  //     description: 'Rich in history with ancient ruins and beautiful architecture.',
-  //   },
-  //   {
-  //     name: 'Cape Town',
-  //     image: 'path/to/cape-town.jpg',
-  //     description: 'A diverse city with breathtaking landscapes and rich cultural experiences.',
-  //   },
-  //   {
-  //     name: 'Barcelona',
-  //     image: 'path/to/barcelona.jpg',
-  //     description: 'Known for its unique architecture and vibrant nightlife.',
-  //   },
-  //   {
-  //     name: 'Istanbul',
-  //     image: 'path/to/istanbul.jpg',
-  //     description: 'A city that straddles two continents with a rich history and diverse culture.',
-  //   },
-  //   {
-  //     name: 'Dubai',
-  //     image: 'path/to/dubai.jpg',
-  //     description: 'Modern city with luxurious experiences and stunning skyscrapers.',
-  //   },
-  //   {
-  //     name: 'Amsterdam',
-  //     image: 'path/to/amsterdam.jpg',
-  //     description: 'Known for its picturesque canals, museums, and lively atmosphere.',
-  //   },
-  //   // Add more destinations here if needed
-  // ];
 
   const [destinations, setDestinations] = useState([]);
   useEffect(() => {
@@ -126,7 +75,7 @@ const TopDestinations = () => {
               <div className="destination-card-front">
               <h3 className="destination-name">{destination.name}</h3>
               <div class="image-container">
-                <img src={destination.image?.source} alt={destination.name} className="destination-image" />
+                <LazyLoadImage src={destination.image?.source} alt={destination.name}  className="destination-image" effect='blur' width="100%" height="150px" />
                <p className="destination-description">{destination.description}</p>
                </div>
               </div>

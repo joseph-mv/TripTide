@@ -3,6 +3,8 @@ import "./TouristSpots.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { haversineDistance } from "../../utils/haversineDistance";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function TouristSpots({ destination, index }) {
   const selectedPlaces = useSelector((state) => state.location.selectedPlaces);
@@ -11,7 +13,14 @@ function TouristSpots({ destination, index }) {
   const [expanded, setExpanded] = useState(false);
   const [description, setDescription] = useState("");
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(true);
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
 
+  const handleImageError = () => {
+    setLoading(false); // Hide the loading spinner even if there's an error
+  };
   // console.log(destination)
   const toggleCard = () => {
     setExpanded(!expanded);
@@ -56,7 +65,7 @@ function TouristSpots({ destination, index }) {
         setDescription(response.data);
       })
       .catch((error) => {
-        console.error(error)
+        // console.error(error)
         setError("Unfortunately, we were unable to locate details for this place.")
       });
     // axios.get(`https://api.tomorrow.io/v4/weather/forecast?location=42.3478,-71.0466&apikey=${process.env.REACT_APP_TOMORROW_API}`)
@@ -64,7 +73,8 @@ function TouristSpots({ destination, index }) {
     //   console.log(response)
     // })
   }, []);
-  // console.log(description.originalimage?.source)
+  console.log(description.extract)
+
   return (
     <div>
       <div
@@ -84,7 +94,16 @@ function TouristSpots({ destination, index }) {
         <div className="siteLabel">{destination.siteLabel}</div>
         <div className="typeLabel">{destination.typeLabel}</div>
         <div className="card-content">
-          <img src={description.originalimage?.source} className="card-image" />
+        {loading && !error && description.thumbnail && (
+        
+          <div className="spinner">Loading...</div>
+        
+      )}
+          <LazyLoadImage src={description.thumbnail?.source} className="card-image"  width="100%" height="auto" effect="blur"
+       alt={destination.siteLabel} 
+       onLoad={handleImageLoad}
+        onError={handleImageError}
+       />
           <p className="card-description">{description.extract}</p>
           {error && <p>{error}</p>}
           <button

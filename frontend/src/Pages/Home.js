@@ -1,18 +1,21 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "../Components/Header/Header";
 import Hero from "../Components/Hero/Hero";
-import TopDestinations from "../Components/TopDestinations/TopDestinations";
+// import TopDestinations from "../Components/TopDestinations/TopDestinations";
 import Features from "../Components/Features/Features";
 import Footer from "../Components/Footer/Footer";
 import BackToTop from "../Components/BackToTop/BackToTop";
-
+const TopDestinations=React.lazy(()=>import('../Components/TopDestinations/TopDestinations'))
 function Home() {
   return (
     <div>
       <Header />
       <Hero />
       <Features />
+      
+      <Suspense fallback={<div>Loading...</div>}>
       <TopDestinations />
+      </Suspense>
       <BackToTop/>
       <Footer />
     </div>
