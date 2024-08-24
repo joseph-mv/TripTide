@@ -50,11 +50,17 @@
     /* height: 30px; */
     object-fit: contain;
     object-position: center;
-    background-image: url('../../../public/icons/long-arrow.png');
+    background: url('../../../public/icons/long-arrow.png');
+    
     background-position: right;
     background-size: cover;
     background-repeat: no-repeat;
 
+}
+@media (prefers-color-scheme: dark) {
+    .places .arrowImg {
+        filter: invert(100%);
+    }
 }
 
 .toDoList {
@@ -73,7 +79,9 @@
     right: 1px;
     /* background-color: red; */
     width: 40%;
-   
+    min-width: fit-content;
+    max-width: 70vw;
+   margin: 2px;
  
 }
 
@@ -82,7 +90,7 @@
 }
 
 h2 {
-    margin-top: 5px;
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -95,11 +103,9 @@ h2 {
 }
 
 .input-container input[type="text"] {
-    flex-shrink: 1;
     flex-grow: 1; 
-    flex-basis: 0; 
-      min-width: 50px;
-     
+    flex-basis: 60px; 
+      min-width: 60px;
     }
 
 .input-container button {

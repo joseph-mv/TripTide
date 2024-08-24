@@ -8,3 +8,9 @@ background-repeat: no-repeat;
 background-size: cover;
 background-attachment: fixed;
 }
+.fixed-body {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+   
+}

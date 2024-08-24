@@ -9,6 +9,7 @@ import Temp from './Pages/Temp';
 import Verification from './Pages/Verification';
 import ForgotPassword from './Pages/ForgotPassword';
 import Itinerary from './Pages/Itinerary/Itinerary';
+import ScrollToTop  from '../src/Components/ScrollToTop/ScrollToTop'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
     <div>
     
     <BrowserRouter>
+    <ScrollToTop/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/authenticate" element={< Authenticate/>} />

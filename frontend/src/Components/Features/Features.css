@@ -17,7 +17,9 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 20px;
-  width: 100%;
+  margin-left: -20px;
+  width: 100vw;
+ 
   /* scroll-behavior: smooth; */
   /* white-space: nowrap; */
 }

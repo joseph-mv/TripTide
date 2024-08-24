@@ -1,5 +1,5 @@
 // src/components/Header.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { motion } from "framer-motion";
@@ -32,8 +32,17 @@ const Header = () => {
     handleLogout();
   }
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    if (!isOpen) {
+      document.body.classList.add("fixed-body");
+    } else {
+      document.body.classList.remove("fixed-body");
+    }
+    setIsOpen(prev=>!prev);
+
   };
+  useEffect(() => {
+    document.body.classList.remove("fixed-body");
+  }, []);
   const shadowAnimation = {
     filter: [
       "drop-shadow(0px 0px 0px rgba(248, 15, 15, 0))",
@@ -91,7 +100,7 @@ const Header = () => {
         <nav className={isOpen ? "nav-open" : ""}>
           <Link className="link" to="/">
             <AiFillHome />
-            &nbsp;&nbsp; <span>Home</span>{" "}
+            &nbsp;&nbsp; <span>Home</span>
           </Link>
           <Link className="link" to="/destinations">
             <FaMapLocation /> &nbsp;&nbsp;Destinations

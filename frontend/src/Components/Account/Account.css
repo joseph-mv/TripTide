@@ -95,13 +95,15 @@
 .input-group .showHideBtn {
     position: absolute;
     right: 1rem;
-    top: 40%;
+    margin-right: 5px;
+    top: 50%;
     width: 10%;
     height: 10%;
-    /* transform: translateY(-50%); */
+    transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
+    
 }
 
 .error {
@@ -315,7 +317,7 @@
 
 /* RESPONSIVE */
 
-@media only screen and (max-width: 425px) {
+@media only screen and (max-width: 600px) {
 
     .container::before,
     .container.sign-in::before,
@@ -327,6 +329,7 @@
         transform: none;
         right: 0;
     }
+    
 
     /* .container.sign-in .col.sign-up {
         transform: translateY(100%);
