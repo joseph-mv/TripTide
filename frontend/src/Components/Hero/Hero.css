@@ -57,6 +57,14 @@
     
     
   }
+  @media(max-width:750px){
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .hero .pg {
+        font-size: 1.3rem;
+    }
+  }
  
   
   /* .hero-button {

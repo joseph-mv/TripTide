@@ -78,10 +78,11 @@ const TopDestinations = () => {
       <h2 className="top-destinations-heading">Top Destinations</h2>
       <div className="destination-grid">
         {destinations.map((destination, index) => (
-          <div key={index} data-aos='fade-up'
+          <div data-aos='fade-up'>
+          <div key={index} 
             className={`destination-card ${flipped[index] ? "flipped" : ""}`}
             onClick={() => handleFlip(index)}>
-            <div className="destination-card-inner">
+            <div className="destination-card-inner" >
               <div className="destination-card-front">
                 <h3 className="destination-name">{destination.name}</h3>
                 <div class="image-container">
@@ -109,6 +110,7 @@ const TopDestinations = () => {
                 <p className="destination-details">{destination.extract}</p>
               </div>
             </div>
+          </div>
           </div>
         ))}
       </div>

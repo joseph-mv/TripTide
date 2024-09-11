@@ -7,7 +7,7 @@
 
 .feature-heading {
   text-align: center;
-  font-size: 2.5em;
+  font-size:clamp(2rem, 4vw, 2.5rem);
   margin-bottom: 40px;
   color: white;
 }
