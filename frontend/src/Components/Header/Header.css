@@ -15,7 +15,7 @@
   }
   
   header .logo {
-    font-size: 24px;
+    font-size: 1.5rem;
     -webkit-box-reflect: below -40px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.629)));
 
   }
@@ -50,7 +50,7 @@
     background: none;
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: 1.5rem;
   }
   
   @media (max-width: 768px) {
@@ -62,7 +62,7 @@
       top: 70px;
       right: 0;
       width: auto;
-      
+      font-size: 1.25rem;
       height: 100vh;
       text-align: left;
       z-index: 7;

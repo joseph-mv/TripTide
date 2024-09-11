@@ -48,7 +48,7 @@ const FeatureSection = () => {
       <h2 className="feature-heading">Our Features</h2>
       <div className="feature-scroll" ref={scrollRef}>
         {features.map((feature, index) => (
-          <FeatureCard
+          <FeatureCard 
             key={index}
             icon={feature.icon}
             title={feature.title}

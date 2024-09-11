@@ -56,7 +56,7 @@ const Account = () => {
       // console.log(response);
       if (response.data.msg) {
         toast.success(response.data.msg);
-        console.log(response.data.msg);
+        // console.log(response.data.msg);
       }
       else {
         setError(response.data.error)
@@ -64,7 +64,8 @@ const Account = () => {
       // Handle successful registration, e.g., redirect to login page
     } catch (error) {
       setLoading(false)
-      console.error(error);
+      setError("Network issue. Please try again later.")
+      // console.error(error);
 
       // Handle registration error
     }
@@ -79,7 +80,7 @@ const Account = () => {
     try {
       const response = await axios.post(`${BASE_URL}/user/login`, { loginEmail, loginPassword });
       // Handle successful login
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data.status) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('refreshToken', response.data.refreshToken)
@@ -92,7 +93,8 @@ const Account = () => {
       }
     } catch (error) {
       // Handle login error
-      console.error(error);
+      // console.error(error);
+      alert("Network issue. Please try again later.")
     }
   }
   const handleForgotPassword = (e) => {
@@ -102,8 +104,7 @@ const Account = () => {
   }
 
   return (
-    <div
-      id="container"
+    <div id="container"
       className={classNames("container", {
         "sign-in": isSignIn,
         "sign-up": !isSignIn,

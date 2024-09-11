@@ -6,7 +6,6 @@ const collection = require("../config/collection");
 const crypto = require('crypto');
 const sendVerificationEmail = require('../utils/sendVerificationEmail');
 const sendOtp = require('../utils/sendOtp');
-const { log } = require('console');
 
 module.exports = {
   signUp: (user) => {
@@ -60,6 +59,7 @@ module.exports = {
       }
     });
   },
+  
   login: (user) => {
     // console.log(user)
     return new promise(async (resolve, reject) => {

@@ -4,7 +4,6 @@ var userHelper = require('../Helpers/user-helper')
 var itineraryHelper=require('../Helpers/itinerary-helper')
 var jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-
 dotenv.config();
 function generateAccessToken(username) {
   return jwt.sign(username, process.env.JWT_SECRET, { expiresIn: '1800s' });

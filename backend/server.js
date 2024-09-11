@@ -19,8 +19,6 @@ db.connect((err)=>{
     });
     
 
-
-  
 var tripRouter=require('./routes/tripPlan')
 var userRouter = require('./routes/user');
 // var adminRouter = require('./routes/admin');

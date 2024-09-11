@@ -11,7 +11,15 @@ router.get('/suggetions',(req,res)=>{
       // console.log(response)
       res.json(response)
    })
-   
+
+})
+router.get('/destinations' ,(req,res)=>{
+   // console.log('destinations',req.query)
+   tripPlanHelper.getDestinations(req.query
+   ).then((response)=>{
+      // console.log(response)
+      res.json(response)
+   })
 })
 
 

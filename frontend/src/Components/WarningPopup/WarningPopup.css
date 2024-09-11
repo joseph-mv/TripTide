@@ -11,12 +11,13 @@
   z-index: 99;
 }
 
+
 .popup-content {
   background-color: #161a1c;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  width: 360px;
+  width: calc(300px + 10vw);
   text-align: center;
   color: white;
   border: 3px ridge #ed1616;
@@ -29,7 +30,7 @@
 
 
 .popup-content p{
-  font-size: 0.9rem;
+  font-size: clamp(14px,16px,1rem);
   text-align: justify;
 }
 
@@ -43,7 +44,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
+  font-size: 1rem;
   text-transform: uppercase;
 }
 

@@ -21,10 +21,10 @@ function PlanButton() {
           <span style={{ '--i': 1 }}>l</span>
           <span style={{ '--i': 2 }}>a</span>
           <span style={{ '--i': 3 }}>n</span>
-          <span style={{ '--i': 4 }}>Y</span>
+          <span style={{ '--i': 4 }}>R</span>
           <span style={{ '--i': 5 }}>o</span>
-          <span style={{ '--i': 6 }}>u</span>
-          <span style={{ '--i': 7 }}>r</span>
+          <span style={{ '--i': 6 }}>a</span>
+          <span style={{ '--i': 7 }}>d</span>
           <span style={{ '--i': 8 }}>T</span>
           <span style={{ '--i': 9 }}>r</span>
           <span style={{ '--i': 10 }}>i</span>

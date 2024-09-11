@@ -4,9 +4,10 @@ import './DeleteConfirmationModal.css';
 
 const DeleteConfirmationModal = ({ isOpen, onRequestClose, onConfirm }) => {
   if (!isOpen) {
+    document.body.classList.remove("fixed-body");
     return null;
   }
-
+  document.body.classList.add("fixed-body");
   return (
     <div className="modal-overlay">
       <div className="modal-content">

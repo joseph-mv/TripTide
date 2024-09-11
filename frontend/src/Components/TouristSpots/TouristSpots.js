@@ -3,16 +3,16 @@ import "./TouristSpots.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { haversineDistance } from "../../utils/haversineDistance";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
-function TouristSpots({ destination, index }) {
+function TouristSpots({ destination, index, locAround }) {
   const selectedPlaces = useSelector((state) => state.location.selectedPlaces);
   const startingPoint = useSelector((state) => state.location.startingPoint);
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const handleImageLoad = () => {
     setLoading(false);
@@ -66,18 +66,47 @@ function TouristSpots({ destination, index }) {
       })
       .catch((error) => {
         // console.error(error)
-        setError("Unfortunately, we were unable to locate details for this place.")
+        setError(
+          "Unfortunately, we were unable to locate details for this place."
+        );
       });
     // axios.get(`https://api.tomorrow.io/v4/weather/forecast?location=42.3478,-71.0466&apikey=${process.env.REACT_APP_TOMORROW_API}`)
     // .then((response)=>{
     //   console.log(response)
     // })
   }, []);
-  console.log(description.extract)
-
+  // console.log(description.extract)
+  if (locAround) {
+    return (
+      <div className="destination-card2" data-aos='fade-up'>
+        <h2 className="destination-title">
+          <span className="destination-index">{index + 1}.</span>
+          {destination.siteLabel}
+        </h2>
+        {loading && !error && description.thumbnail && (
+          <div className="spinner">Loading...</div>
+        )}
+        <LazyLoadImage
+          src={description.thumbnail?.source}
+          className="card-image"
+          width="100%"
+          height="auto"
+          effect="blur"
+          alt={destination.siteLabel}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+        />
+        <div className="destination-content">
+          <div className="typeLabel">{destination.typeLabel}</div>
+          <p className="card-description">{description.extract}</p>
+          {error && <p>{error}</p>}
+        </div>
+      </div>
+    );
+  }
   return (
-    <div>
-      <div
+    <div >
+      <div 
         className={`card ${expanded ? "expanded" : ""}`}
         onClick={toggleCard}
         onMouseLeave={handleMouseLeave}
@@ -86,7 +115,7 @@ function TouristSpots({ destination, index }) {
           type="checkbox"
           id="cardCheckbox"
           onChange={(e) => handleCheckboxChange(e, destination, index + 1)}
-          onClick={e=>e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
           className="checkbox"
         />
         <label for="checkbox" className="checkbox-label"></label>
@@ -94,16 +123,19 @@ function TouristSpots({ destination, index }) {
         <div className="siteLabel">{destination.siteLabel}</div>
         <div className="typeLabel">{destination.typeLabel}</div>
         <div className="card-content">
-        {loading && !error && description.thumbnail && (
-        
-          <div className="spinner">Loading...</div>
-        
-      )}
-          <LazyLoadImage src={description.thumbnail?.source} className="card-image"  width="100%" height="auto" effect="blur"
-       alt={destination.siteLabel} 
-       onLoad={handleImageLoad}
-        onError={handleImageError}
-       />
+          {loading && !error && description.thumbnail && (
+            <div className="spinner">Loading...</div>
+          )}
+          <LazyLoadImage
+            src={description.thumbnail?.source}
+            className="card-image"
+            width="100%"
+            height="auto"
+            effect="blur"
+            alt={destination.siteLabel}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+          />
           <p className="card-description">{description.extract}</p>
           {error && <p>{error}</p>}
           <button
@@ -112,9 +144,7 @@ function TouristSpots({ destination, index }) {
           >
             More Details...
           </button>
-          
         </div>
-        
       </div>
     </div>
   );

@@ -21,8 +21,6 @@
     box-sizing: border-box;
 }
 
-
-
 .container {
     position: relative;
     min-height: 80vh;
@@ -49,6 +47,7 @@
 .form-wrapper {
     width: 100%;
     max-width: 28rem;
+    padding: 10px;
 }
 
 .form {

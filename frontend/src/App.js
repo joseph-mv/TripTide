@@ -10,10 +10,19 @@ import Verification from './Pages/Verification';
 import ForgotPassword from './Pages/ForgotPassword';
 import Itinerary from './Pages/Itinerary/Itinerary';
 import ScrollToTop  from '../src/Components/ScrollToTop/ScrollToTop'
+import DestinationsPage from './Pages/Destinations';
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 
 function App() {
- 
+  useEffect(() => {
+    AOS.init({
+      duration: 1200, // Animation duration in milliseconds
+    });
+  }, []);
+  
   return (
     <div>
     
@@ -22,6 +31,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/authenticate" element={< Authenticate/>} />
+        <Route path='/destinations' element={<DestinationsPage/>}/>
         <Route path='/trip-plan' element={<TripPlan/>}/>
         <Route path='/plan-details' element={<PlanDetails/>} />
         <Route path="/verify-email" element={<Verification/>} />

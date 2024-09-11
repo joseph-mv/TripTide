@@ -3,7 +3,7 @@ import './FeatureCard.css'; // Import the CSS file
 
 const FeatureCard = ({ icon, title, description }) => {
   return (
-    <div className="feature-card">
+    <div className="feature-card" data-aos='fade-left'>
       <div className="feature-icon">
         <i className={icon}></i>
       </div>

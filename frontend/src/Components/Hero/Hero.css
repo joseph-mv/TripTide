@@ -42,10 +42,10 @@
     left:5%;
     animation: text-flicker-out-glow 3s linear 0s 1 normal none;
     background: linear-gradient(90deg,  rgb(228, 248, 12),#f4136d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  
+
   .hero .pg {
     position: absolute;
     top:50%;

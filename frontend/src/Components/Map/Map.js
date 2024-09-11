@@ -41,7 +41,7 @@ function Map() {
       // Assuming this is your route geometry
       const route = coordinates.routeGeometry;
       // console.log(startingPoint)
-          console.log(route)
+          // console.log(route)
       map.on("load", () => {
         map.addSource("route", {
           type: "geojson",
@@ -65,7 +65,7 @@ function Map() {
           },
         });
 
-        new mapboxgl.Marker().setLngLat(start).addTo(map);
+        new mapboxgl.Marker().setLngLat(start).addTo(map); //starting point
 
         new mapboxgl.Marker().setLngLat(end).addTo(map);
         const bounds = new mapboxgl.LngLatBounds().extend(start).extend(end);

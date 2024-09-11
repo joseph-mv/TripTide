@@ -46,6 +46,7 @@ const WarningPopup = ({ travelTime, startDate, endDate }) => {
 
 Happy travels! 🌍✨`);
       setIsVisible(true);
+      document.body.classList.add("fixed-body");
     }
     dispatch({
       type: "NOOFDAYS",
@@ -55,6 +56,7 @@ Happy travels! 🌍✨`);
 
   const closePopup = () => {
     setIsVisible(false);
+    document.body.classList.remove("fixed-body");
   };
   const handleChangeDate = () => {
     setIsVisible(false);
