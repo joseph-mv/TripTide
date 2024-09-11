@@ -15,8 +15,8 @@ function Destinations() {
   const [lat, setLat] = useState(null);
   const [form, setForm] = useState({
     place: "",
-    coordinates: [ 75.8650148, 11.2621704 ],
-    distance:"500",
+    coordinates: [],
+    distance:"",
     type: {
       "Tourist Attraction": true,
       "Tourist Destination": false,
@@ -159,8 +159,6 @@ function Destinations() {
     if(form.coordinates.length===0){
       return alert("Please select a place")
     }
-
-    
     try{
       const response = await axios.get(`${BASE_URL}/destinations`, {
         params: form,
@@ -174,6 +172,7 @@ function Destinations() {
     // localStorage.setItem('place', response.data)
     }catch(err){
       console.error("Error filtering destinations", err);
+      alert("Network issue. Please try again later.")
     }
   }
 
