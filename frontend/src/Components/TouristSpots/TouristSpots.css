@@ -140,6 +140,7 @@
   /* location around a coordinates */
 
   .destination-card2 {
+    position: relative;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -152,7 +153,11 @@
     scrollbar-width: none;
     -ms-overflow-style: none; 
   }
-
+  .destination-card2 .favorite{
+    position: absolute;
+    top: 5px;
+    right: 2px;
+  }
   .destination-card2::-webkit-scrollbar {
     width: 0; 
     background: transparent;

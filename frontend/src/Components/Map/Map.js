@@ -5,7 +5,7 @@ import "./Map.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { isTokenExpired } from "../../utils/isTokenExpired";
-import {refreshToken}  from '../../utils/refreshToken'
+import { refreshToken } from "../../utils/refreshToken";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 function Map() {
@@ -16,8 +16,8 @@ function Map() {
   const coordinates = useSelector((state) => state.location);
   const [loading, setLoading] = useState(true);
   const selectedPlaces = coordinates.selectedPlaces;
-  var token = localStorage.getItem("token")
-  
+  var token = localStorage.getItem("token");
+
   // console.log(coordinates)
   // console.log((mapContainerRef.current))
   //  console.log('se',selectedPlaces)
@@ -30,7 +30,7 @@ function Map() {
         center: [77.5, 14],
         zoom: 12,
       });
-
+      map.addControl(new mapboxgl.FullscreenControl());
       mapRef.current = map;
 
       const startingPoint = coordinates.startingPoint;
@@ -41,7 +41,7 @@ function Map() {
       // Assuming this is your route geometry
       const route = coordinates.routeGeometry;
       // console.log(startingPoint)
-          // console.log(route)
+      // console.log(route)
       map.on("load", () => {
         map.addSource("route", {
           type: "geojson",
@@ -70,8 +70,6 @@ function Map() {
         new mapboxgl.Marker().setLngLat(end).addTo(map);
         const bounds = new mapboxgl.LngLatBounds().extend(start).extend(end);
         map.fitBounds(bounds, { padding: 50 });
-
-        map.addControl(new mapboxgl.FullscreenControl());
       });
       return () => map.remove();
     }
@@ -123,20 +121,21 @@ function Map() {
   }, [coordinates]);
 
   const handlePlan = () => {
-    console.log((coordinates.selectedPlaces))
-    console.log(coordinates.selectedPlaces==null)
+    // console.log(coordinates.selectedPlaces);
+    // console.log(coordinates.selectedPlaces == null);
     if (!token) {
-      console.log(('No token'))
-      navigate("/authenticate")
-      return
-    }else if(isTokenExpired(token)){
-      console.log(('Token expired'))
-     token= refreshToken()
-     if(!token) navigate('/authenticate')
+      // console.log("No token");
+      navigate("/authenticate");
+      return;
+    } else if (isTokenExpired(token)) {
+      // console.log("Token expired");
+      token = refreshToken();
+      if (!token) navigate("/authenticate");
     }
-    if(Object.keys(coordinates.selectedPlaces).length===0) return alert("Select atleast one destination")
-    navigate("itinerary")
-  }
+    if (Object.keys(coordinates.selectedPlaces).length === 0)
+      return alert("Select atleast one destination");
+    navigate("itinerary");
+  };
   // console.log(loading)
   if (loading) {
     return <div className="map-container">Loading...</div>;
@@ -144,7 +143,7 @@ function Map() {
   return (
     <div className="map-container">
       <div className="map-position" ref={mapContainerRef}></div>
-      <button onClick={handlePlan} class="itinerary-button">
+      <button onClick={handlePlan} class={`itinerary-button `}>
         <i class="fa-solid fa-clipboard-list"></i> <span> Make Itinerary</span>
       </button>
     </div>

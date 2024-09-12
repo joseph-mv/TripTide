@@ -9,7 +9,6 @@ function generateAccessToken(username) {
   return jwt.sign(username, process.env.JWT_SECRET, { expiresIn: '1800s' });
 }
 
-
 const generateRefreshToken = (username) => {
   return jwt.sign(username, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' }); 
 };

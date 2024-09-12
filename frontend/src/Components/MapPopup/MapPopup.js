@@ -20,6 +20,8 @@ function MapPopup({ setMap, startingPoint, places }) {
       // center: [77.5, 14],
       zoom: 12,
     });
+    map.addControl(new mapboxgl.FullscreenControl());
+ 
     mapRef.current = map;
     map.on("load", () => {
       map.addSource("route", {
@@ -52,8 +54,7 @@ function MapPopup({ setMap, startingPoint, places }) {
         .extend(coordinates[coordinates.length - 1]);
       map.fitBounds(bounds, { padding: 50 });
 
-      map.addControl(new mapboxgl.FullscreenControl());
-    });
+        });
 
     return () => map.remove();
   }, [places]);

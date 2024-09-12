@@ -11,18 +11,14 @@
     height: 100vh;
     overflow-y: scroll;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; 
   }
   .itineraryDetails::-webkit-scrollbar {
     width: 0; 
     background: transparent;
  }
- .itineraryDetails {
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
-  }
- .itineraryDetails{
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  }
 
 /* ItineraryDetails.css */
 .itinerary-details {
@@ -68,6 +64,7 @@
   font-size: 1.6rem;
   text-align: center;
   color: orange;
+  margin: 5px;
 }
 .saveItinerary{
   margin:10px 50% ;
@@ -87,14 +84,11 @@
   padding: 10px;
   border-radius: 5px;
   border: none;
- 
-  
   height:50px;
   margin-bottom: 10px;
 }
 .saveBtn {
   background-color: #000000;
- 
   color: orange;
   border: none;
   padding: 10px 20px;
@@ -102,8 +96,6 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  
-  
 }
 
 .saveBtn i {

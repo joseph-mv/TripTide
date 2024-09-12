@@ -66,6 +66,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
 }
 .destination-card-front .image-container {
   position: relative;
@@ -109,7 +110,7 @@
 .destination-name {
   font-size: 1.5em;
   margin: 1px 0;
- 
+ margin-bottom: 10px;
 }
 
 .destination-description {

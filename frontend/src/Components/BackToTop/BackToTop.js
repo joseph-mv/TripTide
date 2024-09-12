@@ -25,7 +25,7 @@ const BackToTop = () => {
 
   return (
     showButton && (
-      <button className="back-to-top" onClick={scrollToTop}>
+      <button className="back-to-top" onClick={scrollToTop} data-aos='fade-left'>
         <i className="fas fa-arrow-up"></i>
       </button>
     )

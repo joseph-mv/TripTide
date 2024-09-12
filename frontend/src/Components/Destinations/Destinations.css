@@ -1,51 +1,40 @@
-.destinations-container{
- padding: 0 20px;
+.destinations-container {
+  padding: 0 20px;
 }
-.destinations-container h1{
+.destinations-container h1 {
   text-align: center;
   color: whitesmoke;
   margin-bottom: 10px;
   font-size: 2.5rem;
 }
 
-.des-map-container {  
-    position: relative;
-    margin-left: 5%;
-    width: 90%;
-    height: 60vh;
+.des-map-container {
+  position: relative;
+  margin: 0 auto;
+  height: 60vh;
+  width: 96%;
+  max-width: 1200px;
 }
 
-.des-map-position {
-    position: absolute;
-    top: 0px; 
-    width: 100%; 
-    height: 58vh; 
-         
-}
-.mapboxgl-ctrl-group {
-
+.des-map-container .des-map-position {
   position: absolute;
-  bottom: 40px;
-  left: 10px;
-  
-
+  top: 0px;
+  width: 100%;
+  height: 58vh;
 }
 
-
-.mapboxgl-ctrl-geocoder {
+.des-map-container .mapboxgl-ctrl-geocoder {
   max-width: 100%;
-  width: 100%; 
+  width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  font-size: 0.875rem;
-  
+  font-size: 1rem;
 }
-
 .mapboxgl-ctrl-geocoder--input {
   border: 1px solid #ccc;
   padding: 0px;
   border-radius: 4px;
-  outline: none; 
+  outline: none;
 }
 
 .mapboxgl-ctrl-geocoder--suggestion {
@@ -53,7 +42,7 @@
   border-top: none;
   border-radius: 5px;
   background-color: #fff;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .mapboxgl-ctrl-geocoder--suggestion:hover {
@@ -61,98 +50,95 @@
 }
 
 .form-component {
-    position: absolute;
-    top:65px;
-    right: 5px;
-    height: auto;
-    width: 3rem;
-   background-color: rgba(0, 0, 0, 0.575);
-   border: wheat solid 1px;
-   border-radius: 30px;
-   display: flex;
-   flex-direction: column;
-   align-items: flex-end;
-   @media(max-height:570px) {
+  position: absolute;
+  top: 65px;
+  right: 5px;
+  height: auto;
+  width: 3rem;
+  background-color: rgba(0, 0, 0, 0.575);
+  border: wheat solid 1px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  @media (max-height: 570px) {
     top: 2%;
     max-height: 90%;
-   }
   }
+}
 
+.symbol-container {
+  display: flex;
+  margin: 1rem 0.2rem;
+}
 
-  
-  .symbol-container {
-    display: flex;
- margin: 1rem 0.2rem;
-  }
-  
-  .symbol {
-    font-size: 1.5rem;
-    cursor: pointer;
-   padding: 3px;
-  }
- .symbol.clicked{
+.symbol {
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 3px;
+}
+.symbol.clicked {
   background-color: rgba(255, 166, 0, 0.74);
   /* border: white solid 1px; */
   border-radius: 30%;
- }
-  .input-field {
-    margin-right: 1rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    width: 200px;
-    border-radius: 15px;
-    border: none;
-    background-color: black;
-    color: white;
-  }
-  
-  .checkbox-group {
-    position: absolute;
-    top: 0;
-    right: 2.8rem;
-   width: 200px;
-    display: flex;
-    flex-direction: column;
-    margin-right: 1rem;
-    background-color: black;
-    color: whitesmoke;
-    padding: 20px;
-    border-radius: 5px;
-   overflow: auto;
-   max-height: 250px;
-   scrollbar-width: none;
-  -ms-overflow-style: none; 
-  }
-  
-  .checkbox-group label {
-    margin: 0.5rem 0;
-  }
-  .btnFind{
-    background-color: orange;
-    color: white;
-    min-width: 20%;
-    padding: 10px 20px;
-    text-wrap: nowrap;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    text-align: center;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 20px;
-  }
-  .btnFind:hover{
-    background-color: darkorange;
-    color: white;
-  }
-  .destinations-container .places{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 5fr));
-    gap: 15px;
-    max-width: 1200px;
-    margin: 20px auto;
-    align-items: center;
-    /* background-color: red; */
-    
-  }
+}
+.input-field {
+  margin-right: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 200px;
+  border-radius: 15px;
+  border: none;
+  background-color: black;
+  color: white;
+}
+
+.checkbox-group {
+  position: absolute;
+  top: 0;
+  right: 2.8rem;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+  background-color: black;
+  color: whitesmoke;
+  padding: 20px;
+  border-radius: 5px;
+  overflow: auto;
+  max-height: 250px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.checkbox-group label {
+  margin: 0.5rem 0;
+}
+.btnFind {
+  background-color: orange;
+  color: white;
+  min-width: 20%;
+  padding: 10px 20px;
+  text-wrap: nowrap;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 20px;
+}
+.btnFind:hover {
+  background-color: darkorange;
+  color: white;
+}
+.destinations-container .places {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 5fr));
+  gap: 15px;
+  max-width: 1200px;
+  margin: 20px auto;
+  align-items: center;
+  /* background-color: red; */
+}

@@ -10,6 +10,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 function Destinations() {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null); 
+  const markersRef = useRef([]);
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
   const [lng, setLng] = useState(null);
   const [lat, setLat] = useState(null);
@@ -47,6 +48,7 @@ function Destinations() {
     },
   });
   const [places,setPlaces]=useState([])
+  const [loading,setLoading]=useState(false)
   // console.log(form)
  
 
@@ -54,8 +56,8 @@ function Destinations() {
    
     const { type, name, value, checked } = event.target;
     // console.log(name)
-    if (type === "text") {
-      setForm({ ...form, [name]: value});
+    if (type === "number") {
+      setForm({ ...form, [name]: Math.abs(value)});
     } else if (name ==="activities"){
       setForm({ ...form, [name]: { ...form[name], [value.toLowerCase()]: checked } });
     }else{
@@ -73,6 +75,7 @@ function Destinations() {
       zoom: 0, // Initial map zoom level
     });
     mapRef.current = map;
+    map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left');
     map.addControl(new mapboxgl.NavigationControl(), "bottom-left");
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -155,31 +158,35 @@ function Destinations() {
   ];
 
   const handleFilter=async()=>{
-    console.log(form)
+    // console.log(form)
+    // console.log(loading)
+    setPlaces([])
     if(form.coordinates.length===0){
       return alert("Please select a place")
     }
+    setLoading(true)
     try{
+      console.log(loading)
       const response = await axios.get(`${BASE_URL}/destinations`, {
         params: form,
       });
+      setLoading(false)
       if(response.data.length===0){
         alert("We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options.")
   }
 
   setPlaces(response.data)
-    console.log(response.data)
-    // localStorage.setItem('place', response.data)
+    // console.log(response.data)
     }catch(err){
       console.error("Error filtering destinations", err);
       alert("Network issue. Please try again later.")
+      setLoading(false)
     }
   }
 
   useEffect(() => {
     // console.log(places)
     if(places.length > 0){
-     
       places.forEach((place, i) => {
         
         const el = document.createElement("div");
@@ -203,7 +210,12 @@ function Destinations() {
               i+1 + " : " + place.siteLabel
             );
             marker.setPopup(popup);
+            markersRef.current.push(marker);
       })
+    }
+    return () => {
+      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current = [];
     }
   }, [places])
   
@@ -213,19 +225,21 @@ function Destinations() {
   return (
     <div className="destinations-container">
       <h1>Destinations</h1>
-      <div className="des-map-container">
+      <div className="des-map-container" onMouseLeave={()=>setActiveInput(null)}>
         <div className="des-map-position" ref={mapContainerRef}></div>
+      
         <div className="form-component">
           <div className="symbol-container">
             {activeInput === "distance" && (
               <input
-                type="text"
+                type="number"
+                min="0"
                 name="distance"
                 value={form.distance}
                 onChange={handleChange}
                 placeholder="Distance in km..."
                 className="input-field"
-                
+                autoFocus
               />
             )}
             <div
@@ -285,9 +299,11 @@ function Destinations() {
             </div>
           </div>
         </div>
+      
       </div>
-      <button className="btnFind" onClick={handleFilter}>🔍 Find Destinations</button>
-            <div className="places">
+      <button className="btnFind" onClick={handleFilter} disabled={loading}>🔍 Find Destinations</button>
+       
+       <div className="places">
               {
                 places.map((place,index)=>
                   <TouristSpots destination={place} index={index} locAround/>

@@ -11,6 +11,7 @@ function Itinerary() {
         <SelectedLocations />
         <ItineraryForm />
       </div>
+     
     </div>
   );
 }

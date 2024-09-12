@@ -28,7 +28,7 @@ const FeatureSection = () => {
 
     if (scrollContainer) {
       const handleWheel = (e) => {
-        console.log(e.deltaY);
+        // console.log(e.deltaY);
         if (e.deltaY !== 0) {
           e.preventDefault();
           scrollContainer.scrollLeft += e.deltaY;

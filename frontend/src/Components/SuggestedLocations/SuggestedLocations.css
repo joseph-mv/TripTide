@@ -46,16 +46,15 @@
   to { transform: translateX(0); }
 }
 .destination-container .error {
-  margin: auto;
-
-  font-size: large;
+  margin: 20px 20px;
+  font-size: clamp(14px,2vw,16px);
   color: rgb(48, 47, 47);
   text-align: center;
   min-height: 15vh;
+  color: rgb(139, 0, 0);
 }
 .destination-container::-webkit-scrollbar {
   height: 8px;
-  /* background-color: white; */
 }
 .destination-container::-webkit-scrollbar-track {
   background: #4499b6; /* Color of the track (part the scrollbar slides on) */

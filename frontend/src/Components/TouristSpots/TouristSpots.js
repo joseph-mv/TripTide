@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { haversineDistance } from "../../utils/haversineDistance";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import Heart from "../../assets/Heart";
 
 function TouristSpots({ destination, index, locAround }) {
   const selectedPlaces = useSelector((state) => state.location.selectedPlaces);
@@ -14,6 +15,7 @@ function TouristSpots({ destination, index, locAround }) {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [like, setLike] = useState(false)
   const handleImageLoad = () => {
     setLoading(false);
   };
@@ -55,7 +57,7 @@ function TouristSpots({ destination, index, locAround }) {
       });
     }
   };
-
+ 
   useEffect(() => {
     axios
       .get(
@@ -76,13 +78,21 @@ function TouristSpots({ destination, index, locAround }) {
     // })
   }, []);
   // console.log(description.extract)
+
+ const handleFavorite=(place)=>{
+  
+  setLike(prev=>!prev)
+  }
   if (locAround) {
     return (
-      <div className="destination-card2" data-aos='fade-up'>
+      <div className="destination-card2" data-aos="fade-up">
         <h2 className="destination-title">
           <span className="destination-index">{index + 1}.</span>
           {destination.siteLabel}
         </h2>
+        <div onClick={(e)=>handleFavorite(destination)} className="favorite">
+          <Heart like={like} />
+        </div>
         {loading && !error && description.thumbnail && (
           <div className="spinner">Loading...</div>
         )}
@@ -105,8 +115,8 @@ function TouristSpots({ destination, index, locAround }) {
     );
   }
   return (
-    <div >
-      <div 
+    <div>
+      <div
         className={`card ${expanded ? "expanded" : ""}`}
         onClick={toggleCard}
         onMouseLeave={handleMouseLeave}

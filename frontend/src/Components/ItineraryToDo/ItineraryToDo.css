@@ -55,11 +55,10 @@
     background-position: right;
     background-size: cover;
     background-repeat: no-repeat;
-
 }
 @media (prefers-color-scheme: dark) {
     .places .arrowImg {
-        filter: invert(100%);
+        /* background-color: red; */
     }
 }
 
@@ -89,8 +88,8 @@
     height: 30px;
 }
 
-h2 {
-    margin-top: 10px;
+.toDoList h2 {
+    margin: 10px;
     text-align: center;
 }
 
@@ -175,7 +174,7 @@ ul {
         width: 40%;
     }
   }
-  @media screen and (max-width: 500px) {
+  @media  (max-width: 500px) {
     .todo-item :nth-child(3) {
         flex-basis: 100%; /* Make the 3rd child take full width */
         order: 1; /* Move the 3rd child to the second row */
