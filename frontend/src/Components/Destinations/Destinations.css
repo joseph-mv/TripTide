@@ -48,7 +48,13 @@
 .mapboxgl-ctrl-geocoder--suggestion:hover {
   border: black solid 1px;
 }
-
+.destinations-container p{
+  color: white;
+  margin: 10px auto;
+  width: 96%;
+  max-width: 1200px;
+  text-align: justify;
+}
 .form-component {
   position: absolute;
   top: 65px;

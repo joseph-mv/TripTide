@@ -172,8 +172,8 @@ function Destinations() {
         alert(
           "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."
         );
-      }else{
-       placesRef.current.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        placesRef.current.scrollIntoView({ behavior: "smooth" });
       }
 
       setPlaces(response.data);
@@ -222,6 +222,8 @@ function Destinations() {
   return (
     <div className="destinations-container">
       <h1>Destinations</h1>
+      {/* <h1>Explore Your Next Destination</h1> */}
+
       <div
         className="des-map-container"
         onMouseLeave={() => setActiveInput(null)}
@@ -299,6 +301,12 @@ function Destinations() {
           </div>
         </div>
       </div>
+      <p>
+        Discover your ideal adventure by filtering destinations based on
+        location, type, and activities within a specific distance from your
+        desired location. Find the perfect getaway tailored to your preferences.
+      </p>
+
       <button className="btnFind" onClick={handleFilter} disabled={loading}>
         🔍 Find Destinations
       </button>
