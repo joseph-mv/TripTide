@@ -9,15 +9,16 @@ import TouristSpots from "../TouristSpots/TouristSpots";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function Destinations() {
   const mapContainerRef = useRef(null);
-  const mapRef = useRef(null); 
+  const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const placesRef = useRef();
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
   const [lng, setLng] = useState(null);
   const [lat, setLat] = useState(null);
   const [form, setForm] = useState({
     place: "",
     coordinates: [],
-    distance:"",
+    distance: "",
     type: {
       "Tourist Attraction": true,
       "Tourist Destination": false,
@@ -47,50 +48,47 @@ function Destinations() {
       others: false,
     },
   });
-  const [places,setPlaces]=useState([])
-  const [loading,setLoading]=useState(false)
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(false);
   // console.log(form)
- 
 
   const handleChange = (event) => {
-   
     const { type, name, value, checked } = event.target;
     // console.log(name)
     if (type === "number") {
-      setForm({ ...form, [name]: Math.abs(value)});
-    } else if (name ==="activities"){
-      setForm({ ...form, [name]: { ...form[name], [value.toLowerCase()]: checked } });
-    }else{
+      setForm({ ...form, [name]: Math.abs(value) });
+    } else if (name === "activities") {
+      setForm({
+        ...form,
+        [name]: { ...form[name], [value.toLowerCase()]: checked },
+      });
+    } else {
       setForm({ ...form, [name]: { ...form[name], [value]: checked } });
-   
     }
   };
 
   useEffect(() => {
-    
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng,lat], // Initial map center coordinates
+      center: [lng, lat], // Initial map center coordinates
       zoom: 0, // Initial map zoom level
     });
     mapRef.current = map;
-    map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left');
+    map.addControl(new mapboxgl.FullscreenControl(), "bottom-left");
     map.addControl(new mapboxgl.NavigationControl(), "bottom-left");
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
     });
-   
+
     if (lng && lat) {
       // Add a marker at the current location
       setForm((prev) => ({
         ...prev,
-        coordinates: [lng,lat],
+        coordinates: [lng, lat],
       }));
-      new mapboxgl.Marker()
-        .setLngLat([lng, lat])
-        .addTo(map);
+      new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
 
       map.setCenter([lng, lat]);
     }
@@ -99,30 +97,29 @@ function Destinations() {
     geocoder.on("result", (event) => {
       const placeName = event.result.place_name;
       const coordinates = event.result.geometry.coordinates;
-      
+
       setForm((prev) => ({
         ...prev,
         place: placeName,
         coordinates: coordinates,
       }));
-       });
+    });
     return () => map.remove();
-  }, [lng,lat]);
-// console.table(form.activities)
+  }, [lng, lat]);
+  // console.table(form.activities)
   useEffect(() => {
     if (navigator.geolocation) {
-     
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLng(position.coords.longitude);
           setLat(position.coords.latitude);
         },
         (error) => {
-          console.error('Error getting location', error);
+          console.error("Error getting location", error);
         }
       );
     } else {
-      console.log('Geolocation is not supported by this browser.');
+      console.log("Geolocation is not supported by this browser.");
     }
   }, []);
   const [activeInput, setActiveInput] = useState(null);
@@ -157,77 +154,80 @@ function Destinations() {
     "Cultural",
   ];
 
-  const handleFilter=async()=>{
+  const handleFilter = async () => {
     // console.log(form)
     // console.log(loading)
-    setPlaces([])
-    if(form.coordinates.length===0){
-      return alert("Please select a place")
+    setPlaces([]);
+    if (form.coordinates.length === 0) {
+      return alert("Please select a place");
     }
-    setLoading(true)
-    try{
-      console.log(loading)
+    setLoading(true);
+    try {
+      console.log(loading);
       const response = await axios.get(`${BASE_URL}/destinations`, {
         params: form,
       });
-      setLoading(false)
-      if(response.data.length===0){
-        alert("We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options.")
-  }
+      setLoading(false);
+      if (response.data.length === 0) {
+        alert(
+          "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."
+        );
+      }else{
+       placesRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
 
-  setPlaces(response.data)
-    // console.log(response.data)
-    }catch(err){
+      setPlaces(response.data);
+      // console.log(response.data)
+    } catch (err) {
       console.error("Error filtering destinations", err);
-      alert("Network issue. Please try again later.")
-      setLoading(false)
+      alert("Network issue. Please try again later.");
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     // console.log(places)
-    if(places.length > 0){
+    if (places.length > 0) {
       places.forEach((place, i) => {
-        
         const el = document.createElement("div");
         el.className = "marker";
 
         const number = document.createElement("span");
         number.className = "marker-text";
-        number.textContent = i+1;
+        number.textContent = i + 1;
         const img = document.createElement("img");
         img.src = "../../../icons/destination.png";
         img.className = "marker-image";
 
         el.appendChild(number);
-          el.appendChild(img);
+        el.appendChild(img);
 
-          const marker = new mapboxgl.Marker({ element: el })
-            .setLngLat(place.location.coordinates)
-            .addTo(mapRef.current);
+        const marker = new mapboxgl.Marker({ element: el })
+          .setLngLat(place.location.coordinates)
+          .addTo(mapRef.current);
 
-            const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-              i+1 + " : " + place.siteLabel
-            );
-            marker.setPopup(popup);
-            markersRef.current.push(marker);
-      })
+        const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+          i + 1 + " : " + place.siteLabel
+        );
+        marker.setPopup(popup);
+        markersRef.current.push(marker);
+      });
     }
     return () => {
-      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
-    }
-  }, [places])
-  
-
-
+    };
+  }, [places]);
 
   return (
     <div className="destinations-container">
       <h1>Destinations</h1>
-      <div className="des-map-container" onMouseLeave={()=>setActiveInput(null)}>
+      <div
+        className="des-map-container"
+        onMouseLeave={() => setActiveInput(null)}
+      >
         <div className="des-map-position" ref={mapContainerRef}></div>
-      
+
         <div className="form-component">
           <div className="symbol-container">
             {activeInput === "distance" && (
@@ -271,7 +271,6 @@ function Destinations() {
               onClick={() => handleSymbolClick("type")}
             >
               🌐
-               
             </div>
           </div>
           <div className="symbol-container">
@@ -299,18 +298,16 @@ function Destinations() {
             </div>
           </div>
         </div>
-      
       </div>
-      <button className="btnFind" onClick={handleFilter} disabled={loading}>🔍 Find Destinations</button>
-       
-       <div className="places">
-              {
-                places.map((place,index)=>
-                  <TouristSpots destination={place} index={index} locAround/>
-                )
-              }
+      <button className="btnFind" onClick={handleFilter} disabled={loading}>
+        🔍 Find Destinations
+      </button>
 
-            </div>
+      <div ref={placesRef} className="places">
+        {places.map((place, index) => (
+          <TouristSpots destination={place} index={index} locAround />
+        ))}
+      </div>
     </div>
   );
 }
