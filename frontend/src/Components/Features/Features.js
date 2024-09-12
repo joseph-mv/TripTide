@@ -20,6 +20,9 @@ const FeatureSection = () => {
     // { icon: 'fas fa-language', title: 'Language Translation', description: 'Translate languages and communicate effectively while traveling.' },
     // { icon: 'fas fa-bed', title: 'Accommodation Finder', description: 'Find and book accommodations that suit your needs.' },
     // { icon: 'fas fa-book', title: 'Travel Diary', description: 'Document your travel experiences and memories digitally.' },
+    {icon:'fas fa-map-marker-alt',       title:"Filter Destinations",
+      description:"Filter destinations by location, type, and activities within a given radius."
+ }
   ];
   const scrollRef = useRef(null);
 
