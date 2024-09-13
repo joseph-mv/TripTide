@@ -129,7 +129,7 @@ module.exports = {
          }
        }
         const destinations = await db.get().collection(collection.TOURIST_Collection).find(query).toArray();
-        // console.log(destinations)
+        console.log(destinations)
         resolve(destinations);
       }catch(err){
         reject(err);

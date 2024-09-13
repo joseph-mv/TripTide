@@ -70,7 +70,8 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
   };
   const handleNotes = (e) => {
     setItinerary((prev) => ({
-      ...prev,[day]: { ...prev[day],notes: e.target.value},
+      ...prev,
+      [day]: { ...prev[day], notes: e.target.value },
     }));
   };
 
@@ -152,15 +153,14 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
               </li>
             ))}
           </ul>
-          
         </div>
         <textarea
-            id="notes"
-            name="notes"
-            value={item.notes}
-            onChange={handleNotes}
-            placeholder="Share your thoughts, reflections, or any additional details you'd like to remember about this day..."
-          />
+          id="notes"
+          name="notes"
+          value={item.notes}
+          onChange={handleNotes}
+          placeholder="Share your thoughts, reflections, or any additional details you'd like to remember about this day..."
+        />
       </main>
     </div>
   );

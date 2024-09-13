@@ -9,37 +9,35 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { haversineDistance } from "../../utils/haversineDistance";
 
 const TouristSpotsList = () => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   var coordinates = useSelector((state) => state.location);
   // console.log('redux', coordinates)
   var formData = useSelector((state) => state.form);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState({});
-  const places=coordinates.sortedSelectedPlaces
+  const places = coordinates.sortedSelectedPlaces;
   // localStorage.setItem('coordinates',JSON.stringify(coordinates) )
   // coordinates = JSON.parse(localStorage.getItem("coordinates"));
- 
+
   useEffect(() => {
     var selectedPlaces = Object.values(coordinates.selectedPlaces);
-  selectedPlaces = selectedPlaces.sort(
-    (a, b) => a.distFromStart - b.distFromStart
-  );
-    
+    selectedPlaces = selectedPlaces.sort(
+      (a, b) => a.distFromStart - b.distFromStart
+    );
+
     dispatch({
       type: "SET_SORTED",
       payload: selectedPlaces,
-    })
-  }, [])
-  
-  
-  const handleOpenModal = (spot,index) => {
+    });
+  }, []);
+
+  const handleOpenModal = (spot, index) => {
     // console.log(('spot,',spot,index+1))
-    
-    setToDelete({spot:spot, index:index+1});
-    
+
+    setToDelete({ spot: spot, index: index + 1 });
+
     setIsModalOpen(true);
   };
- 
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -49,12 +47,12 @@ const TouristSpotsList = () => {
     const newPlaces = [
       ...places.slice(0, toDelete.index - 1),
       ...places.slice(toDelete.index),
-    ]
-  //  console.table(newPlaces)
+    ];
+    //  console.table(newPlaces)
     dispatch({
       type: "SET_SORTED",
       payload: newPlaces,
-    })
+    });
     setIsModalOpen(false);
   };
   var firstPoint = [
@@ -65,14 +63,14 @@ const TouristSpotsList = () => {
     <div className="tourist-spots-list">
       <div className="spot startingPoint">
         <h3 className="site-label">{formData.startingPoint}</h3>
-        <h4>{formData.startDate.split('-').reverse().join('-')}</h4>
+        <h4>{formData.startDate.split("-").reverse().join("-")}</h4>
       </div>
 
       {places.map((spot, index) => {
         var secondPoint = spot.place.location.coordinates;
         var distance = haversineDistance(firstPoint, secondPoint) * 1.3;
         firstPoint = secondPoint;
-     
+
         return (
           <>
             <div class="icon-container">
@@ -85,7 +83,7 @@ const TouristSpotsList = () => {
 
                 <button
                   className="delete-button"
-                  onClick={() => handleOpenModal(spot,index)}
+                  onClick={() => handleOpenModal(spot, index)}
                 >
                   <FontAwesomeIcon icon={faTrashCan} />
                 </button>
@@ -100,7 +98,7 @@ const TouristSpotsList = () => {
                 <p className="type-label">{spot.place.typeLabel}</p>
               </div>
             </div>
-            </>
+          </>
         );
       })}
     </div>

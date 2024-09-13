@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './BackToTop.css'; 
+import React, { useState, useEffect } from "react";
+import "./BackToTop.css";
 
 const BackToTop = () => {
   const [showButton, setShowButton] = useState(false);
@@ -15,17 +15,21 @@ const BackToTop = () => {
 
   // Scroll to top
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     showButton && (
-      <button className="back-to-top" onClick={scrollToTop} data-aos='fade-left'>
+      <button
+        className="back-to-top"
+        onClick={scrollToTop}
+        data-aos="fade-left"
+      >
         <i className="fas fa-arrow-up"></i>
       </button>
     )

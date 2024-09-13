@@ -20,13 +20,18 @@
   }
   
   .footer-links ul {
+    display: flex;
     list-style: none;
     padding: 0;
     margin: 10px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* align-items: center; */
+    justify-content: center;
   }
   
   .footer-links ul li {
-    display: inline;
+    display: block;
     margin: 0 15px;
   }
   
@@ -34,6 +39,7 @@
     color: #fff;
     text-decoration: none;
     font-size: 1em;
+    text-wrap: nowrap;
   }
   
   .footer-links ul li a:hover {

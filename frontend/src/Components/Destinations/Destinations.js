@@ -119,7 +119,7 @@ function Destinations() {
         }
       );
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      // console.log("Geolocation is not supported by this browser.");
     }
   }, []);
   const [activeInput, setActiveInput] = useState(null);
@@ -163,7 +163,7 @@ function Destinations() {
     }
     setLoading(true);
     try {
-      console.log(loading);
+      // console.log(loading);
       const response = await axios.get(`${BASE_URL}/destinations`, {
         params: form,
       });

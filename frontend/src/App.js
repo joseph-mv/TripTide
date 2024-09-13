@@ -16,7 +16,8 @@ import "aos/dist/aos.css";
 function App() {
   useEffect(() => {
     AOS.init({
-      duration: 1200, // Animation duration in milliseconds
+      duration: 1200,
+      once: true,
     });
   }, []);
 

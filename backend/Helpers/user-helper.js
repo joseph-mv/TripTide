@@ -66,7 +66,7 @@ module.exports = {
       existingUser = await db
         .get()
         .collection(collection.User_Collection)
-        .findOne({ email: user.loginEmail });
+        .findOne({"isVerified": true, email: user.loginEmail });
       if (existingUser) {
         if (await bcrypt.compare(user.loginPassword, existingUser.password)) {
           console.log('user logedin')

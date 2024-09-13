@@ -1,5 +1,7 @@
 .destinations-container {
   padding: 0 20px;
+  overflow: hidden;
+  
 }
 .destinations-container h1 {
   text-align: center;

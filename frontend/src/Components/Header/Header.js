@@ -27,7 +27,7 @@ const Header = () => {
     // navigate("/login");
   };
   if (refreshToken && isTokenExpired(refreshToken)) {
-    console.log("Refresh token expired");
+    // console.log("Refresh token expired");
     setRefreshToken("");
     handleLogout();
   }
@@ -37,8 +37,7 @@ const Header = () => {
     } else {
       document.body.classList.remove("fixed-body");
     }
-    setIsOpen(prev=>!prev);
-
+    setIsOpen((prev) => !prev);
   };
   useEffect(() => {
     document.body.classList.remove("fixed-body");
@@ -124,10 +123,8 @@ const Header = () => {
             &nbsp;&nbsp;{userName ? userName : "Account"}
           </Link>
           <Link onClick={handleLogout} className="link" to="/authenticate">
-            
-          &nbsp;&nbsp; &nbsp;&nbsp;{userName ? 'Logout' : ""}
+            &nbsp;&nbsp; &nbsp;&nbsp;{userName ? "Logout" : ""}
           </Link>
-       
         </nav>
       </header>
       <motion.div className="travelFlag" animate={wavingAnimation} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./TouristSpots.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,11 +15,10 @@ function TouristSpots({ destination, index, locAround }) {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [like, setLike] = useState(false)
+  const [like, setLike] = useState(false);
   const handleImageLoad = () => {
     setLoading(false);
   };
-
   const handleImageError = () => {
     setLoading(false); // Hide the loading spinner even if there's an error
   };
@@ -57,7 +56,7 @@ function TouristSpots({ destination, index, locAround }) {
       });
     }
   };
- 
+
   useEffect(() => {
     axios
       .get(
@@ -79,10 +78,9 @@ function TouristSpots({ destination, index, locAround }) {
   }, []);
   // console.log(description.extract)
 
- const handleFavorite=(place)=>{
-  
-  setLike(prev=>!prev)
-  }
+  const handleFavorite = () => {
+    setLike((prev) => !prev);
+  };
   if (locAround) {
     return (
       <div className="destination-card2" data-aos="fade-up">
@@ -90,12 +88,13 @@ function TouristSpots({ destination, index, locAround }) {
           <span className="destination-index">{index + 1}.</span>
           {destination.siteLabel}
         </h2>
-        <div onClick={(e)=>handleFavorite(destination)} className="favorite">
+        <div onClick={(e) => handleFavorite(destination)} className="favorite">
           <Heart like={like} />
         </div>
         {loading && !error && description.thumbnail && (
           <div className="spinner">Loading...</div>
         )}
+
         <LazyLoadImage
           src={description.thumbnail?.source}
           className="card-image"
@@ -108,8 +107,8 @@ function TouristSpots({ destination, index, locAround }) {
         />
         <div className="destination-content">
           <div className="typeLabel">{destination.typeLabel}</div>
+          {error && <p className="error">{error}</p>}
           <p className="card-description">{description.extract}</p>
-          {error && <p>{error}</p>}
         </div>
       </div>
     );
@@ -146,8 +145,9 @@ function TouristSpots({ destination, index, locAround }) {
             onLoad={handleImageLoad}
             onError={handleImageError}
           />
+
           <p className="card-description">{description.extract}</p>
-          {error && <p>{error}</p>}
+          {error && <p className="error">{error}</p>}
           <button
             className="more-details-button"
             onClick={handleMoreDetailsClick}

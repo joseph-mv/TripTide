@@ -5,46 +5,44 @@ import { useDispatch } from "react-redux";
 const accessKey = process.env.REACT_APP_UNSPLASH_ACESSS_KEY;
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-const LocationCard = ({ name,startingPoint,destination }) => {
+const LocationCard = ({ name, startingPoint, destination }) => {
   // console.log(name)
   const [imageUrl, setimageUrl] = useState();
   const [description, setDescription] = useState();
 
   const [wikidataId, setWikidataId] = useState("");
-  const dispath=useDispatch()
+  const dispath = useDispatch();
   useEffect(() => {
     const fetchGeocodedResults = async () => {
-      
       try {
         const response = await axios.get(
           `https://api.mapbox.com/search/geocode/v6/forward?q=${name}&types=street%2Clocality%2Cplace%2Cregion%2Cdistrict&language=en&access_token=${mapboxToken}`
         );
         // console.log(response)
-          console.log(response.data.features)
-        
-         var wikiId = response.data.features[0]?.properties?.context?.place?.wikidata_id || "";
-         if(!wikiId){
-          wikiId=response.data.features[0]?.properties?.context?.region?.wikidata_id || ""
-         }
+        // console.log(response.data.features);
+
+        var wikiId =
+          response.data.features[0]?.properties?.context?.place?.wikidata_id ||
+          "";
+        if (!wikiId) {
+          wikiId =
+            response.data.features[0]?.properties?.context?.region
+              ?.wikidata_id || "";
+        }
         setWikidataId(wikiId);
         // console.log('wikidata'+wikiId)
         const coords = response.data.features[0]?.properties?.coordinates || {};
-       if(destination){
-        dispath({
-          type:'SET_DESTINATION',
-          payload:coords
-        })
-       }
-       else if(startingPoint){
-        dispath({
-          type:'SET_STARTING_POINT',
-          payload:coords
-        })
-       }
-        
-        
-        
-        
+        if (destination) {
+          dispath({
+            type: "SET_DESTINATION",
+            payload: coords,
+          });
+        } else if (startingPoint) {
+          dispath({
+            type: "SET_STARTING_POINT",
+            payload: coords,
+          });
+        }
       } catch (error) {
         // console.error("Error fetching geocoded suggestions:", error);
       }
@@ -67,7 +65,6 @@ const LocationCard = ({ name,startingPoint,destination }) => {
     fetchImageForLocation();
   }, [name]);
   useEffect(() => {
-   
     if (wikidataId) {
       const fetchDescription = async () => {
         try {

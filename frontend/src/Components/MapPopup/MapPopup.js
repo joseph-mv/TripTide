@@ -7,13 +7,12 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 function MapPopup({ setMap, startingPoint, places }) {
   const coordinates = [[startingPoint.longitude, startingPoint.latitude]];
-  console.log(places);
+  // console.log(places);
   places.map((place) => coordinates.push(place.place.location.coordinates));
   // console.log(coordinates)
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   useEffect(() => {
-    // console.log("map");
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -21,7 +20,7 @@ function MapPopup({ setMap, startingPoint, places }) {
       zoom: 12,
     });
     map.addControl(new mapboxgl.FullscreenControl());
- 
+
     mapRef.current = map;
     map.on("load", () => {
       map.addSource("route", {
@@ -53,21 +52,20 @@ function MapPopup({ setMap, startingPoint, places }) {
         .extend(coordinates[0])
         .extend(coordinates[coordinates.length - 1]);
       map.fitBounds(bounds, { padding: 50 });
-
-        });
+    });
 
     return () => map.remove();
   }, [places]);
 
   useEffect(() => {
-    Object.keys(places).forEach((key,index) => {
+    Object.keys(places).forEach((key, index) => {
       const place = places[key];
       const el = document.createElement("div");
       el.className = "marker";
 
       const number = document.createElement("span");
       number.className = "marker-text";
-      number.textContent = index+1;
+      number.textContent = index + 1;
 
       const img = document.createElement("img");
       img.src = "../../../icons/destination.png";
@@ -77,17 +75,16 @@ function MapPopup({ setMap, startingPoint, places }) {
       el.appendChild(img);
 
       const marker = new mapboxgl.Marker({ element: el })
-            .setLngLat(place.place.location.coordinates)
-            .addTo(mapRef.current);
-            console.log(index)
-            const popup = new mapboxgl.Popup({ offset: 25 })
-            .setHTML(`<p style="color: black;">${index+1} : ${place.place.siteLabel}</p>`);
-          
-            marker.setPopup(popup);  
-    })
-   
-  }, [places])
-  
+        .setLngLat(place.place.location.coordinates)
+        .addTo(mapRef.current);
+      // console.log(index);
+      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+        `<p style="color: black;">${index + 1} : ${place.place.siteLabel}</p>`
+      );
+
+      marker.setPopup(popup);
+    });
+  }, [places]);
 
   return (
     <div className="mapPopup-container">

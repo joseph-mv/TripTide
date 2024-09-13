@@ -48,7 +48,7 @@ const ItineraryForm = () => {
     date = getNextDate(date);
   }
   const [itinerary, setItinerary] = useState(newItinerary);
-  const [name,setName]=useState('')
+  const [name, setName] = useState("");
   itinerary.Day1.startingPoint = formData.startingPoint;
 
   // console.table(itinerary)
@@ -56,45 +56,47 @@ const ItineraryForm = () => {
     e.preventDefault();
     // console.log((token))
     if (!token) {
-      console.log("No token");
+      // console.log("No token");
       navigate("/authenticate");
       return;
     } else if (isTokenExpired(token)) {
-      console.log("Token expired");
-      token=await refreshToken();
-      if(!token) { navigate("/authenticate");}
-    } 
-   
-      const tripItinerary = {
-        userId,
-        name,
-        itinerary: itinerary,
-        places: {
-          startingPoint: coordinates.startingPoint,
-          selectedPlaces: coordinates.sortedSelectedPlaces,
-          destinations: coordinates.destinations,
-        },
-        details: formData,
-      };
-
-      try {
-        const response = await axios.post(
-          `${BASE_URL}/user/save-itinerary`,
-          tripItinerary,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        if(response.data) {
-          alert('Your Itinerary has been saved')
-          navigate('/')
-        }
-      } catch (error) {
-        // console.error(error);
-        // setErrorMessage("Deposit failed. Please try again later.");
+      // console.log("Token expired");
+      token = await refreshToken();
+      if (!token) {
+        navigate("/authenticate");
       }
+    }
+
+    const tripItinerary = {
+      userId,
+      name,
+      itinerary: itinerary,
+      places: {
+        startingPoint: coordinates.startingPoint,
+        selectedPlaces: coordinates.sortedSelectedPlaces,
+        destinations: coordinates.destinations,
+      },
+      details: formData,
+    };
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/user/save-itinerary`,
+        tripItinerary,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (response.data) {
+        alert("Your Itinerary has been saved");
+        navigate("/");
+      }
+    } catch (error) {
+      // console.error(error);
+      // setErrorMessage("Deposit failed. Please try again later.");
+    }
   };
   return (
     <div className="itineraryDetails">
@@ -145,11 +147,17 @@ const ItineraryForm = () => {
         />
       ))}
       <form onSubmit={handleItinerary} className="saveItinerary">
-<input type="text" onChange={(e)=>setName(e.target.value)} value={name} placeholder="Enter itinerary name" required/>
+        <input
+          type="text"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+          placeholder="Enter itinerary name"
+          required
+        />
 
-      <button type="submit" className="saveBtn">
-        <i className="fa-solid fa-cloud"></i> Save Your Itinerary
-      </button>
+        <button type="submit" className="saveBtn">
+          <i className="fa-solid fa-cloud"></i> Save Your Itinerary
+        </button>
       </form>
     </div>
   );
