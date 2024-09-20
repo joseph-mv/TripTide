@@ -9,6 +9,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import Itinerary from "./Pages/Itinerary/Itinerary";
 import ScrollToTop from "../src/Components/ScrollToTop/ScrollToTop";
 import DestinationsPage from "./Pages/Destinations";
+import AboutSection from "./Pages/AboutSection";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/verify-email" element={<Verification />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/plan-details/itinerary" element={<Itinerary />} />
+          <Route path="/about" element={<AboutSection />} />
         </Routes>
       </BrowserRouter>
     </div>
