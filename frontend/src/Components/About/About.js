@@ -11,7 +11,7 @@ const About = () => {
 
       <section className="about-introduction">
        
-        <img src="/image/about1.jpg" data-aos="fade-right" ></img>
+        <img src="/image/about1.webp" data-aos="fade-right" ></img>
         <div>
         <h2>Escape the Ordinary: Plan Your Adventure</h2>
         <p>
@@ -73,7 +73,7 @@ const About = () => {
       </section>
       
       </div>
-      <img src="/image/about2.jpeg" data-aos="fade-left"  ></img>
+      <img src="/image/about2.webp" data-aos="fade-left"  ></img>
       </div>
       
       

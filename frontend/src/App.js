@@ -13,6 +13,7 @@ import AboutSection from "./Pages/AboutSection";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ContactSection from "./Pages/ContactSection";
 
 function App() {
   useEffect(() => {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/plan-details/itinerary" element={<Itinerary />} />
           <Route path="/about" element={<AboutSection />} />
+          <Route path='/contact' element={<ContactSection/>} />
         </Routes>
       </BrowserRouter>
     </div>

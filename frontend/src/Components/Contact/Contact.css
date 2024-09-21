@@ -1,0 +1,133 @@
+.contact-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-section h1,
+.contact-section h2 {
+  color: #fdfdfd;
+  text-align: center;
+}
+.contact-section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.contact-section p {
+  color: #f1f1f1;
+  line-height: 1.6;
+}
+
+.contact-info {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.contact-form {
+  margin-bottom: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.332);
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.contact-form .form-group {
+  margin-bottom: 20px;
+}
+
+.contact-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.contact-form button {
+  padding: 10px 20px;
+  background-color: orange;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+}
+
+.contact-form button:hover {
+  background-color:darkorange;
+}
+
+.contact-map {
+  text-align: center;
+ 
+}
+.map-form-container{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.contact-section .map-container {
+  position: static;
+  justify-content: center;
+  background-color: white;
+  height: auto;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.contact-details {
+  text-align: left;
+  padding: 10px;
+}
+
+.contact-details p {
+  margin: 0px 0px;
+  color: black;
+  width: 300px;
+  overflow: visible;
+  &:hover .icon {
+    color: #245b6c;
+  }
+}
+.contact-details .icon {
+  margin-right: 10px;
+  font-size: 2.8rem;
+  color: #3d98b4;
+  width: 40px;
+}
+.contact-details p {
+  display: flex;
+  gap: 20px;
+}
+.contact-details p span {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-container iframe {
+  width: 100%;
+  border: 0;
+  border-radius: 5px;
+}
+@media (min-width: 768px) {
+  .contact-section  .map-form-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 0;
+    }
+    .contact-form{
+        width: 50%;
+    }
+    .contact-map{
+      width: 40%;
+    }
+}
