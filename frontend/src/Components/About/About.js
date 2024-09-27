@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import "./About.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const About = () => {
+  // const [loaded, setLoaded] = useState(false);
   return (
     <div className="about-section">
       <h1>About Us</h1>
-
-      <section className="about-introduction">
-       
-        <img src="/image/about1.webp" data-aos="fade-right" ></img>
-        <div>
+      <section className="about-introduction">    
+       <img src="/image/about1.webp" data-aos="fade-right" ></img>
+           <div>
         <h2>Escape the Ordinary: Plan Your Adventure</h2>
         <p>
           "TripTide is your ultimate travel planning companion. Discover

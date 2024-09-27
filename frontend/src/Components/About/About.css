@@ -1,5 +1,6 @@
 .about-section {
     padding: 20px;
+    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
     overflow: hidden; 
@@ -7,6 +8,7 @@
   
   .about-section h1,
   .about-section h2 {
+    /* margin-top: 40px; */
     color: #ffffff;
     text-align: center;
   }
@@ -14,9 +16,11 @@
     font-size: 2.5rem;
     margin-bottom: 20px;
   }
+
   .about-section img{
-    border-radius: 15px;
+    position: relative;
     width: 100%;
+    border-radius: 15px;
   }
   .about-section p,
   .about-section ul
@@ -44,7 +48,6 @@
     font-size: 1.3rem;
     filter: drop-shadow(4px 4px 1px rgba(255, 140, 0, 0.656));
   }
-  
   
   .about-introduction,
   .about-mission-vision,
@@ -81,6 +84,12 @@
     padding: 10px;
     border-radius: 5px;
   }
+  @media(max-width:950px){
+    .about-contact h2,  .about-introduction h2{
+      margin-top: 20px;
+
+    }
+  }
   
     @media(min-width:950px){
     .about-introduction, .mission_team_container{
@@ -90,6 +99,7 @@
     
     .about-section img{
         width: 40%;
+        min-width: 40%;
         object-fit: cover;
        
       }

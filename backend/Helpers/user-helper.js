@@ -69,7 +69,7 @@ module.exports = {
         .findOne({"isVerified": true, email: user.loginEmail });
       if (existingUser) {
         if (await bcrypt.compare(user.loginPassword, existingUser.password)) {
-          console.log('user logedin')
+          // console.log('user logedin')
           // console.log(existingUser)
           resolve({
             status: true,
@@ -87,11 +87,11 @@ module.exports = {
   forgotPassword: ({ email }) => {
     return new Promise(async(resolve, reject) => {
       const user = await db.get().collection(collection.User_Collection).findOne({ email });
-      console.log(user);
+      // console.log(user);
       if (!user) {
         reject({ error: 'No user found with this email' });
       }else{
-        const otp = crypto.randomInt(1000, 9999).toString(); // Generate a 6-digit OTP
+        const otp = crypto.randomInt(1000, 9999).toString(); // Generate a 4-digit OTP
         const expirationTime = Date.now() + 3600000; // 1 hour
         await db.get().collection(collection.User_Collection).updateOne(
           { email },

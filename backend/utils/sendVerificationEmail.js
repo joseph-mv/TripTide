@@ -1,8 +1,8 @@
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
-  service: 'Gmail',
+  service: "Gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -16,7 +16,7 @@ const sendVerificationEmail = async (email, verificationLink) => {
   const mailOptions = {
     from: `TripTide <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'Email Verification - TripTide',
+    subject: "Email Verification - TripTide",
     text: `Dear User,
 
 Thank you for signing up with TripTide. Please click the link below to verify your email address:
@@ -38,9 +38,9 @@ TripTide`,
 
   try {
     await transporter.sendMail(mailOptions);
-    return {msg:'A verification email has been sent to ' + email + '.'};
+    return { msg: "A verification email has been sent to " + email + "." };
   } catch (error) {
-    return {error:' An Error occured , try again ' }
+    return { error: " An Error occured , try again " };
   }
 };
 

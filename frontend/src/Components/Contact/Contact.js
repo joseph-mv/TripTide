@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Contact.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Contact = () => {
   const [contactForm,setContactForm]=useState({name:'',email:'',subject:'',message:''})
   const handleChange=(e)=>{

@@ -62,9 +62,9 @@ function SuggestedLocations() {
           ))}
           {!loading && coordinates.destinations?.length === 0 && (
             <div className="error">
-              "Oops! We couldn't find any destinations that match your chosen
-              activities. Please try selecting different activities or refining
-              your search."
+              {error
+                ? "Some network error"
+                : "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search."}
             </div>
           )}
         </div>

@@ -50,7 +50,7 @@ function calculateNewPoint(latitude, longitude, distance, bearing) {
 export function getRectangleCorners(point1, point2) {
   // Calculate the distance between the two points
   const distanceBetweenPoints = haversineDistance(point1, point2);
-  console.log(distanceBetweenPoints);
+  // console.log(distanceBetweenPoints);
   const width = Math.max(10, Math.min(distanceBetweenPoints / 20, 200));
 //  console.log('width'+width)
   const bearing = Math.atan2(

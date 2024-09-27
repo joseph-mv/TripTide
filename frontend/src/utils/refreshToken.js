@@ -10,7 +10,7 @@ export const refreshToken = async () => {
 
   try {
     const response = await axios.post(`${BASE_URL}/user/refresh-token`, { refreshToken,userId });
-    console.log(response)
+    // console.log(response)
     const newAccessToken = response.data.token;
     
     // Update the access token in storage

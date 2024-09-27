@@ -4,12 +4,12 @@ var state={
 }
 module.exports.connect = async function(done){
     var url = process.env.MONGO_URI;
-    dbname='TripTide'
+    dbName='TripTide'
    
     await MongoClient.connect(url)
     .then((data) => {
         // Access the newly created database with the desired name
-        state.db = data.db(dbname); 
+        state.db = data.db(dbName); 
 
      done()
      

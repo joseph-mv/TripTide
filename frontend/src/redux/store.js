@@ -12,10 +12,10 @@ import locationReducer from './reducers/locationReducer';
     storage,
   };
 
-  // const persistedFormReducer = persistReducer(formPersistConfig, formReducer);
+  // const persistedReducer = persistReducer(formPersistConfig, formReducer);
 
   // const rootReducer = combineReducers({
-  //   form: persistedFormReducer,
+  //   form: persistedReducer,
   //   location: locationReducer,
   // });
 
@@ -28,9 +28,9 @@ import locationReducer from './reducers/locationReducer';
     location: locationReducer,
 
   })
-  const persistedFormReducer=persistReducer(formPersistConfig, rootReducer)
+  const persistedReducer=persistReducer(formPersistConfig, rootReducer)
   const store = configureStore({
-    reducer: persistedFormReducer,
+    reducer: persistedReducer,
   });
 const persistor = persistStore(store);
 

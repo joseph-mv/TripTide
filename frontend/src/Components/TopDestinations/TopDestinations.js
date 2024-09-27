@@ -8,7 +8,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 const TopDestinations = () => {
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [flipped, setFlipped] = useState(Array(10).fill(false));
+  const [flipped, setFlipped] = useState(Array(12).fill(false));
   const [imageLoading, setImageLoading] = useState(Array(12).fill(true));
 
   useEffect(() => {
@@ -45,18 +45,18 @@ const TopDestinations = () => {
             }
           })
         );
-        setDestinations(places.filter((place) => place !== null).slice(0, 12));
-
-        if (places[0]) setLoading(false);
+        setDestinations(places.filter((place) => place !== null).slice(0, 12)); 
       } catch (e) {
         console.error("Error fetching top destinations:", e);
+      }finally{
+        setLoading(false);
       }
     };
 
     fetchPlaces();
   }, []);
   // console.log(destinations);
-
+// if(destinations.length > 0)  
   const handleImageLoad = (index) => {
     setImageLoading((prevLoading) =>
       prevLoading.map((loadingState, i) => (i === index ? false : loadingState))
@@ -100,6 +100,7 @@ const TopDestinations = () => {
                       effect="blur"
                       width="100%"
                       height="150px"
+                      visibleByDefault={true}
                       onLoad={() => handleImageLoad(index)}
                       onError={() => handleImageError(index)}
                     />

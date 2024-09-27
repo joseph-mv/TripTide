@@ -46,7 +46,7 @@
   to { transform: translateX(0); }
 }
 .destination-container .error {
-  margin: 20px 20px;
+  margin: 20px auto;
   font-size: clamp(14px,2vw,16px);
   color: rgb(48, 47, 47);
   text-align: center;
