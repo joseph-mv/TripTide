@@ -2,7 +2,7 @@
 import React from "react";
 import "./DeleteConfirmationModal.css";
 
-const DeleteConfirmationModal = ({ isOpen, onRequestClose, onConfirm }) => {
+const DeleteConfirmationModal = ({trip, isOpen, onRequestClose, onConfirm }) => {
   if (!isOpen) {
     document.body.classList.remove("fixed-body");
     return null;
@@ -11,7 +11,7 @@ const DeleteConfirmationModal = ({ isOpen, onRequestClose, onConfirm }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3>Are you sure you want to delete this destination?</h3>
+        <h3>Are you sure you want to delete this {trip? trip:"destination"}?</h3>
         <button className="modal-button" onClick={onConfirm}>
           Confirm
         </button>

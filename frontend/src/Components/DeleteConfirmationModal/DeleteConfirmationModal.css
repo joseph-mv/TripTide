@@ -13,7 +13,8 @@
   }
   
   .modal-content {
-    background: rgba(30, 22, 22, 0.893);
+    background: rgb(30, 22, 22);
+    color: white;
     padding: 20px;
     border-radius: 8px;
     text-align: center;

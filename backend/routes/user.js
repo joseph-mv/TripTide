@@ -4,6 +4,7 @@ var userHelper = require("../Helpers/user-helper");
 var itineraryHelper = require("../Helpers/itinerary-helper");
 var jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { resolve } = require("promise");
 dotenv.config();
 function generateAccessToken(username) {
   return jwt.sign(username, process.env.JWT_SECRET, { expiresIn: "1800s" });
@@ -18,7 +19,7 @@ const generateRefreshToken = (username) => {
 // console.log(process.env.JWT_SECRET)
 function verifyToken(req, res, next) {
   const token = req.headers["authorization"];
-
+// console.log(token)
   if (!token) return res.status(401).json({ error: "Access denied" });
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -142,15 +143,26 @@ router.post("/save-itinerary", verifyToken, (req, res) => {
     });
 });
 router.get("/user-dashboard",verifyToken,(req,res)=>{
-  console.log(req.query.userId)
+  // console.log(req.query.userId)
   userHelper.getUserItineraries(req.query.userId).then((response) => {
     // console.log(response)
     res.json(response);
   }).catch(err => {
-    console.log(err);
+    // console.log(err);
     res.status(500).json({ message: err.message });
 
   })
+})
+router.delete('/delete-trip',verifyToken,(req,res)=>{
+  console.log(req.query)
+  itineraryHelper.deleteItinerary(req.query.id).then((response) => {
+   res.status(200).json(true);
+  }).catch(err=>{
+      // console.log(err)
+     res.status(500).json({ message: err.message });
+  })
+
+  
 })
 
 

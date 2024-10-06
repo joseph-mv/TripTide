@@ -118,7 +118,7 @@ const Header = () => {
             <SiImessage />
             &nbsp;&nbsp;Contact
           </Link>
-          <Link className="link" to="/authenticate">
+          <Link className="link" to={userName?"/account":"/authenticate"}>
             <MdAccountCircle />
             &nbsp;&nbsp;{userName ? userName : "Account"}
           </Link>

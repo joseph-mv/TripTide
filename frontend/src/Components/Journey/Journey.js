@@ -20,7 +20,6 @@ const Journey = () => {
   const [errMsg, setErrMsg] = useState("");
   const [routeNum, setRouteNum] = useState(0);
   const [routes, setRoutes] = useState([]);
-
   const formData = useSelector((state) => state.form);
   const coordinates = useSelector((state) => state.location);
   const dispatch = useDispatch();
@@ -108,8 +107,13 @@ const Journey = () => {
         type: "DISTANCE",
         payload: distance,
       });
+      dispatch({
+        type: "TRAVELTIME",
+        payload: travelTime,
+      });
     }
   }, [routes, routeNum]);
+  // console.log(coordinates)
 
   return (
     <div>

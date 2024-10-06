@@ -4,6 +4,7 @@ const initialState = {
   // midPoint:{},
   coordinates: [],
   distance: "",
+  travelTime: "",
   routeGeometry: [],
   selectedPlaces: {},
   destinations: [],
@@ -16,6 +17,7 @@ const SET_STARTING_POINT = "SET_STARTING_POINT";
 // const MID_POINT='MID_POINT'
 const COORDINATES = "COORDINATES";
 const DISTANCE = "DISTANCE";
+const TRAVELTIME="TRAVELTIME"
 const ROUTE_GEOMETRY = "ROUTE_GEOMETRY";
 const RESET_STATE = "RESET_ LOCATION";
 const DELETE_PLACE = "DELETE_PLACE";
@@ -50,6 +52,11 @@ const locationReducer = (state = initialState, action) => {
         ...state,
         distance: action.payload,
       };
+      case TRAVELTIME:
+        return {
+          ...state,
+          travelTime: action.payload,
+        };
     case ROUTE_GEOMETRY:
       return {
         ...state,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./UserDashBoard.css"; // Import the CSS file
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
 import axios from "axios";
+import UserTrip from "../UserTrip/UserTrip";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Sample data for demonstration
 const userData = {
@@ -57,23 +58,29 @@ const userData = {
 
 
 const UserDashboard = () => {
-  var token = localStorage.getItem("token");
+  
+  var token = useRef(localStorage.getItem("token"));
   const userId = localStorage.getItem("user_Id");
   const userName =localStorage.getItem("user_Name");
-
+  const [trips,setTrips]=useState([])
+//  console.log(token)
   const [activeTab, setActiveTab] = useState("currentTrip");
   const navigate = useNavigate();
+  const today = new Date(); // Current date and time
+const currentDate = new Date(today.toISOString().split('T')[0]); // Today's date at 00:00:00
+
+
+
   useEffect(() => {
-   
    async function getUser(){
-      if (!token) {
+      if (!token.current) {
         // console.log("No token");
         navigate("/authenticate");
         return;
-      } else if (isTokenExpired(token)) {
+      } else if (isTokenExpired(token.current)) {
         // console.log("Token expired");
-        token = await refreshToken();
-        if (!token) {
+        token.current = await refreshToken();
+        if (!token.current) {
           navigate("/authenticate");
         }
       }
@@ -84,22 +91,34 @@ const UserDashboard = () => {
          
           { params: { userId },
             headers: {
-              Authorization: token,
+              Authorization: token.current,
             },
           }
         )
+        setTrips(response.data)
       } catch (error) {
         // console.error(error);
         // setErrorMessage("Deposit failed. Please try again later.");
       }
 
     }
-     
-
-      getUser()
-   
-    
+      getUser()  
   }, [])
+  const upcomingTrips=trips.filter(trip=>{
+    const startDate = new Date(trip.details.startDate)
+    return startDate.getTime() > currentDate.getTime()
+  })
+  const completedTrips=trips.filter(trip=>{
+    const endDate = new Date(trip.details.endDate)
+    return endDate.getTime() < currentDate.getTime()
+  })
+  const ongoingTrips=trips.filter(trip=>{
+    const startDate = new Date(trip.details.startDate)
+    const endDate = new Date(trip.details.endDate)
+    return startDate.getTime() <= currentDate.getTime() && endDate.getTime() >= currentDate.getTime()
+  })
+  console.log(ongoingTrips)
+  
   
 
   const setCurrentTrip = (tripId) => {
@@ -112,6 +131,19 @@ const UserDashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "currentTrip":
+        if(ongoingTrips.length > 0) {
+          return (
+            <ul>
+            {ongoingTrips.map(trip=>{
+              return (
+
+                <UserTrip trip={trip} setTrips={setTrips}/>
+                
+              )
+            })}
+          </ul>
+          )
+        }
         const currentTrip = userData.trips.find(
           (trip) => trip.status === "Ongoing"
         );
@@ -119,7 +151,7 @@ const UserDashboard = () => {
           <div className="currentTrip">
             {currentTrip ? (
               <div className="trip-card">
-                <h3>{currentTrip.title}</h3>
+                <h3>{ongoingTrips[3]?.name}</h3>
                 <div className="day-counter">
                   <div>Day </div>
                   <div>
@@ -135,8 +167,8 @@ const UserDashboard = () => {
                   <div className="place">
                     <i className="fas fa-map-marker-alt"></i>{" "}
                     {/* Icon for Start Place */}
-                    <p>{currentTrip.startPlace}</p>
-                    <p>{currentTrip.startDate}</p>
+                    <p>{ongoingTrips[0]?.details.startingPoint}</p>
+                    <p>{ongoingTrips[0]?.details.startDate}</p>
                   </div>
 
                   <div className="additional-info">
@@ -144,38 +176,38 @@ const UserDashboard = () => {
                     <strong>
                     <FontAwesomeIcon icon={faClock} /> Days:
                       </strong>
-                       {currentTrip.duration}
+                       {ongoingTrips[3]?.noOfDays}
                     </p>
                     <p>
                       <strong>
                         <FontAwesomeIcon icon={faUsers} /> Trippers:
                       </strong>{" "}
-                      {currentTrip.noOfPeople}
+                      {ongoingTrips[3]?.details.noOfPeople}
                     </p>
                     <p>
                       <strong>
                         <FontAwesomeIcon icon={faInfoCircle} /> Status:
                       </strong>{" "}
-                      {currentTrip.status}
+                      {ongoingTrips[3]?.details.status}
                     </p>
                     <p>
                       <strong>
                         <FontAwesomeIcon icon={faRoute} /> Distance:
                       </strong>{" "}
-                      {currentTrip.distance} km
+                      {ongoingTrips[3]?.distance} km
                     </p>
                     <p>
                       <strong>
                         <FontAwesomeIcon icon={faHourglassHalf} /> Duration:
                       </strong>{" "}
-                      {currentTrip.duration} hours
+                      {ongoingTrips[3]?.travelTime} 
                     </p>
                   </div>
                   <div className="place">
                     <i className="fas fa-map-marker-alt"></i>{" "}
                     {/* Icon for End Place */}
-                    <p>{currentTrip.endPlace}</p>
-                    <p>{currentTrip.endDate}</p>
+                    <p>{ongoingTrips[0]?.details.destination}</p>
+                    <p>{ongoingTrips[0]?.details.endDate}</p>
                   </div>
                 </div>
               </div>
@@ -189,16 +221,13 @@ const UserDashboard = () => {
           <div className="content-section">
             <h2>Upcoming Trips</h2>
             <ul>
-              {userData.trips
-                .filter((trip) => trip.status === "Upcoming")
-                .map((trip) => (
-                  <li key={trip.id}>
-                    {trip.title} ({trip.dates})
-                    <button onClick={() => setCurrentTrip(trip.id)}>
-                      Set as Current
-                    </button>
-                  </li>
-                ))}
+              {upcomingTrips.sort((a,b)=>new Date(a.details.startDate)-new Date(b.details.startDate)).map(trip=>{
+                return (
+
+                  <UserTrip trip={trip} setTrips={setTrips}/>
+                  
+                )
+              })}
             </ul>
           </div>
         );
@@ -207,10 +236,8 @@ const UserDashboard = () => {
           <div className="content-section">
             <h2>Trip History</h2>
             <ul>
-              {userData.tripHistory.map((trip) => (
-                <li key={trip.id}>
-                  {trip.title} (Date: {trip.date})
-                </li>
+              {completedTrips.sort((a,b)=>new Date(a.details.startDate)-new Date(b.details.startDate)).map((trip) => (
+                <UserTrip trip={trip} setTrips={setTrips}/>
               ))}
             </ul>
           </div>

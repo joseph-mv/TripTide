@@ -14,6 +14,7 @@ import { refreshToken } from "../../utils/refreshToken";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ItineraryForm = () => {
   var coordinates = useSelector((state) => state.location);
+  console.log(coordinates)
   var token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_Id");
   var formData = useSelector((state) => state.form);
@@ -76,10 +77,13 @@ const ItineraryForm = () => {
         selectedPlaces: coordinates.sortedSelectedPlaces,
         destinations: coordinates.destinations,
       },
+      distance:coordinates.distance,
+      travelTime: coordinates.travelTime,
+      noOfDays:coordinates.noOfDays,
       details: formData,
       createdAt:new Date()
     };
-
+    // console.log(tripItinerary)
     try {
       const response = await axios.post(
         `${BASE_URL}/user/save-itinerary`,
