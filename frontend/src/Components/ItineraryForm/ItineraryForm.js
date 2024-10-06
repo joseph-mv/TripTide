@@ -77,6 +77,7 @@ const ItineraryForm = () => {
         destinations: coordinates.destinations,
       },
       details: formData,
+      createdAt:new Date()
     };
 
     try {

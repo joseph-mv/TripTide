@@ -1,0 +1,217 @@
+/* UserDashboard.css */
+
+.dashboard-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #cccccc5d;
+    padding-bottom: 10px;
+    margin: 20px 0;
+    overflow:scroll;
+    scrollbar-width: 0;
+    gap: 15px;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+.navbar::-webkit-scrollbar {
+    display: none; 
+  }
+
+.navbar button {
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 1px;
+    text-wrap: nowrap;
+}
+
+.navbar button.active  {
+    border-bottom:4px solid orange;
+}
+
+.content-section {
+    margin-top: 20px;
+}
+
+.content-section h2 {
+    margin-bottom: 10px;
+}
+
+.content-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.content-section li {
+    margin-bottom: 5px;
+}
+
+.currentTrip {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.trip-card {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.trip-card h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.trip-card h3 {
+    font-size: 1.3rem;
+    color: #555;
+    margin: 10px 0;
+    text-align: center;
+    /* float: left; */
+}
+
+.day-counter {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 1.3rem;
+    display: inline-block;
+    width: 20%;
+    padding: 10px;
+    border-radius: 100%;
+    font-weight: bold;
+    color: #007BFF;
+    text-align: center;
+    margin-bottom: 15px;
+    border: 1px solid orange;
+}
+
+.place-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10px; 
+    width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+.place i {
+    margin-right: 5px; /* Space between icon and place name */
+    color: #007BFF; /* Color for icons */
+}
+.additional-info {
+    position: relative;
+    margin: 15px; 
+    font-size: 1rem; 
+    background: url('../../../public/icons/up-arrow.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom;
+    width: 80%;
+    padding: 10px;  
+}
+.additional-info p{
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    & strong{
+        display: flex;
+        gap: 5px;
+    }
+}
+
+
+
+
+
+
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.action-buttons button {
+    padding: 10px 20px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.action-buttons button:first-child {
+    background-color: #007bff;
+    margin-right: 10px;
+}
+
+.action-buttons button:last-child {
+    background-color: #28a745;
+}
+
+
+
+
+
+
+
+
+
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.action-buttons button {
+    padding: 10px 20px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.action-buttons button:first-child {
+    background-color: #007bff;
+    margin-right: 10px;
+}
+
+.action-buttons button:last-child {
+    background-color: #28a745;
+}

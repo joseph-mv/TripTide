@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ContactSection from "./Pages/ContactSection";
+import Account from "./Pages/Account";
 function App() {
   useEffect(() => {
     AOS.init({
@@ -37,6 +38,7 @@ function App() {
           <Route path="/plan-details/itinerary" element={<Itinerary />} />
           <Route path="/about" element={<AboutSection />} />
           <Route path='/contact' element={<ContactSection/>} />
+          <Route path='/account' element={<Account/>} />
         </Routes>
       </BrowserRouter>
     </div>

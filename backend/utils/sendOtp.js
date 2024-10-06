@@ -13,6 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendOtp = async (email, otp) => {
+  
   const mailOptions = {
     from: `TripTide <${process.env.EMAIL_USER}>`,
     to: email,
@@ -49,7 +50,8 @@ const sendOtp = async (email, otp) => {
     await transporter.sendMail(mailOptions);
     return {msg:'An Otp has been sent to ' + email + '.'};
   } catch (error) {
-    return {error:' An Error occured , try again ' }
+    console.error(error)
+    return {error:' An Error occurred , try again ' }
   }
 };
 

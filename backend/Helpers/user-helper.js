@@ -24,6 +24,7 @@ module.exports = {
         const verificationToken = crypto.randomBytes(32).toString('hex');
         user.verificationToken = verificationToken;
         user.isVerified = false;
+        user.createdAt=new Date()
         await db.get()
           .collection(collection.User_Collection)
           .insertOne(user)
@@ -134,4 +135,15 @@ module.exports = {
     })
 
   },
+  getUserItineraries:(userId)=>{
+    return new Promise((resolve, reject) =>{
+      const itineraries = db.get().collection(collection.ITINERARY_Collection).find({userId}).toArray()
+      if(itineraries){
+        resolve(itineraries)
+      }else{
+        reject({ error: 'No itineraries found' })
+      }
+    })
+  }
+
 }

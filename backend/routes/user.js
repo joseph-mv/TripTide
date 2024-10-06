@@ -103,12 +103,12 @@ router.post("/forgot-password", async (req, res) => {
   userHelper
     .forgotPassword(req.body)
     .then((response) => {
-      // console.log(response)
+      console.log(response)
       res.json(response);
     })
     .catch((error) => {
-      console.log("error: ");
-      console.log(error);
+      // console.log("error: ");
+      // console.log(error);
       res.json(error);
     });
 });
@@ -129,7 +129,7 @@ router.post("/refresh-token", (req, res) => {
 });
 
 router.post("/save-itinerary", verifyToken, (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   itineraryHelper
     .addItinerary(req.body)
     .then((response) => {
@@ -141,5 +141,18 @@ router.post("/save-itinerary", verifyToken, (req, res) => {
       res.status(500).json({ message: "Internal Server Error" }); // Handle errors appropriately
     });
 });
+router.get("/user-dashboard",verifyToken,(req,res)=>{
+  console.log(req.query.userId)
+  userHelper.getUserItineraries(req.query.userId).then((response) => {
+    // console.log(response)
+    res.json(response);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+
+  })
+})
+
+
 
 module.exports = router;

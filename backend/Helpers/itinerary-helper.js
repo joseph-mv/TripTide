@@ -9,7 +9,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
         await db.get().collection(collection.ITINERARY_Collection).insertOne(itinerary).then((data)=>{
             resolve(true)
-            console.log((data))
+            // console.log((data))
         }).catch((err)=>{
             reject(err)
             // console.log((err))
