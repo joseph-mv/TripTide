@@ -20,10 +20,10 @@ const Footer = () => {
               
             </li>
             <li>
-              <a href="#privacy">Privacy Policy</a>
+              <a href="#privacy">Privacy & Policy</a>
             </li>
             <li>
-              <a href="#terms">Terms of Service</a>
+              <a href="#terms">Terms & Service</a>
             </li>
           </ul>
         </div>

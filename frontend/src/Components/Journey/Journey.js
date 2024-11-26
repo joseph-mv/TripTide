@@ -16,7 +16,7 @@ import WarningPopup from "../WarningPopup/WarningPopup";
 
 const Journey = () => {
   const [distance, setDistance] = useState();
-  const [travelTime, setTravelTime] = useState();
+  const [travelTime, setTravelTime] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [routeNum, setRouteNum] = useState(0);
   const [routes, setRoutes] = useState([]);
@@ -82,8 +82,6 @@ const Journey = () => {
       let time = formatDuration(route.duration);
       setTravelTime(time);
       let coordinates = [];
-      // console.log(length)
-
       for (
         let i = Math.floor(length / 10);
         i < length && length > 10;
@@ -103,17 +101,20 @@ const Journey = () => {
         type: "COORDINATES",
         payload: coordinates,
       });
+      
       dispatch({
         type: "DISTANCE",
         payload: distance,
       });
+      
       dispatch({
         type: "TRAVELTIME",
-        payload: travelTime,
+        payload: time,
       });
     }
   }, [routes, routeNum]);
-  // console.log(coordinates)
+  // console.log('travelTime',coordinates.travelTime)
+  // console.log(coordinates.distance)
 
   return (
     <div>

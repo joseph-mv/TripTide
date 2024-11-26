@@ -14,7 +14,7 @@ import { refreshToken } from "../../utils/refreshToken";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ItineraryForm = () => {
   var coordinates = useSelector((state) => state.location);
-  console.log(coordinates)
+  // console.log(coordinates)
   var token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_Id");
   var formData = useSelector((state) => state.form);
@@ -74,8 +74,9 @@ const ItineraryForm = () => {
       itinerary: itinerary,
       places: {
         startingPoint: coordinates.startingPoint,
+        endPoint:coordinates.destination,
         selectedPlaces: coordinates.sortedSelectedPlaces,
-        destinations: coordinates.destinations,
+        
       },
       distance:coordinates.distance,
       travelTime: coordinates.travelTime,
@@ -145,7 +146,6 @@ const ItineraryForm = () => {
       <h1>MAKE YOUR ITINERARY</h1>
       {Object.keys(itinerary).map((key) => (
         <ItineraryToDo
-          startingPoint={formData.startingPoint}
           day={key}
           item={itinerary[key]}
           setItinerary={setItinerary}

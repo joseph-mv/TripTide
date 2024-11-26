@@ -28,7 +28,7 @@ module.exports = {
         await db.get()
           .collection(collection.User_Collection)
           .insertOne(user)
-          .then((data) => {
+          .then((data) => { 
 
             // resolve({ data, status: true });
           });

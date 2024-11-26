@@ -4,11 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const UserTrip = ({ trip,setTrips }) => {
+  console.log(trip)
   var token = localStorage.getItem("token");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate=useNavigate()
     const handleOpenModal = () => {
     
         setIsModalOpen(true);
@@ -34,8 +37,11 @@ const UserTrip = ({ trip,setTrips }) => {
         }
         
       };
+      const handleClick=()=>{
+        navigate("/plan-details/itinerary");
+      }
   return (
-    <li className="trip-item" key={trip._id}>
+    <li onClick={handleClick} className="trip-item" key={trip._id}>
       <span className="trip-details">
         {trip.details.startDate.split('-').reverse().join('-')} 
       </span>

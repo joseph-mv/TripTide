@@ -12,7 +12,6 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
   const [activity, setActivity] = useState("");
 
   var coordinates = useSelector((state) => state.location);
-  // coordinates = JSON.parse(localStorage.getItem("coordinates"));
   const places = coordinates.sortedSelectedPlaces;
   // console.log((coordinates))
   const handleDestination = (e) => {
@@ -20,6 +19,8 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
       ...prev,
       [day]: { ...prev[day], endPoint: e.target.value },
     }));
+
+    // next day starting Point
     if (item.day <= coordinates.noOfDays) {
       setItinerary((prev) => ({
         ...prev,
