@@ -44,7 +44,7 @@ const UserTrip = ({ trip,setTrips,current }) => {
       };
       const handleClick=()=>{
         console.log('click')
-        navigate("edit-itinerary");
+        navigate("edit-itinerary",{state:{trip}});
       }
   return (
     <li onClick={handleClick} className="trip-item" key={trip._id}>

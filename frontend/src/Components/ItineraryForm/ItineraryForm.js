@@ -1,5 +1,5 @@
 // ItineraryForm.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ItineraryForm.css";
 import { useSelector } from "react-redux";
 import ItineraryToDo from "../ItineraryToDo/ItineraryToDo";
@@ -12,7 +12,7 @@ import axios from "axios";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const ItineraryForm = () => {
+const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
   var coordinates = useSelector((state) => state.location);
   // console.log(coordinates)
   var token = localStorage.getItem("token");
@@ -34,23 +34,40 @@ const ItineraryForm = () => {
     SEK: "kr", // Swedish Krona
     NZD: "$", // New Zealand Dollar
   };
-
-  let date = formData.startDate;
+  console.log(formData);
   const newItinerary = {};
-  for (let i = 0; i < coordinates.noOfDays; i++) {
-    newItinerary["Day" + (i + 1)] = {
-      day: i + 1,
-      date: date,
-      todo: [],
-      startingPoint: "",
-      endPoint: "",
-      notes: "",
-    };
-    date = getNextDate(date);
+  if (!oldItinerary) { 
+    let date = formData.startDate;
+
+    for (let i = 0; i < coordinates.noOfDays; i++) {
+      newItinerary["Day" + (i + 1)] = {
+        day: i + 1,
+        date: date,
+        todo: [],
+        startingPoint: "",
+        endPoint: "",
+        notes: "",
+      };
+      date = getNextDate(date);
+    }
   }
+
   const [itinerary, setItinerary] = useState(newItinerary);
-  const [name, setName] = useState("");
-  itinerary.Day1.startingPoint = formData.startingPoint;
+
+  useEffect(() => {
+    // for editing itinerary
+    if (oldItinerary) {  
+      setItinerary(oldItinerary);
+    }
+  }, [oldItinerary]);
+
+  const [name, setName] = useState(oldName);
+  console.log(oldItinerary);
+  console.log(itinerary);
+  console.log(formData);
+  if (!oldItinerary) {
+    itinerary.Day1.startingPoint = formData.startingPoint;
+  }
 
   // console.table(itinerary)
   const handleItinerary = async (e) => {
@@ -74,20 +91,19 @@ const ItineraryForm = () => {
       itinerary: itinerary,
       places: {
         startingPoint: coordinates.startingPoint,
-        endPoint:coordinates.destination,
+        endPoint: coordinates.destination,
         selectedPlaces: coordinates.sortedSelectedPlaces,
-        
       },
-      distance:coordinates.distance,
+      distance: coordinates.distance,
       travelTime: coordinates.travelTime,
-      noOfDays:coordinates.noOfDays,
+      noOfDays: coordinates.noOfDays,
       details: formData,
-      createdAt:new Date()
+      createdAt: new Date(),
     };
     // console.log(tripItinerary)
     try {
       const response = await axios.post(
-        `${BASE_URL}/user/save-itinerary`,
+        `${BASE_URL}/user/${_id?`edit-itinerary?id=${_id}`:"save-itinerary"}`,
         tripItinerary,
         {
           headers: {
