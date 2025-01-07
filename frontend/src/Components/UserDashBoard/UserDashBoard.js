@@ -16,6 +16,7 @@ import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
 import axios from "axios";
 import UserTrip from "../UserTrip/UserTrip";
+import OngoingTrips from "./OngoingTrips/OngoingTrips";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Sample data for demonstration
 const userData = {
@@ -118,7 +119,7 @@ const UserDashboard = () => {
       endDate.getTime() >= currentDate.getTime()
     );
   });
-  console.log(ongoingTrips);
+
 
   const setCurrentTrip = (tripId) => {
     // Update the trips to mark the selected trip as current and others as not current
@@ -130,121 +131,7 @@ const UserDashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "currentTrip":
-        if (ongoingTrips.length > 1) {
-          return (
-            <ul >
-              <div className="current-error">
-               <p>
-                      You have multiple trips currently in progress. To ensure a
-                      smooth travel experience, please review your trip details
-                      and choose one of the following options:
-                    </p>
-
-                    <ul>
-                      <li>
-                        <strong>Change the date</strong> of one or more trips to
-                        avoid conflicts.
-                      </li>
-                      <li>
-                        <strong>Delete</strong> one or more trips if they are no
-                        longer necessary.
-                      </li>
-                    </ul>
-                    </div>
-              {ongoingTrips.map((trip) => {
-                return (
-                  <div>
-                   
-                    <UserTrip trip={trip} setTrips={setTrips} />
-                  </div>
-                );
-              })}
-            </ul>
-          );
-        }
-        const currentTrip = userData.trips.find(
-          (trip) => trip.status === "Ongoing"
-        );
-        return (
-          <div className="currentTrip">
-            {currentTrip ? (
-              <div className="trip-card">
-                <h3>{ongoingTrips[0]?.name}</h3>
-                <div className="day-counter">
-                  <div>Day </div>
-                  <div>
-                    {new Date().getDate() -
-                      new Date(ongoingTrips[0]?.details.startDate).getDate() +
-                      1}
-                  </div>
-                </div>
-                <div className="place-container">
-                  <div className="place">
-                    <i className="fas fa-map-marker-alt"></i>{" "}
-                    {/* Icon for Start Place */}
-                    <p>{ongoingTrips[0]?.details.startingPoint}</p>
-                    <p>{ongoingTrips[0]?.details.startDate}</p>
-                  </div>
-
-                  <div className="additional-info">
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faClock} /> Days:
-                      </strong>
-                      {ongoingTrips[0]?.noOfDays}
-                    </p>
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faBicycle} /> Ride:
-                      </strong>{" "}
-                      {ongoingTrips[0]?.details.transportation}
-                    </p>
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faUsers} /> Trippers:
-                      </strong>{" "}
-                      {ongoingTrips[0]?.details.numPeople}
-                    </p>
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faDollarSign} /> Budget:
-                      </strong>{" "}
-                      {ongoingTrips[0]?.details.budget}{" "}
-                      {ongoingTrips[0]?.details.currency}
-                    </p>
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faRoute} /> Distance:
-                      </strong>{" "}
-                      {ongoingTrips[0]?.distance} km
-                    </p>
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faHourglassHalf} /> Travel
-                        Duration:
-                      </strong>{" "}
-                      {ongoingTrips[0]?.travelTime}
-                    </p>
-                    <p>
-                      <strong>
-                        <FontAwesomeIcon icon={faStickyNote} /> notes:
-                      </strong>{" "}
-                      {ongoingTrips[0]?.details.notes}
-                    </p>
-                  </div>
-                  <div className="place">
-                    <i className="fas fa-map-marker-alt"></i>{" "}
-                    {/* Icon for End Place */}
-                    <p>{ongoingTrips[0]?.details.destination}</p>
-                    <p>{ongoingTrips[0]?.details.endDate}</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p>No current trip.</p>
-            )}
-          </div>
-        );
+       return <OngoingTrips ongoingTrips={ongoingTrips}/>
       case "upcomingTrips":
         return (
           <div className="content-section">

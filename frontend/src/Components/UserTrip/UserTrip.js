@@ -7,20 +7,25 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const UserTrip = ({ trip,setTrips }) => {
+const UserTrip = ({ trip,setTrips,current }) => {
   console.log(trip)
   var token = localStorage.getItem("token");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate=useNavigate()
-    const handleOpenModal = () => {
-    
+    const handleOpenModal = (e) => {
+
+      e.stopPropagation();
+    console.log(('opn'))
         setIsModalOpen(true);
       };
-      const handleCloseModal = () => {
+      const handleCloseModal = (e) => {
+        e.stopPropagation();
         setIsModalOpen(false);
       };
     
-      const handleConfirmDelete = async() => {
+      const handleConfirmDelete = async(e) => {
+        e.stopPropagation();
+        
         try {
           const response = await axios.delete(`${BASE_URL}/user/delete-trip`, {
             params: { id: trip._id },
@@ -38,20 +43,21 @@ const UserTrip = ({ trip,setTrips }) => {
         
       };
       const handleClick=()=>{
-        navigate("/plan-details/itinerary");
+        console.log('click')
+        navigate("edit-itinerary");
       }
   return (
     <li onClick={handleClick} className="trip-item" key={trip._id}>
-      <span className="trip-details">
+     {current ? <button  onClick={handleClick}>Edit</button>:<> <span className="trip-details">
         {trip.details.startDate.split('-').reverse().join('-')} 
       </span>
       <span className="trip-details">
         {trip.name}
-      </span>
+      </span> </>}
     
       <button
         className=" delete-button"
-        onClick={() => handleOpenModal(trip)}
+        onClick={handleOpenModal}
       >
         <FontAwesomeIcon icon={faTrashCan} />
       </button>

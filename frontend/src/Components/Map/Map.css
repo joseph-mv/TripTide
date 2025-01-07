@@ -3,7 +3,7 @@
 .map-container {
   position: absolute;
   width: 100%;
-  top: calc(30vh + 350px);
+  top: calc(30vh + 370px);
   height: 100vh; /* Full viewport height */
   margin: auto;
 }

@@ -80,7 +80,7 @@ const TopDestinations = () => {
 
       <div className="destination-grid">
         {destinations.map((destination, index) => (
-          <div data-aos="fade-up">
+          <div key={index} data-aos="fade-up">
             <div
               key={index}
               className={`destination-card ${flipped[index] ? "flipped" : ""}`}
