@@ -12,10 +12,11 @@ import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
 import { currencySymbols } from "../../utils/currencySymbols";
 import { dailyItinerary } from "../../utils/dailyItinerary";
+import { getPrevDate } from "../../utils/prevDate";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   var coordinates = useSelector((state) => state.location);
   var formData = useSelector((state) => state.form);
   var token = localStorage.getItem("token");
@@ -23,7 +24,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const [map, setMap] = useState(false);
 
   const newItinerary = {};
-  
+
   if (!oldItinerary) {
     let date = formData.startDate;
 
@@ -32,33 +33,27 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       date = getNextDate(date);
     }
     dispatch({
-      type:"CREATE_NEW_ITINERARY",
-      payload:{date:date,noOfDays:coordinates.noOfDays}
-
-    })
+      type: "CREATE_NEW_ITINERARY",
+      payload: { date: date, noOfDays: coordinates.noOfDays },
+    });
   }
-  
-  
- 
-  const [itinerary, setItinerary] = useState(()=>{
-    const savedItinerary =localStorage.getItem("itinerary"); 
-    return savedItinerary?JSON.parse(savedItinerary):newItinerary
+
+  const [itinerary, setItinerary] = useState(() => {
+    const savedItinerary = localStorage.getItem("itinerary");
+    return savedItinerary ? JSON.parse(savedItinerary) : newItinerary;
   });
 
-useEffect(() => {
- localStorage.setItem("itinerary", JSON.stringify(itinerary))
- return () => {
- localStorage.removeItem('itinerary')
-}
-}, [itinerary])
-
-
-
+  useEffect(() => {
+    localStorage.setItem("itinerary", JSON.stringify(itinerary));
+    return () => {
+      localStorage.removeItem("itinerary");
+    };
+  }, [itinerary]);
 
   useEffect(() => {
     // for editing itinerary
     if (oldItinerary) {
-      setItinerary( oldItinerary);
+      setItinerary(oldItinerary);
     }
   }, [oldItinerary]);
 
@@ -70,18 +65,37 @@ useEffect(() => {
   }
 
   const addNewDay = () => {
-    const number=coordinates.noOfDays
-    const date=getNextDate(formData.endDate)
-    const newItinerary = dailyItinerary( number, date);
+    const number = coordinates.noOfDays;
+    const date = getNextDate(formData.endDate);
+    const newItinerary = dailyItinerary(number, date);
     dispatch({
-      type:"UPDATE",
-      payload:{name:"endDate",value:date}
-    })
+      type: "UPDATE",
+      payload: { name: "endDate", value: date },
+    });
     dispatch({
-      type:"INC_NO_OF_DAYS"
-    })
-    setItinerary(prev=>({...prev, ["Day" + (number+1)]:newItinerary}));
-    
+      type: "INC_NO_OF_DAYS",
+    });
+    setItinerary((prev) => ({ ...prev, ["Day" + (number + 1)]: newItinerary }));
+  };
+  console.log(itinerary);
+
+  const deleteLastDay = () => {
+    const number = coordinates.noOfDays;
+    const date = getPrevDate(formData.endDate);
+    dispatch({
+      type: "UPDATE",
+      payload: { name: "endDate", value: date },
+    });
+    dispatch({
+      type: "DEC_NO_OF_DAYS",
+    });
+
+    setItinerary((prev) => {
+      // const keys=Object.keys(prev)
+      // const lastDay=keys[keys.length-1]
+      const { ["Day" + number]: _, ...rest } = prev;
+      return rest;
+    });
   };
   const handleItinerary = async (e) => {
     e.preventDefault();
@@ -176,7 +190,14 @@ useEffect(() => {
           setItinerary={setItinerary}
         />
       ))}
-      <button onClick={addNewDay} className="addDayBtn">Add Day</button>
+      <div>
+        <button onClick={addNewDay} className="addDayBtn">
+          Add Day
+        </button>
+        <button onClick={deleteLastDay} className="delDayBtn">
+          Delete Day
+        </button>
+      </div>
       <form onSubmit={handleItinerary} className="saveItinerary">
         <input
           type="text"

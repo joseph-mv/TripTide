@@ -98,6 +98,19 @@
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
+.delDayBtn{
+  background-color: red;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  float:right;
+  margin-left: auto;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
 .saveBtn {
   background-color: #000000;
   color: orange;

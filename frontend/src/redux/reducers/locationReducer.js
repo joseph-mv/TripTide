@@ -77,7 +77,7 @@ const locationReducer = (state = initialState, action) => {
     case DEC_NO_OF_DAYS: {
       return {
         ...state,
-        noOfDays: { ...state.noOfDays-- },
+        noOfDays: state.noOfDays-1,
       };
     }
 
