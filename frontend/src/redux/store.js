@@ -6,7 +6,6 @@ import formReducer from './reducers/formReducer';
 import locationReducer from './reducers/locationReducer';
 
 
-
   const formPersistConfig = {
     key: 'form',
     storage,

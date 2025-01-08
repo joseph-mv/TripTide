@@ -1,7 +1,7 @@
 // ItineraryForm.jsx
 import React, { useEffect, useState } from "react";
 import "./ItineraryForm.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ItineraryToDo from "../ItineraryToDo/ItineraryToDo";
 import { getNextDate } from "../../utils/nextDate";
 import MapPopup from "../MapPopup/MapPopup";
@@ -11,9 +11,11 @@ import axios from "axios";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
 import { currencySymbols } from "../../utils/currencySymbols";
+import { dailyItinerary } from "../../utils/dailyItinerary";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
+const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
+  const dispatch=useDispatch()
   var coordinates = useSelector((state) => state.location);
   var formData = useSelector((state) => state.form);
   var token = localStorage.getItem("token");
@@ -21,40 +23,69 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
   const [map, setMap] = useState(false);
 
   const newItinerary = {};
-  if (!oldItinerary) { 
+  
+  if (!oldItinerary) {
     let date = formData.startDate;
 
     for (let i = 0; i < coordinates.noOfDays; i++) {
-      newItinerary["Day" + (i + 1)] = {
-        day: i + 1,
-        date: date,
-        todo: [],
-        startingPoint: "",
-        endPoint: "",
-        notes: "",
-      };
+      newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
       date = getNextDate(date);
     }
-  }
+    dispatch({
+      type:"CREATE_NEW_ITINERARY",
+      payload:{date:date,noOfDays:coordinates.noOfDays}
 
-  const [itinerary, setItinerary] = useState(newItinerary);
+    })
+  }
+  
+  
+ 
+  const [itinerary, setItinerary] = useState(()=>{
+    const savedItinerary =localStorage.getItem("itinerary"); 
+    return savedItinerary?JSON.parse(savedItinerary):newItinerary
+  });
+
+useEffect(() => {
+ localStorage.setItem("itinerary", JSON.stringify(itinerary))
+ return () => {
+ localStorage.removeItem('itinerary')
+}
+}, [itinerary])
+
+
+
 
   useEffect(() => {
     // for editing itinerary
-    if (oldItinerary) {  
-      setItinerary(oldItinerary);
+    if (oldItinerary) {
+      setItinerary( oldItinerary);
     }
   }, [oldItinerary]);
 
   const [name, setName] = useState(oldName);
- 
-  if (!oldItinerary) { // for new Intinerary
+
+  if (!oldItinerary) {
+    // for new Intinerary
     itinerary.Day1.startingPoint = formData.startingPoint;
   }
 
+  const addNewDay = () => {
+    const number=coordinates.noOfDays
+    const date=getNextDate(formData.endDate)
+    const newItinerary = dailyItinerary( number, date);
+    dispatch({
+      type:"UPDATE",
+      payload:{name:"endDate",value:date}
+    })
+    dispatch({
+      type:"INC_NO_OF_DAYS"
+    })
+    setItinerary(prev=>({...prev, ["Day" + (number+1)]:newItinerary}));
+    
+  };
   const handleItinerary = async (e) => {
     e.preventDefault();
-    if (!token) { 
+    if (!token) {
       navigate("/authenticate");
       return;
     } else if (isTokenExpired(token)) {
@@ -79,10 +110,12 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
       details: formData,
       createdAt: new Date(),
     };
-    
+
     try {
       const response = await axios.post(
-        `${BASE_URL}/user/${_id?`edit-itinerary?id=${_id}`:"save-itinerary"}`,
+        `${BASE_URL}/user/${
+          _id ? `edit-itinerary?id=${_id}` : "save-itinerary"
+        }`,
         tripItinerary,
         {
           headers: {
@@ -94,8 +127,7 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
         alert("Your Itinerary has been saved");
         navigate("/");
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   return (
     <div className="itineraryDetails">
@@ -144,6 +176,7 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
           setItinerary={setItinerary}
         />
       ))}
+      <button onClick={addNewDay} className="addDayBtn">Add Day</button>
       <form onSubmit={handleItinerary} className="saveItinerary">
         <input
           type="text"

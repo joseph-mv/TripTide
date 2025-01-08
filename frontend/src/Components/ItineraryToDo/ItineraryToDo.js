@@ -10,7 +10,6 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
   // console.log((item.todo))
   const [time, setTime] = useState("");
   const [activity, setActivity] = useState("");
-
   var coordinates = useSelector((state) => state.location);
   const places = coordinates.sortedSelectedPlaces;
   // console.log((coordinates))
@@ -21,7 +20,7 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
     }));
 
     // next day starting Point
-    if (item.day <= coordinates.noOfDays) {
+    if (item.day < coordinates.noOfDays) {
       setItinerary((prev) => ({
         ...prev,
         ["Day" + (item.day + 1)]: {
