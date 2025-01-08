@@ -9,89 +9,70 @@ import {
   faVanShuttle,
 } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import WarningPopup from "../WarningPopup/WarningPopup";
+import { formatDuration } from "../../utils/formatDuration";
 
 const Journey = () => {
-  const [distance, setDistance] = useState();
-  const [travelTime, setTravelTime] = useState("");
+  const dispatch = useDispatch();
   const [errMsg, setErrMsg] = useState("");
   const [routeNum, setRouteNum] = useState(0);
   const [routes, setRoutes] = useState([]);
   const formData = useSelector((state) => state.form);
   const coordinates = useSelector((state) => state.location);
-  const dispatch = useDispatch();
 
-  function formatDuration(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-
-    let result = "";
-    if (hours > 0) {
-      result += `${hours}h `;
-    }
-    if (minutes > 0) {
-      result += `${minutes}m`;
-    }
-    return result.trim();
-  }
+ 
   function handleRouteChange() {
     dispatch({ type: "RESET_ PLACE" });
     dispatch({ type: "REMOVE_DESTINATIONS" });
     setRouteNum((prev) => (prev + 1) % routes.length);
   }
 
-  useEffect(() => {
-    // console.log("journey")
-    const getDirections = async (start, end) => {
-      if (start.longitude) {
-        // console.log(start)
-        const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
+  const getDirections = async (start, end) => {
+    if (start.longitude) {
+      // console.log(start)
+      const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
+      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
 
-        try {
-          const response = await axios.get(url);
-          const data = response.data;
-          // console.log(data);
-          setErrMsg("");
-          // setData(data)
-          setRoutes(data.routes);
-          // console.log(data.routes)
-        } catch (error) {
-          console.error("Error fetching directions:", error);
-          let msg = error.response?.data?.message;
-          setErrMsg(msg);
-        }
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+        // console.log(data);
+        setErrMsg("");
+        // setData(data)
+        setRoutes(data.routes);
+        // console.log(data.routes)
+      } catch (error) {
+        console.error("Error fetching directions:", error);
+        let msg = error.response?.data?.message;
+        setErrMsg(msg);
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     getDirections(coordinates.startingPoint, coordinates.destination);
   }, [coordinates.startingPoint, coordinates.destination]);
-  // console.log(routes.length)
+ 
 
   useEffect(() => {
     if (routes.length > 0) {
       let route = routes[routeNum];
       let routeGeometry = route.geometry;
       let length = route.geometry.coordinates.length;
-
       let distance = (route.distance / 1000).toFixed(2);
-      setDistance(distance + " Km");
       let time = formatDuration(route.duration);
-      setTravelTime(time);
-      let coordinates = [];
+      let coordinates = []; //for pushing the coordinates
+      //push points from geometry to coordinates
       for (
         let i = Math.floor(length / 10);
         i < length && length > 10;
         i += Math.floor(length / 10)
       ) {
-        // console.log(i)
         coordinates.push(route.geometry.coordinates[i]);
       }
-      coordinates.push(route.geometry.coordinates[length - 1]);
-      // console.log(coordinates.length)
+      coordinates.push(route.geometry.coordinates[length - 1]); //push last coordinate
 
       dispatch({
         type: "ROUTE_GEOMETRY",
@@ -104,7 +85,7 @@ const Journey = () => {
       
       dispatch({
         type: "DISTANCE",
-        payload: distance,
+        payload: distance +" KM",
       });
       
       dispatch({
@@ -113,14 +94,13 @@ const Journey = () => {
       });
     }
   }, [routes, routeNum]);
-  // console.log('travelTime',coordinates.travelTime)
-  // console.log(coordinates.distance)
 
   return (
     <div>
-      {travelTime && (
+      {coordinates.travelTime && (
+        
         <WarningPopup
-          travelTime={travelTime}
+          travelTime={coordinates.travelTime}
           startDate={formData.startDate}
           endDate={formData.endDate}
         />
@@ -151,9 +131,9 @@ const Journey = () => {
           </motion.span>
 
           <h3>
-            {distance ? (
+            {coordinates.distance ? (
               <>
-                <span>{distance}</span> <span>{travelTime}</span>
+                <span>{coordinates.distance}</span> <span>{coordinates.travelTime}</span>
               </>
             ) : (
               <span>{errMsg}</span>

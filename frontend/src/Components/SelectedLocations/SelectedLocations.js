@@ -4,23 +4,20 @@ import "./SelectedLocations.css";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
-
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { haversineDistance } from "../../utils/haversineDistance";
 
 const TouristSpotsList = () => {
   const dispatch = useDispatch();
   var coordinates = useSelector((state) => state.location);
-  // console.log('redux', coordinates)
   var formData = useSelector((state) => state.form);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState({});
   const places = coordinates.sortedSelectedPlaces;
-  // localStorage.setItem('coordinates',JSON.stringify(coordinates) )
-  // coordinates = JSON.parse(localStorage.getItem("coordinates"));
 
   useEffect(() => {
     var selectedPlaces = Object.values(coordinates.selectedPlaces);
+    //sorting selected places by distance from starting point
     selectedPlaces = selectedPlaces.sort(
       (a, b) => a.distFromStart - b.distFromStart
     );
@@ -31,9 +28,8 @@ const TouristSpotsList = () => {
     });
   }, []);
 
+  //for delete confirmation box
   const handleOpenModal = (spot, index) => {
-    // console.log(('spot,',spot,index+1))
-
     setToDelete({ spot: spot, index: index + 1 });
 
     setIsModalOpen(true);
@@ -55,6 +51,7 @@ const TouristSpotsList = () => {
     });
     setIsModalOpen(false);
   };
+
   var firstPoint = [
     coordinates.startingPoint.longitude,
     coordinates.startingPoint.latitude,

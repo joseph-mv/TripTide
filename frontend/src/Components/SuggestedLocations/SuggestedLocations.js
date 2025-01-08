@@ -7,41 +7,37 @@ import "./SuggestedLocations.css";
 import TouristSpots from "../TouristSpots/TouristSpots";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function SuggestedLocations() {
+  const dispatch = useDispatch();
   const coordinates = useSelector((state) => state.location);
   const formData = useSelector((state) => state.form);
-  // console.log('form',formData.activities)
-  const dispatch = useDispatch();
-
-  // console.log(coordinates)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // console.log(loading)
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/suggetions`, {
+        params: {
+          coordinates: coordinates.coordinates,
+          distance: coordinates.distance,
+          activities: formData.activities,
+        },
+      });
+      dispatch({
+        type: "ADD_DESTINATIONS",
+        payload: response.data,
+      });
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // console.log("fetching destinations");
-        // console.log(coordinates.coordinates);
-        const response = await axios.get(`${BASE_URL}/suggetions`, {
-          params: {
-            coordinates: coordinates.coordinates,
-            distance: coordinates.distance,
-            activities: formData.activities,
-          },
-        });
-        // console.log('suggetions response')
-        // console.log(response);
-        dispatch({
-          type: "ADD_DESTINATIONS",
-          payload: response.data,
-        });
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    dispatch({ type: "RESET_ PLACE" });
-    if (coordinates.destinations.length === 0) {
+    dispatch({ type: "RESET_ PLACE" });  //reset Selected places,useful while navigate backward
+    
+    if (coordinates.destinations.length === 0) { //fetch destinations if nothing is here
       setLoading(true);
       if (coordinates.distance) {
         fetchData();
@@ -49,7 +45,6 @@ function SuggestedLocations() {
     }
   }, [coordinates.distance]);
 
-  //  console.log('len',coordinates.destinations)
   return (
     <div>
       <h1 className="desTitle">Destinations</h1>

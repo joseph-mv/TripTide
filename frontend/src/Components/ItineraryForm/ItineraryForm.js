@@ -5,36 +5,21 @@ import { useSelector } from "react-redux";
 import ItineraryToDo from "../ItineraryToDo/ItineraryToDo";
 import { getNextDate } from "../../utils/nextDate";
 import MapPopup from "../MapPopup/MapPopup";
-// index.js or App.js
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
+import { currencySymbols } from "../../utils/currencySymbols";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
+  const navigate = useNavigate();
   var coordinates = useSelector((state) => state.location);
-  // console.log(coordinates)
+  var formData = useSelector((state) => state.form);
   var token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_Id");
-  var formData = useSelector((state) => state.form);
   const [map, setMap] = useState(false);
-  const navigate = useNavigate();
-  const currencySymbols = {
-    USD: "$", // US Dollar
-    EUR: "€", // Euro
-    GBP: "£", // British Pound Sterling
-    JPY: "¥", // Japanese Yen
-    CNY: "¥", // Chinese Yuan
-    INR: "₹", // Indian Rupee
-    AUD: "$", // Australian Dollar
-    CAD: "$", // Canadian Dollar
-    CHF: "CHF", // Swiss Franc
-    RUB: "₽", // Russian Ruble
-    SEK: "kr", // Swedish Krona
-    NZD: "$", // New Zealand Dollar
-  };
-  console.log(formData);
+
   const newItinerary = {};
   if (!oldItinerary) { 
     let date = formData.startDate;
@@ -62,23 +47,17 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
   }, [oldItinerary]);
 
   const [name, setName] = useState(oldName);
-  console.log(oldItinerary);
-  console.log(itinerary);
-  console.log(formData);
-  if (!oldItinerary) {
+ 
+  if (!oldItinerary) { // for new Intinerary
     itinerary.Day1.startingPoint = formData.startingPoint;
   }
 
-  // console.table(itinerary)
   const handleItinerary = async (e) => {
     e.preventDefault();
-    // console.log((token))
-    if (!token) {
-      // console.log("No token");
+    if (!token) { 
       navigate("/authenticate");
       return;
     } else if (isTokenExpired(token)) {
-      // console.log("Token expired");
       token = await refreshToken();
       if (!token) {
         navigate("/authenticate");
@@ -100,7 +79,7 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
       details: formData,
       createdAt: new Date(),
     };
-    // console.log(tripItinerary)
+    
     try {
       const response = await axios.post(
         `${BASE_URL}/user/${_id?`edit-itinerary?id=${_id}`:"save-itinerary"}`,
@@ -116,8 +95,6 @@ const ItineraryForm = ({ oldItinerary,oldName="",_id }) => {
         navigate("/");
       }
     } catch (error) {
-      // console.error(error);
-      // setErrorMessage("Deposit failed. Please try again later.");
     }
   };
   return (

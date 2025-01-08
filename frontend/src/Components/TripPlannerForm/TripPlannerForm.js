@@ -16,27 +16,40 @@ import {
   pageTransition,
 } from "../../animation/tripplan";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const TripPlannerForm = () => {
+  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const today = new Date().toISOString().split("T")[0];
+  
   const formData = useSelector((state) => state.form);
-  dispatch({
-    type: "RESET_ LOCATION",
-  });
-  //  console.log(coordinates)
-
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [suggestions1, setSuggestions1] = useState([]); //for Destination input
+  const [suggestions2, setSuggestions2] = useState([]); // for Starting Point
+  const [idxSugg1, setIdxSugg1] = useState(-1); 
+  const [idxSugg2, setIdxSugg2] = useState(-1);
+
+  // Reset locationReducer state to initial when navigating back from the plan-details page.
+  dispatch({  
+    type: "RESET_ LOCATION",
+  });
+
+
   const handleChange = (e) => {
-    // console.log(e.target.value)
     dispatch({ type: "UPDATE", payload: e.target });
     setIdxSugg1(0);
     setIdxSugg2(0);
   };
+
+  // For selecting from Suggestions
   const handleKeyDown = (e) => {
     // console.log(e.target)
-    if (e.key === "ArrowDown") {
+    if (e.key === "ArrowDown") {  
       if (e.target.id === "destination") {
         setIdxSugg1((pre) => (pre + 1) % suggestions1.length);
       } else if (e.target.id === "startingPoint") {
@@ -71,12 +84,7 @@ const TripPlannerForm = () => {
     }
   };
 
-  const [minDate, setMinDate] = useState("");
-  const [suggestions1, setSuggestions1] = useState([]);
-  const [suggestions2, setSuggestions2] = useState([]);
-  const [idxSugg1, setIdxSugg1] = useState(-1);
-
-  const [idxSugg2, setIdxSugg2] = useState(-1);
+  // Fetch geocoded suggestions for Destination and Starting Point
   const fetchGeocodedResults = async (e) => {
     try {
       const response = await axios.get(
@@ -94,14 +102,15 @@ const TripPlannerForm = () => {
       console.error("Error fetching geocoded suggestions:", error);
     }
   };
-  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     if (currentPage === 2) {
       navigate("/plan-details");
     }
+    //checking between startDate and endDate
     const { startDate, endDate } = formData;
     if (new Date(startDate) > new Date(endDate)) {
-      alert("Start date cannot be later than end date.");
+      toast.error("Start date cannot be later than end date")
       e.preventDefault();
       return false;
     }
@@ -109,14 +118,11 @@ const TripPlannerForm = () => {
     setCurrentPage((pre) => 1 + (pre % 2));
   };
 
-  useEffect(() => {
-    // Get today's date in the format YYYY-MM-DD
-    const today = new Date().toISOString().split("T")[0];
-    setMinDate(today);
-  }, []);
 
+ 
   return (
     <div>
+      <ToastContainer/>
       <div className="trip-planner-form">
         <AnimatePresence mode="wait">
           <form onSubmit={handleSubmit}>
@@ -184,7 +190,7 @@ const TripPlannerForm = () => {
                     type="date"
                     id="startDate"
                     name="startDate"
-                    min={minDate}
+                    min={today}
                     value={formData.startDate}
                     onChange={handleChange}
                     required
@@ -196,7 +202,7 @@ const TripPlannerForm = () => {
                     type="date"
                     id="endDate"
                     name="endDate"
-                    min={minDate}
+                    min={today}
                     value={formData.endDate}
                     onChange={handleChange}
                     required

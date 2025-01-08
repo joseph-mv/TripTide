@@ -61,11 +61,14 @@ const locationReducer = (state = initialState, action) => {
         ...state,
         routeGeometry: action.payload,
       };
-      case NOOFDAYS:
+      case NOOFDAYS:{
+        console.log(action.payload)
         return {
-         ...state,
-          noOfDays: action.payload
-        }
+          ...state,
+           noOfDays: action.payload
+         }
+      }
+        
 
     case DELETE_PLACE:
       const { [action.payload]: _, ...remainingPlaces } = state.selectedPlaces;

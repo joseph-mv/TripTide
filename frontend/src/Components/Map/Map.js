@@ -18,12 +18,9 @@ function Map() {
   const selectedPlaces = coordinates.selectedPlaces;
   var token = localStorage.getItem("token");
 
-  // console.log(coordinates)
-  // console.log((mapContainerRef.current))
-  //  console.log('se',selectedPlaces)
+
   useEffect(() => {
     if (coordinates.distance && mapContainerRef.current) {
-      // console.log("map");
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11",
@@ -38,10 +35,8 @@ function Map() {
       const start = [startingPoint.longitude, startingPoint.latitude];
       const end = [endpoint.longitude, endpoint.latitude];
 
-      // Assuming this is your route geometry
-      const route = coordinates.routeGeometry;
-      // console.log(startingPoint)
-      // console.log(route)
+      //for route geometry in the map
+      const route = coordinates.routeGeometry; 
       map.on("load", () => {
         map.addSource("route", {
           type: "geojson",
@@ -77,11 +72,8 @@ function Map() {
   }, [coordinates.distance, mapContainerRef.current]);
 
   useEffect(() => {
-    // console.log('selected')
     if (coordinates.selectedPlaces && mapRef.current) {
-      // console.log(selectedPlaces)
-      // console.log('markerref')
-      // console.log(markersRef.current)
+  
       Object.keys(markersRef.current).forEach((key) => {
         if (!coordinates.selectedPlaces[key]) {
           markersRef.current[key].remove();
@@ -121,14 +113,12 @@ function Map() {
   }, [coordinates]);
 
   const handlePlan = () => {
-    // console.log(coordinates.selectedPlaces);
-    // console.log(coordinates.selectedPlaces == null);
     if (!token) {
-      // console.log("No token");
+      
       navigate("/authenticate");
       return;
     } else if (isTokenExpired(token)) {
-      // console.log("Token expired");
+  
       token = refreshToken();
       if (!token) navigate("/authenticate");
     }
@@ -136,7 +126,7 @@ function Map() {
       return alert("Select atleast one destination");
     navigate("itinerary");
   };
-  // console.log(loading)
+ 
   if (loading) {
     return <div className="map-container">Loading...</div>;
   }

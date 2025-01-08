@@ -35,7 +35,6 @@ function TouristSpots({ destination, index, locAround }) {
   const handleCheckboxChange = (event, place, index) => {
     event.stopPropagation();
     const id = place._id;
-    // console.log(place, index,id)
     if (selectedPlaces[id]) {
       // delete selectedPlaces[id]
       dispatch({
@@ -43,9 +42,7 @@ function TouristSpots({ destination, index, locAround }) {
         payload: id,
       });
     } else {
-      // console.log(startingPoint)
       const stPoint = [startingPoint.longitude, startingPoint.latitude];
-      // console.log(destination.location.coordinates)
       const destinationPoint = destination.location.coordinates;
       const distFromStart = haversineDistance(stPoint, destinationPoint);
 
@@ -76,11 +73,13 @@ function TouristSpots({ destination, index, locAround }) {
     //   console.log(response)
     // })
   }, []);
-  // console.log(description.extract)
+ 
 
   const handleFavorite = () => {
     setLike((prev) => !prev);
   };
+
+  // use for Find out destination around point
   if (locAround) {
     return (
       <div className="destination-card2" data-aos="fade-up">
