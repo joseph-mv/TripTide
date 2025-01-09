@@ -18,14 +18,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { today } from "../../utils/constants";
 const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const TripPlannerForm = () => {
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const today = new Date().toISOString().split("T")[0];
-  
+ 
   const formData = useSelector((state) => state.form);
   const [currentPage, setCurrentPage] = useState(1);
 

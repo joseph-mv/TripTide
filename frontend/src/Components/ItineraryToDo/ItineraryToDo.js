@@ -5,6 +5,7 @@ import { convertTo12HourFormat } from "../../utils/convertTo12HourFormat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { useSelector } from "react-redux";
+import { reverseDate } from "../../utils/reverseDate";
 
 const ItineraryToDo = ({ day, item, setItinerary }) => {
   // console.log((item.todo))
@@ -79,7 +80,7 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
     <div className="toDoContainer">
       <header className="header">
         <div className="left">Day {item.day} </div>
-        <div className="right">{item.date.split("-").reverse().join("-")}</div>
+        <div className="right">{reverseDate.call(item.date)}</div>
       </header>
       <main className="main">
         <div className="places">

@@ -13,6 +13,9 @@ import { refreshToken } from "../../utils/refreshToken";
 import { currencySymbols } from "../../utils/currencySymbols";
 import { dailyItinerary } from "../../utils/dailyItinerary";
 import { getPrevDate } from "../../utils/prevDate";
+import { today } from "../../utils/constants";
+import { dayAfterNumber } from "../../utils/dayAfternumbers";
+import { reverseDate } from "../../utils/reverseDate";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
@@ -24,45 +27,36 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const [map, setMap] = useState(false);
 
   const newItinerary = {};
+  const [itinerary, setItinerary] = useState(newItinerary);
+  const [name, setName] = useState(oldName);
 
-  if (!oldItinerary) {
-    let date = formData.startDate;
+  //creating new Itinerary object
+  useEffect(() => {  
+    if (!oldItinerary) {
+      let date = formData.startDate;
 
-    for (let i = 0; i < coordinates.noOfDays; i++) {
-      newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
-      date = getNextDate(date);
+      for (let i = 0; i < coordinates.noOfDays; i++) {
+        console.log("new itinerary");
+        newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
+        date = getNextDate(date);
+      }
+      dispatch({
+        type: "CREATE_NEW_ITINERARY",
+        payload: { date: date, noOfDays: coordinates.noOfDays },
+      });
+
+      // for new Intinerary 1st todo starting location
+      itinerary.Day1.startingPoint = formData.startingPoint;
     }
-    dispatch({
-      type: "CREATE_NEW_ITINERARY",
-      payload: { date: date, noOfDays: coordinates.noOfDays },
-    });
-  }
-
-  const [itinerary, setItinerary] = useState(() => {
-    const savedItinerary = localStorage.getItem("itinerary");
-    return savedItinerary ? JSON.parse(savedItinerary) : newItinerary;
-  });
-
+  }, []);
+  
   useEffect(() => {
-    localStorage.setItem("itinerary", JSON.stringify(itinerary));
-    return () => {
-      localStorage.removeItem("itinerary");
-    };
-  }, [itinerary]);
-
-  useEffect(() => {
-    // for editing itinerary
+    // for editing oldItinerary from server
     if (oldItinerary) {
       setItinerary(oldItinerary);
     }
   }, [oldItinerary]);
 
-  const [name, setName] = useState(oldName);
-
-  if (!oldItinerary) {
-    // for new Intinerary
-    itinerary.Day1.startingPoint = formData.startingPoint;
-  }
 
   const addNewDay = () => {
     const number = coordinates.noOfDays;
@@ -77,26 +71,37 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
     });
     setItinerary((prev) => ({ ...prev, ["Day" + (number + 1)]: newItinerary }));
   };
-  console.log(itinerary);
 
   const deleteLastDay = () => {
     const number = coordinates.noOfDays;
     const date = getPrevDate(formData.endDate);
-    dispatch({
+    dispatch({ //update the endDate field
       type: "UPDATE",
       payload: { name: "endDate", value: date },
     });
-    dispatch({
+    dispatch({ //decrement the number of days of travelTime
       type: "DEC_NO_OF_DAYS",
     });
-
+//delete last day in itinerary
     setItinerary((prev) => {
-      // const keys=Object.keys(prev)
-      // const lastDay=keys[keys.length-1]
       const { ["Day" + number]: _, ...rest } = prev;
       return rest;
     });
   };
+  const changeStartDate = (e) => {
+    dispatch({ type: "UPDATE", payload: e.target }); //update start date
+    const endDate = dayAfterNumber(e.target.value, coordinates.noOfDays);
+    dispatch({ type: "UPDATE", payload: { name: "endDate", value: endDate } }); //update end date
+
+    // update all Day dates in itinerary
+    const updatedItinerary = { ...itinerary };
+    Object.keys(updatedItinerary).forEach((Day)=>{
+     const number=Day.match(/\d+/)[0]
+     updatedItinerary[Day].date=dayAfterNumber(e.target.value,+number)
+    })
+    setItinerary(updatedItinerary)
+  };
+
   const handleItinerary = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -145,6 +150,14 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   };
   return (
     <div className="itineraryDetails">
+      <label>startDate:</label>
+      <input
+        type="date"
+        name="startDate"
+        value={formData.startDate}
+        onChange={changeStartDate}
+        min={today}
+      />
       <div className="itinerary-details">
         <div className="column">
           <p className="map" onClick={() => setMap(!map)}>
@@ -178,7 +191,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
 
         <div className="desCard">
           <h3> {formData.destination}</h3>
-          <h4>{formData.endDate.split("-").reverse().join("-")}</h4>
+          <h4>{reverseDate.call(formData.endDate)}</h4>
         </div>
       </div>
       <hr />

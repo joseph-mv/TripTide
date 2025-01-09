@@ -19,7 +19,7 @@ const initialState = {
 };
 
 const formReducer = (state = initialState, action) => {
-
+console.log(action.payload)
   switch (action.type) {
     case "UPDATE":
       const { name, value, type, checked } = action?.payload;
