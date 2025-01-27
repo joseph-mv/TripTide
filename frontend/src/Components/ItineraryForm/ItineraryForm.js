@@ -150,10 +150,12 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   };
   return (
     <div className="itineraryDetails">
+      
       <label>startDate:</label>
       <input
         type="date"
         name="startDate"
+        className="startDateInput"
         value={formData.startDate}
         onChange={changeStartDate}
         min={today}

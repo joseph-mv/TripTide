@@ -60,6 +60,13 @@
  text-overflow: ellipsis;
  /* max-height: 80px; */
 }
+.startDateInput{
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  margin: 4px;
+ 
+}
 .itineraryDetails h1{
   font-size: 1.6rem;
   text-align: center;
@@ -110,6 +117,10 @@
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+ 
+}
+.delDayBtn:hover, .addDayBtn:hover {
+  transform: scale(1.05);
 }
 .saveBtn {
   background-color: #000000;
