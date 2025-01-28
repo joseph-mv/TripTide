@@ -146,7 +146,7 @@ header .menu-toggle {
   height: 7vh;
   width: 100%;
   /* background-color: red; */
-  background-image: url("../../../public/navbar.png");
+  background-image: url("/navbar.png");
 
   background-size: contain;
   background-position: center;
