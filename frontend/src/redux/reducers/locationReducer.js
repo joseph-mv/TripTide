@@ -21,6 +21,7 @@ const ROUTE_GEOMETRY = "ROUTE_GEOMETRY";
 const RESET_STATE = "RESET_ LOCATION";
 const DELETE_PLACE = "DELETE_PLACE";
 const ADD_PLACE = "ADD_PLACE";
+const SET_PLACES="SET_PLACES";
 const RESET_PLACE = "RESET_ PLACE";
 const ADD_DESTINATIONS = "ADD_DESTINATIONS";
 const REMOVE_DESTINATIONS = "REMOVE_DESTINATIONS";
@@ -96,6 +97,8 @@ const locationReducer = (state = initialState, action) => {
           [action.id]: action.payload,
         },
       };
+      case SET_PLACES:
+        return{...state,selectedPlaces:action.payload}
     case RESET_PLACE:
       return {
         ...state,

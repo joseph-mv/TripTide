@@ -121,11 +121,12 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       places: {
         startingPoint: coordinates.startingPoint,
         endPoint: coordinates.destination,
-        selectedPlaces: coordinates.sortedSelectedPlaces,
+        selectedPlaces: coordinates.selectedPlaces,
       },
       distance: coordinates.distance,
       travelTime: coordinates.travelTime,
       noOfDays: coordinates.noOfDays,
+      coordinates: coordinates.coordinates,
       details: formData,
       createdAt: new Date(),
     };

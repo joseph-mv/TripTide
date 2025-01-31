@@ -5,19 +5,20 @@ import ItineraryForm from "../Components/ItineraryForm/ItineraryForm";
 import "../Pages/Itinerary/Itinerary.css";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { fetchDestinations } from "../services/api/destinationServices";
 
 const EditItinerary = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { trip } = location.state || {}; // Fallback in case no state is passed
-  console.info("old iteineray deatails", trip);
+  // console.info("old iteineray deatails", trip);
   useEffect(() => {
     dispatch({
       type: "SET_FORM",
       payload: trip.details,
     });
     dispatch({
-      type: "SET_SORTED",
+      type: "SET_PLACES",
       payload: trip.places.selectedPlaces,
     });
     dispatch({
@@ -40,7 +41,21 @@ const EditItinerary = () => {
       type: "NOOFDAYS",
       payload: trip.noOfDays,
     });
+    // dispatch({
+    //   type:"COORDINATES",
+    //   payload: trip.coordinates
+    // })
+    destinations()
   }, []);
+ 
+  const destinations=async()=>{
+   const data=await fetchDestinations(trip,trip.details.activities)
+   dispatch({
+    type: "ADD_DESTINATIONS",
+    payload: data,
+  });
+  }
+  
 
   return (
     <div>
