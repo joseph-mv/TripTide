@@ -1,30 +1,24 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { getRectangleCorners } from '../../assets/mapRectangle';
-import axios from "axios";
 import "./SuggestedLocations.css";
 
 import TouristSpots from "../TouristSpots/TouristSpots";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { fetchDestinations } from "../../services/api/destinationServices";
 function SuggestedLocations() {
   const dispatch = useDispatch();
   const coordinates = useSelector((state) => state.location);
   const formData = useSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const fetchData = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/suggetions`, {
-        params: {
-          coordinates: coordinates.coordinates,
-          distance: coordinates.distance,
-          activities: formData.activities,
-        },
-      });
+      const data = await fetchDestinations(coordinates, formData.activities);
       dispatch({
         type: "ADD_DESTINATIONS",
-        payload: response.data,
+        payload: data,
       });
     } catch (err) {
       setError(err);
@@ -33,11 +27,11 @@ function SuggestedLocations() {
     }
   };
 
-
   useEffect(() => {
-    dispatch({ type: "RESET_ PLACE" });  //reset Selected places,useful while navigate backward
-    
-    if (coordinates.destinations.length === 0) { //fetch destinations if nothing is here
+    dispatch({ type: "RESET_ PLACE" }); //reset Selected places,useful while navigate backward
+
+    if (coordinates.destinations.length === 0) {
+      //fetch destinations if nothing is here
       setLoading(true);
       if (coordinates.distance) {
         fetchData();

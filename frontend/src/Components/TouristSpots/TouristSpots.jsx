@@ -7,7 +7,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Heart from "../../assets/Heart";
 
-function TouristSpots({ destination, index, locAround }) {
+function TouristSpots({ addDestination, destination, index, locAround }) {
   const selectedPlaces = useSelector((state) => state.location.selectedPlaces);
   const startingPoint = useSelector((state) => state.location.startingPoint);
   const dispatch = useDispatch();
@@ -73,7 +73,6 @@ function TouristSpots({ destination, index, locAround }) {
     //   console.log(response)
     // })
   }, []);
- 
 
   const handleFavorite = () => {
     setLike((prev) => !prev);
@@ -87,6 +86,7 @@ function TouristSpots({ destination, index, locAround }) {
           <span className="destination-index">{index + 1}.</span>
           {destination.siteLabel}
         </h2>
+
         <div onClick={(e) => handleFavorite(destination)} className="favorite">
           <Heart like={like} />
         </div>

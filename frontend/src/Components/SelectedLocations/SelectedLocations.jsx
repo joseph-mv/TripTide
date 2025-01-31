@@ -4,8 +4,10 @@ import "./SelectedLocations.css";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { haversineDistance } from "../../utils/haversineDistance";
+import { reverseDate } from "../../utils/reverseDate";
+import AddLocations from "./AddLocations";
 
 const TouristSpotsList = () => {
   const dispatch = useDispatch();
@@ -13,10 +15,12 @@ const TouristSpotsList = () => {
   var formData = useSelector((state) => state.form);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toDelete, setToDelete] = useState({});
+  const[isAdd, setIsAdd] = useState(false)
   const places = coordinates.sortedSelectedPlaces;
-
+  console.log(coordinates);
   useEffect(() => {
     var selectedPlaces = Object.values(coordinates.selectedPlaces);
+    console.log(selectedPlaces)
     //sorting selected places by distance from starting point
     selectedPlaces = selectedPlaces.sort(
       (a, b) => a.distFromStart - b.distFromStart
@@ -26,7 +30,7 @@ const TouristSpotsList = () => {
       type: "SET_SORTED",
       payload: selectedPlaces,
     });
-  }, []);
+  }, [coordinates.selectedPlaces]);
 
   //for delete confirmation box
   const handleOpenModal = (spot, index) => {
@@ -40,6 +44,11 @@ const TouristSpotsList = () => {
   };
 
   const handleConfirmDelete = () => {
+    // console.log(places[toDelete.index-1])
+    dispatch({
+      type: "DELETE_PLACE",
+      payload: places[toDelete.index-1].place._id,
+    });
     const newPlaces = [
       ...places.slice(0, toDelete.index - 1),
       ...places.slice(toDelete.index),
@@ -56,11 +65,16 @@ const TouristSpotsList = () => {
     coordinates.startingPoint.longitude,
     coordinates.startingPoint.latitude,
   ];
+  const addLocationPopup = function () {
+    setIsAdd(prev=>!prev)
+  };
+
+
   return (
     <div className="tourist-spots-list">
       <div className="spot startingPoint">
         <h3 className="site-label">{formData.startingPoint}</h3>
-        <h4>{formData.startDate.split("-").reverse().join("-")}</h4>
+        <h4>{reverseDate.call(formData.startDate)}</h4>
       </div>
 
       {places.map((spot, index) => {
@@ -98,6 +112,8 @@ const TouristSpotsList = () => {
           </>
         );
       })}
+      <FontAwesomeIcon onClick={addLocationPopup} className="addButton" icon={faPlusCircle} />
+    {isAdd && <AddLocations  addLocationPopup={addLocationPopup}/>}
     </div>
   );
 };

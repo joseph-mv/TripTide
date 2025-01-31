@@ -4,7 +4,7 @@
   height: 30vh;
   align-items: center;
   justify-content: space-between;
-  background: url("../../../public/image/roadmap-fnal.png");
+  background: url("/image/roadmap-fnal.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

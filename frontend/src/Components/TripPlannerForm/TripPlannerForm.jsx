@@ -22,23 +22,35 @@ import { today } from "../../utils/constants";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const TripPlannerForm = () => {
-  
+  const currencies = [
+    "INR",
+    "USD",
+    "EUR",
+    "GBP",
+    "JPY",
+    "AUD",
+    "CAD",
+    "CHF",
+    "CNY",
+    "SEK",
+    "NZD",
+  ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
- 
+
   const formData = useSelector((state) => state.form);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [suggestions1, setSuggestions1] = useState([]); //for Destination input
   const [suggestions2, setSuggestions2] = useState([]); // for Starting Point
-  const [idxSugg1, setIdxSugg1] = useState(-1); 
+  const [idxSugg1, setIdxSugg1] = useState(-1);
   const [idxSugg2, setIdxSugg2] = useState(-1);
 
   // Reset locationReducer state to initial when navigating back from the plan-details page.
-  dispatch({  
+  dispatch({
     type: "RESET_ LOCATION",
   });
-
 
   const handleChange = (e) => {
     dispatch({ type: "UPDATE", payload: e.target });
@@ -49,7 +61,7 @@ const TripPlannerForm = () => {
   // For selecting from Suggestions
   const handleKeyDown = (e) => {
     // console.log(e.target)
-    if (e.key === "ArrowDown") {  
+    if (e.key === "ArrowDown") {
       if (e.target.id === "destination") {
         setIdxSugg1((pre) => (pre + 1) % suggestions1.length);
       } else if (e.target.id === "startingPoint") {
@@ -110,7 +122,7 @@ const TripPlannerForm = () => {
     //checking between startDate and endDate
     const { startDate, endDate } = formData;
     if (new Date(startDate) > new Date(endDate)) {
-      toast.error("Start date cannot be later than end date")
+      toast.error("Start date cannot be later than end date");
       e.preventDefault();
       return false;
     }
@@ -118,11 +130,9 @@ const TripPlannerForm = () => {
     setCurrentPage((pre) => 1 + (pre % 2));
   };
 
-
- 
   return (
     <div>
-      <ToastContainer/>
+      <ToastContainer />
       <div className="trip-planner-form">
         <AnimatePresence mode="wait">
           <form onSubmit={handleSubmit}>
@@ -253,18 +263,10 @@ const TripPlannerForm = () => {
                     value={formData.currency}
                     onChange={handleChange}
                   >
-                    <option value="INR">INR</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-
-                    <option value="AUD">AUD</option>
-                    <option value="CAD">CAD</option>
-                    <option value="CHF">CHF</option>
-                    <option value="CNY">CNY</option>
-                    <option value="SEK">SEK</option>
-                    <option value="NZD">NZD</option>
+                    {currencies.map(
+                      (currency) =>
+                        <option value={currency}>{currency}</option>
+                    )}
                   </select>
                 </div>
 

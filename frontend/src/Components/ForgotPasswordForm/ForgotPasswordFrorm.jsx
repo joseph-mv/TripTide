@@ -23,7 +23,7 @@ const ForgotPasswordForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/user/forgot-password`,
+        `${import.meta.env.VITE_BASE_URL}/user/forgot-password`,
         { email }
       );
       // console.log(response);
@@ -59,7 +59,7 @@ const ForgotPasswordForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/user/reset-password`,
+        `${import.meta.env.VITE_BASE_URL}/user/reset-password`,
         {
           email,
           otp: otp.join(""),

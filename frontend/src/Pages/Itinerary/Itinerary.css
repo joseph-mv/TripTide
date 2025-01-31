@@ -24,7 +24,7 @@
         rgba(20, 17, 17, 0.359) 20%,
         rgba(12, 12, 12, 0.33) 80%, /* Transparent to color transition */
         #4d889b00 100% /* Merged color at the bottom */
-    ), url('../../../public/bg_image/ItineraryBg.webp');
+    ), url('/bg_image/ItineraryBg.webp');
     background-size: cover;
     background-position: center;
     filter: blur(1px) brightness(100%) opacity(70%)  ;

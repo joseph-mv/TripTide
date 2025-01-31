@@ -32,7 +32,8 @@ const Journey = () => {
   const getDirections = async (start, end) => {
     if (start.longitude) {
       // console.log(start)
-      const accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
+      const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+      // console.log(accessToken)
       const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
 
       try {

@@ -15,12 +15,12 @@
  * dayAfterNumber('2023-03-01', 15);
  */
 export function dayAfterNumber(startDate, number) {
-    console.log(startDate,number)
+    // console.log(startDate,number)
   // Convert the date to JavaScript Date objects
   const end = new Date(startDate);
   // Get the next date by adding the specified number of days to the current day
   end.setDate(end.getDate() + number - 1);
-  console.log(end.toISOString().split('T')[0])
+  // console.log(end.toISOString().split('T')[0])
   return end.toISOString().split('T')[0];
 }
 

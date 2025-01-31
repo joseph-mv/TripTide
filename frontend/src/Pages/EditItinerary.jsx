@@ -7,50 +7,52 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 const EditItinerary = () => {
-    const dispatch = useDispatch();
-    const location = useLocation();
-    const { trip } = location.state || {}; // Fallback in case no state is passed
-   console.log(trip)
-    useEffect(() => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { trip } = location.state || {}; // Fallback in case no state is passed
+  console.info("old iteineray deatails", trip);
+  useEffect(() => {
     dispatch({
-        type:"SET_FORM",
-    payload: trip.details
-      })
+      type: "SET_FORM",
+      payload: trip.details,
+    });
     dispatch({
-        type: "SET_SORTED",
-        payload: trip.places.selectedPlaces,
-      });
-      dispatch({
-        type: "SET_STARTING_POINT",
-        payload: trip.places.startingPoint,
-      })
-      dispatch({
-        type:"SET_DESTINATION",
-        payload: trip.places.endPoint, 
-      })
-      dispatch({
-        type:"DISTANCE",
-        payload: trip.distance, 
-      })
-      dispatch({
-        type:"TRAVELTIME",
-        payload: trip.travelTime, 
-      })
-      dispatch({
-        type:"NOOFDAYS",
-        payload: trip.noOfDays, 
-      })
+      type: "SET_SORTED",
+      payload: trip.places.selectedPlaces,
+    });
+    dispatch({
+      type: "SET_STARTING_POINT",
+      payload: trip.places.startingPoint,
+    });
+    dispatch({
+      type: "SET_DESTINATION",
+      payload: trip.places.endPoint,
+    });
+    dispatch({
+      type: "DISTANCE",
+      payload: trip.distance,
+    });
+    dispatch({
+      type: "TRAVELTIME",
+      payload: trip.travelTime,
+    });
+    dispatch({
+      type: "NOOFDAYS",
+      payload: trip.noOfDays,
+    });
+  }, []);
 
-   }, [])
-   
-  
-  console.log(trip.details)
   return (
     <div>
-        <Header/>
-        <div className="itineraryContainer">
+      <Header />
+      <div className="itineraryContainer">
         <SelectedLocations />
-        <ItineraryForm oldItinerary={trip.itinerary} oldName={trip.name} _id={trip._id} />
+
+        <ItineraryForm
+          oldItinerary={trip.itinerary}
+          oldName={trip.name}
+          _id={trip._id}
+        />
       </div>
     </div>
   );

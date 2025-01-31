@@ -31,12 +31,11 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const [name, setName] = useState(oldName);
 
   //creating new Itinerary object
-  useEffect(() => {  
+  useEffect(() => {
     if (!oldItinerary) {
       let date = formData.startDate;
 
       for (let i = 0; i < coordinates.noOfDays; i++) {
-        console.log("new itinerary");
         newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
         date = getNextDate(date);
       }
@@ -49,14 +48,13 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       itinerary.Day1.startingPoint = formData.startingPoint;
     }
   }, []);
-  
+
   useEffect(() => {
     // for editing oldItinerary from server
     if (oldItinerary) {
       setItinerary(oldItinerary);
     }
   }, [oldItinerary]);
-
 
   const addNewDay = () => {
     const number = coordinates.noOfDays;
@@ -75,14 +73,16 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const deleteLastDay = () => {
     const number = coordinates.noOfDays;
     const date = getPrevDate(formData.endDate);
-    dispatch({ //update the endDate field
+    dispatch({
+      //update the endDate field
       type: "UPDATE",
       payload: { name: "endDate", value: date },
     });
-    dispatch({ //decrement the number of days of travelTime
+    dispatch({
+      //decrement the number of days of travelTime
       type: "DEC_NO_OF_DAYS",
     });
-//delete last day in itinerary
+    //delete last day in itinerary
     setItinerary((prev) => {
       const { ["Day" + number]: _, ...rest } = prev;
       return rest;
@@ -95,11 +95,11 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
 
     // update all Day dates in itinerary
     const updatedItinerary = { ...itinerary };
-    Object.keys(updatedItinerary).forEach((Day)=>{
-     const number=Day.match(/\d+/)[0]
-     updatedItinerary[Day].date=dayAfterNumber(e.target.value,+number)
-    })
-    setItinerary(updatedItinerary)
+    Object.keys(updatedItinerary).forEach((Day) => {
+      const number = Day.match(/\d+/)[0];
+      updatedItinerary[Day].date = dayAfterNumber(e.target.value, +number);
+    });
+    setItinerary(updatedItinerary);
   };
 
   const handleItinerary = async (e) => {
@@ -150,7 +150,6 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   };
   return (
     <div className="itineraryDetails">
-      
       <label>startDate:</label>
       <input
         type="date"

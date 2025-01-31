@@ -6,7 +6,7 @@
       rgba(12, 12, 12, 0) 80%,
       #26728b 100%
     ),
-    url("../../../public/bg_image/bg-plantrip.webp");
+    url("/bg_image/bg-plantrip.webp");
   background-size: cover;
   background-position: bottom;
   background-repeat: no-repeat;

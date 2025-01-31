@@ -1,5 +1,7 @@
 /* TouristSpotsList.css */
 .tourist-spots-list {
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll;
   padding: 0 10px;
   width: min-content;
@@ -7,9 +9,9 @@
   flex-shrink: 0;
   border-radius: 25px;
   margin-left: 2%;
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
-  -webkit-overflow-scrolling: touch; 
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tourist-spots-list::-webkit-scrollbar {
@@ -86,10 +88,6 @@
   }
 }
 
-.spot-body {
-  /* margin-top: 8px; */
-}
-
 .site-label {
   font-size: 1rem;
   margin: 0;
@@ -101,6 +99,65 @@
   margin: 4px 0 0 0;
   color: orange;
 }
+.addButton {
+  color: white;
+  border-radius: 5px;
+  font-size: xx-large;
+  &:hover {
+    scale: 1.05;
+  }
+}
+
+.addLocationPopup {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.addContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: black;
+  border-radius: 10px;
+  width: 80%;
+  height: 70%;
+  margin: 10% auto;
+  max-height: min-content;
+}
+.closeBtn{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  &:hover {
+    color: #ff0000;
+  }
+ }
+
+
+.addDestinations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  max-width: 100%;
+  margin: 0px auto;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  &::-webkit-scrollbar {
+    display: none;
+}
+}
 
 @media (max-width: 800px) {
   .tourist-spots-list {
@@ -109,7 +166,7 @@
     margin-left: 0;
     height: 20vh;
 
-    overflow-x: scroll; 
+    overflow-x: scroll;
     overflow-y: hidden;
     scroll-behavior: smooth;
 
@@ -142,7 +199,7 @@
     
   
   } */
-  
+
   .distance-text {
     top: -10px;
     text-align: center;
@@ -153,19 +210,16 @@
     /* transform: scaleX(2); */
   }
 
-  .spot{
+  .spot {
     min-width: 180px;
     height: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
     /* margin-left: 0; */
-  
   }
 
   .type-label {
     position: absolute;
     top: 70%;
-  
   }
-
 }

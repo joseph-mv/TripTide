@@ -50,7 +50,7 @@
     /* height: 30px; */
     object-fit: contain;
     object-position: center;
-    background: url('../../../public/icons/long-arrow.png');
+    background: url('/icons/long-arrow.png');
     
     background-position: right;
     background-size: cover;

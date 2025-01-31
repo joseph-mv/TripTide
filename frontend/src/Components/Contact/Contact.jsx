@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Contact.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
 const Contact = () => {
   const [contactForm,setContactForm]=useState({name:'',email:'',subject:'',message:''})
   const handleChange=(e)=>{
@@ -10,7 +10,7 @@ const Contact = () => {
   }
   const handleSubmit=(e)=>{
     e.preventDefault()
-    console.log(contactForm)
+    // console.log(contactForm)
     setContactForm({name:'',email:'',subject:'',message:''})
   }
   return (

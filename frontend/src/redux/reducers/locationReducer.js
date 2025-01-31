@@ -30,6 +30,7 @@ const DEC_NO_OF_DAYS = "DEC_NO_OF_DAYS";
 const SET_SORTED = "SET_SORTED";
 
 const locationReducer = (state = initialState, action) => {
+
   switch (action.type) {
     case SET_DESTINATION:
       return {
