@@ -18,7 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { today } from "../../utils/constants";
+import { today } from "../../utils/date";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const TripPlannerForm = () => {

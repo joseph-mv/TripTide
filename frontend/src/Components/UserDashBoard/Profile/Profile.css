@@ -1,0 +1,48 @@
+.profile-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header > img {
+    
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+.profile-header .profile-options{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    top: 100%;
+    left: 20px;
+    & button, label{
+        background-color: transparent;
+        margin: 2px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 1rem;
+    }
+    & input{
+        display: none;
+    }
+}
+
+.profile-header .profile-options::before {
+   content: "";
+   position: absolute;
+   top: -20px;
+   left: 20px;
+   border-left: 5px solid transparent;
+   border-right: 20px solid transparent;
+   border-bottom: 21px solid white; /* Creates the triangle */
+}
+
+

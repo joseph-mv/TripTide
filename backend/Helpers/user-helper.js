@@ -144,6 +144,12 @@ module.exports = {
         reject({ error: 'No itineraries found' })
       }
     })
+  },
+  updateUserProfile:(userId,imageData)=>{
+    return new Promise((resolve,reject)=>{
+      const user=db.get().collection(collection.TOURIST_Collection).updateOne({userId},{$set:{image:imageData}})
+      resolve({success:true,imageData})
+    })
   }
 
 }

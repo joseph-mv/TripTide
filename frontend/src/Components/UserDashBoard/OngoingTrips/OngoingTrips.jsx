@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import UserTrip from "../../UserTrip/UserTrip";
+import UserTrip from "../UserTrip/UserTrip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBicycle,

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./UserTrip.css"; // Import the CSS file
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
+import DeleteConfirmationModal from "../../DeleteConfirmationModal/DeleteConfirmationModal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { reverseDate } from "../../utils/reverseDate";
+import { reverseDate } from "../../../utils/reverseDate";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UserTrip = ({ trip, setTrips, current }) => {
@@ -46,7 +46,7 @@ const UserTrip = ({ trip, setTrips, current }) => {
   return (
     <li onClick={handleClick} className="trip-item" key={trip._id}>
       {current ? (
-        <button onClick={handleClick}>Edit</button>
+        <button className="editBtn" onClick={handleClick}>Edit</button>
       ) : (
         <>
           {" "}

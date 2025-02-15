@@ -9,19 +9,23 @@ import {
   faHourglassHalf,
   faDollarSign,
   faStickyNote,
+  faEye,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useNavigate } from "react-router-dom";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
 import axios from "axios";
-import UserTrip from "../UserTrip/UserTrip";
+import UserTrip from "./UserTrip/UserTrip";
 import OngoingTrips from "./OngoingTrips/OngoingTrips";
+import Navbar from "./NavBar/Navbar";
+import Profile from "./Profile/Profile";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 // Sample data for demonstration
 const userData = {
   name: "John Doe",
-  profilePicture: "https://via.placeholder.com/150",
+  profilePicture: "https://picsum.photos/id/237/200/300",
   trips: [
     {
       id: 1,
@@ -62,7 +66,6 @@ const userData = {
 const UserDashboard = () => {
   var token = useRef(localStorage.getItem("token"));
   const userId = localStorage.getItem("user_Id");
-  const userName = localStorage.getItem("user_Name");
   const [trips, setTrips] = useState([]);
   //  console.log(token)
   const [activeTab, setActiveTab] = useState("currentTrip");
@@ -121,12 +124,12 @@ const UserDashboard = () => {
   });
 
 
-  const setCurrentTrip = (tripId) => {
-    // Update the trips to mark the selected trip as current and others as not current
-    userData.trips.forEach((trip) => {
-      trip.status = trip.id === tripId ? "Ongoing" : "Upcoming";
-    });
-  };
+  // const setCurrentTrip = (tripId) => {
+  //   // Update the trips to mark the selected trip as current and others as not current
+  //   userData.trips.forEach((trip) => {
+  //     trip.status = trip.id === tripId ? "Ongoing" : "Upcoming";
+  //   });
+  // };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -222,64 +225,14 @@ const UserDashboard = () => {
     }
   };
 
+
+
   return (
     <div className="dashboard-container">
-      <div className="profile-header">
-        <img src={userData.profilePicture} alt="Profile" />
-        <h2>Welcome {userName}!</h2>
-      </div>
-
+     
+    <Profile userData={userData}/>
       {/* Navbar */}
-      <nav className="navbar">
-        <button
-          className={activeTab === "currentTrip" ? "active" : ""}
-          onClick={() => setActiveTab("currentTrip")}
-        >
-          Current Trip
-        </button>
-        <button
-          className={activeTab === "upcomingTrips" ? "active" : ""}
-          onClick={() => setActiveTab("upcomingTrips")}
-        >
-          Upcoming Trips
-        </button>
-        <button
-          className={activeTab === "tripHistory" ? "active" : ""}
-          onClick={() => setActiveTab("tripHistory")}
-        >
-          Trip History
-        </button>
-        <button
-          className={activeTab === "connections" ? "active" : ""}
-          onClick={() => setActiveTab("connections")}
-        >
-          Connections
-        </button>
-        <button
-          className={activeTab === "savedDestinations" ? "active" : ""}
-          onClick={() => setActiveTab("savedDestinations")}
-        >
-          Saved Destinations
-        </button>
-        <button
-          className={activeTab === "recommendedDestinations" ? "active" : ""}
-          onClick={() => setActiveTab("recommendedDestinations")}
-        >
-          Recommendations
-        </button>
-        <button
-          className={activeTab === "notifications" ? "active" : ""}
-          onClick={() => setActiveTab("notifications")}
-        >
-          Notifications
-        </button>
-        <button
-          className={activeTab === "accountSettings" ? "active" : ""}
-          onClick={() => setActiveTab("accountSettings")}
-        >
-          Account Settings
-        </button>
-      </nav>
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab}/>
 
       {/* Dynamic Content */}
       {renderContent()}

@@ -1,0 +1,40 @@
+.trip-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.trip-details {
+  flex-grow: 1;
+}
+
+.editBtn {
+  background: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    scale: 1.04;
+    color: #004973;
+  }
+}
+
+.delete-button {
+  background: none;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  font-size: 16;
+  cursor: pointer;
+  color: #ff0000;
+  transform: rotateX(30deg);
+  &:hover {
+    transform: rotateX(0deg);
+    color: #0a0b0b;
+  }
+}

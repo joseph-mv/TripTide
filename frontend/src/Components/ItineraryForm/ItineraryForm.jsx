@@ -13,7 +13,7 @@ import { refreshToken } from "../../utils/refreshToken";
 import { currencySymbols } from "../../utils/currencySymbols";
 import { dailyItinerary } from "../../utils/dailyItinerary";
 import { getPrevDate } from "../../utils/prevDate";
-import { today } from "../../utils/constants";
+import { today } from "../../utils/date";
 import { dayAfterNumber } from "../../utils/dayAfternumbers";
 import { reverseDate } from "../../utils/reverseDate";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
