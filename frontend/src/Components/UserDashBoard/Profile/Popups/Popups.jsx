@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import "./Popups.css";
 import { updateProfilePic } from "../../../../services/user";
+import { useDispatch } from "react-redux";
 export const ButtonPopup = ({
   handleProfilePicTab,
   viewImage,
@@ -33,7 +34,7 @@ export const ImagePopup = ({ setIsShowImage, userData }) => {
 
         <img
           className="showImage"
-          src={userData?.profilePicture || "/default-profile.png"}
+          src={userData?.image || "/default-profile.png"}
           alt="Profile"
         />
       </div>
@@ -41,7 +42,7 @@ export const ImagePopup = ({ setIsShowImage, userData }) => {
   );
 };
 
-export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => {
+export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
   const [zoom, setZoom] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [x, setX] = useState(0);
@@ -51,10 +52,26 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => 
   const [yLast, setYLast] = useState(0);
   const [crop, setCrop] = useState(false);
   const [base64, setBase64] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // const [imageState,setImageState]=useState({
+  //   zoom:0,
+  //   isDragging:false,
+  //   x:0,
+  //   y:0,
+  //   xLast:0,
+  //   yLast:0,
+  //   status:"editing",
+  //   base64: "",
+  //   loading: false,
+
+  // })
+
   const canvasRef = useRef();
   const imgRef = useRef();
+  const dispatch = useDispatch();
 
-  const handlePopup = () => {
+  const closePopup = () => {
     setIsChangeImage(false);
   };
 
@@ -62,8 +79,8 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => 
     setZoom(e.target.value / 100);
   };
   useEffect(() => {
+    if (base64) return;
     const canvas = canvasRef.current;
-    console.log("canvas");
     if (!canvas) return;
     if (canvas) {
       const ctx = canvas.getContext("2d");
@@ -93,7 +110,6 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => 
 
         ctx.beginPath();
         if (crop) {
-          console.log("crop");
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -109,9 +125,9 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => 
           canvas.height * (1 + zoom)
         );
         ctx.stroke();
-      if(crop){
-         setBase64(canvas.toDataURL("image/png"));
-      }
+        if (crop) {
+          setBase64(canvas.toDataURL("image/png"));
+        }
       };
     }
   }, [selectedImage, zoom, x, y, crop]);
@@ -129,7 +145,6 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => 
       const rect = canvas.getBoundingClientRect();
       const newX = xLast + e.clientX - rect.left - rect.width / 2;
       const newY = yLast + e.clientY - rect.top - rect.height / 2;
-      console.log(newX, newY);
       if (newX > -rect.width && newX < rect.width) {
         setX(newX);
       }
@@ -144,17 +159,22 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage,userId }) => 
   };
   const handleCrop = () => {
     setCrop(true);
-    
   };
 
-useEffect(() => {
-  if(base64){
-
-    updateProfilePic(userId,base64)
-  }
-}, [base64])
-
-  
+  const handleSave = async () => {
+    setLoading(true);
+    if (base64) {
+      const response = await updateProfilePic(base64);
+      if (response.success) {
+        dispatch({ type: "CHANGEIMAGE", payload: base64 });
+      } else {
+        alert(
+          "We couldn't update your image. Please check your internet connection and try again."
+        );
+      }
+      closePopup();
+    }
+  };
 
   return (
     <div className="modal-overlay">
@@ -163,7 +183,7 @@ useEffect(() => {
         <FontAwesomeIcon
           icon={faTimes}
           className="close-icon"
-          onClick={handlePopup}
+          onClick={closePopup}
         />
 
         <canvas
@@ -175,8 +195,16 @@ useEffect(() => {
         >
           Your browser does not support the cropping image
         </canvas>
-        <button onClick={handleCrop}>Save</button>
-        <input type="range" value={zoom * 100} onChange={handleZoom} />
+        <div>
+          <input type="range" value={zoom * 100} onChange={handleZoom} />
+          {crop ? (
+            <button disabled={loading} onClick={handleSave}>
+              Save
+            </button>
+          ) : (
+            <button onClick={handleCrop}>Crop</button>
+          )}
+        </div>
       </div>
     </div>
   );

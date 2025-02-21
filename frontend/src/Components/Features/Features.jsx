@@ -72,7 +72,6 @@ const FeatureSection = () => {
       };
     }
   }, []);
-
   return (
     <div className="feature-section">
       <h2 className="feature-heading">Our Features</h2>

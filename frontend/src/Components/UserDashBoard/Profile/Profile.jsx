@@ -1,15 +1,12 @@
-import { faEye, faImage, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import { ButtonPopup, ImageChangePopup, ImagePopup } from "./Popups/Popups";
 const Profile = ({ userData }) => {
-  const userId = localStorage.getItem("user_Id");
-  const userName = localStorage.getItem("user_Name");
   const [profilePicTab, setProfilePicTab] = useState(false);
   const [isShowImage, setIsShowImage] = useState(false);
-  const [isChangeImage, setIsChangeImage] = useState(true);
+  const [isChangeImage, setIsChangeImage] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
+ 
 
   const handleProfilePicTab = () => {
     setProfilePicTab((prev) => !prev);
@@ -21,7 +18,6 @@ const Profile = ({ userData }) => {
 
   const handleProfilePic = (e) => {
     const file = e.target.files?.[0]; // Get the first file
- console.log(file)
     if (file) {
       setIsChangeImage(true)
       const reader = new FileReader();
@@ -33,10 +29,15 @@ const Profile = ({ userData }) => {
     }
   };
 
+  useEffect(() => {
+    
+  }, [])
+  
+
   return (
     <div className="profile-header">
       <img
-        src={userData.profilePicture}
+        src={userData.image}
         onClick={handleProfilePicTab}
         alt="Profile"
       />
@@ -48,14 +49,14 @@ const Profile = ({ userData }) => {
           handleProfilePic={handleProfilePic}
         />
       )}
-      <h2>Welcome {userName}!</h2>
+      <h2>Welcome {userData.userName}!</h2>
 
       {/* Image Image */}
       {isShowImage && (
         <ImagePopup setIsShowImage={setIsShowImage} userData={userData} />
       )}
       {isChangeImage && (
-       <ImageChangePopup setIsChangeImage={setIsChangeImage} selectedImage={selectedImage} userId={userId} />
+       <ImageChangePopup setIsChangeImage={setIsChangeImage} selectedImage={selectedImage}  />
       
       )}
     </div>

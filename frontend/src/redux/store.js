@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import formReducer from './reducers/formReducer';
 import locationReducer from './reducers/locationReducer';
+import userReducer from './reducers/userReducer';
 
 
   const formPersistConfig = {
@@ -25,6 +26,7 @@ import locationReducer from './reducers/locationReducer';
   const rootReducer=combineReducers({
     form: formReducer,
     location: locationReducer,
+    user:userReducer
 
   })
   const persistedReducer=persistReducer(formPersistConfig, rootReducer)

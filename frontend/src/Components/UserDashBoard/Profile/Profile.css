@@ -11,6 +11,7 @@
     width: 100px;
     height: 100px;
     margin-right: 20px;
+    object-fit: cover;
 }
 .profile-header .profile-options{
     position: absolute;

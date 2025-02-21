@@ -6,12 +6,13 @@ var jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { resolve } = require("promise");
 dotenv.config();
-function generateAccessToken(username) {
-  return jwt.sign(username, process.env.JWT_SECRET, { expiresIn: "1800s" });
+function generateAccessToken(user) {
+  console.log('generate access token')
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1800s" });
 }
-
-const generateRefreshToken = (username) => {
-  return jwt.sign(username, process.env.JWT_REFRESH_SECRET, {
+const generateRefreshToken = (user) => {
+  console.log('generate refreshToken')
+  return jwt.sign(user, process.env.JWT_REFRESH_SECRET, {
     expiresIn: "7d",
   });
 };
@@ -23,8 +24,8 @@ function verifyToken(req, res, next) {
   if (!token) return res.status(401).json({ error: "Access denied" });
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // req.userId = decoded.userId;
+    console.log('decoded',decoded)
+    req.userId = decoded.userId;
     next();
   } catch (error) {
     console.error(error);
@@ -78,17 +79,15 @@ router.post("/login", (req, res) => {
     .then((response) => {
       // console.log(response)
       if (response.status) {
-        const token = generateAccessToken({ username: req.body.email });
-        const refreshToken = generateRefreshToken({ username: req.body.email });
+        const token = generateAccessToken({ userId: response.userId });
+        const refreshToken = generateRefreshToken({ userId: response.userId });
 
         res
           .status(201)
           .json({
-            status: true,
             token,
             refreshToken,
-            userId: response.userId,
-            userName: response.userName,
+           ...response
           });
       }
     })
@@ -143,8 +142,8 @@ router.post("/save-itinerary", verifyToken, (req, res) => {
     });
 });
 router.get("/user-dashboard",verifyToken,(req,res)=>{
-  // console.log(req.query.userId)
-  userHelper.getUserItineraries(req.query.userId).then((response) => {
+console.log(req.userId)
+  userHelper.getUserItineraries(req.userId).then((response) => {
     // console.log(response)
     res.json(response);
   }).catch(err => {
@@ -174,6 +173,13 @@ router.post('/edit-itinerary',verifyToken,(req,res)=>{
   }
   )
 })
+
+router.post('/updateProfilePic',verifyToken,(req, res)=>{
+userHelper.updateUserProfilePic({...req.body,userId:req.userId}).then((response)=>{
+    res.status(200).json(response)
+  }).catch(error=>res.json(error))
+},)
+
 
 
 

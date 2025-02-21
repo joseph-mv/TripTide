@@ -10,9 +10,7 @@ module.exports.connect = async function(done){
     .then((data) => {
         // Access the newly created database with the desired name
         state.db = data.db(dbName); 
-
-     done()
-     
+     done()     
     })
     .catch((error) => {
         console.error("Connection error:", error);

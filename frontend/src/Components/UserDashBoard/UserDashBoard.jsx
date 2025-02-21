@@ -21,67 +21,29 @@ import UserTrip from "./UserTrip/UserTrip";
 import OngoingTrips from "./OngoingTrips/OngoingTrips";
 import Navbar from "./NavBar/Navbar";
 import Profile from "./Profile/Profile";
+import { useSelector } from "react-redux";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-// Sample data for demonstration
-const userData = {
-  name: "John Doe",
-  profilePicture: "https://picsum.photos/id/237/200/300",
-  trips: [
-    {
-      id: 1,
-      title: "Beach Vacation",
-      startDate: "2024-07-01",
-      endDate: "2024-07-07",
-      endPlace: "Miami Beach",
-      startPlace: "kozhikode",
-
-      status: "Ongoing",
-      duration: 7,
-      type: "Leisure",
-      noOfPeople: 2,
-    },
-    {
-      id: 2,
-      title: "Mountain Retreat",
-      startDate: "2024-08-01",
-      endDate: "2024-08-07",
-      startPlace: "kozhikode",
-      endPlace: "Rocky Mountains",
-      status: "Upcoming",
-      duration: 7,
-      type: "Adventure",
-      noOfPeople: 4,
-    },
-  ],
-  tripHistory: [
-    { id: 1, title: "Summer Road Trip", date: "2024-05-20" },
-    { id: 2, title: "City Exploration", date: "2024-06-15" },
-  ],
-  connections: ["Alice", "Bob", "Charlie"],
-  savedDestinations: ["Beach Resort", "Mountain Cabin"],
-  recommendedDestinations: ["Maldives", "Switzerland", "Japan"],
-  notifications: ["Trip reminders", "New connections", "Special offers"],
-};
 
 const UserDashboard = () => {
   var token = useRef(localStorage.getItem("token"));
-  const userId = localStorage.getItem("user_Id");
   const [trips, setTrips] = useState([]);
   //  console.log(token)
   const [activeTab, setActiveTab] = useState("currentTrip");
   const navigate = useNavigate();
   const today = new Date(); // Current date and time
   const currentDate = new Date(today.toISOString().split("T")[0]); // Today's date at 00:00:00
-
+  const userData=useSelector(store=>store.user)
+  // console.log(user,'sdjlkjl')
   useEffect(() => {
     async function getUser() {
       if (!token.current) {
         // console.log("No token");
         navigate("/authenticate");
         return;
-      } else if (isTokenExpired(token.current)) {
-        // console.log("Token expired");
-        token.current = await refreshToken();
+      } 
+      else if (isTokenExpired(token.current)) {
+        console.log("Token expired");
+        token.current = await refreshToken(userData.userId);
         if (!token.current) {
           navigate("/authenticate");
         }
@@ -90,9 +52,8 @@ const UserDashboard = () => {
       try {
         const response = await axios.get(
           `${BASE_URL}/user/user-dashboard`,
-
           {
-            params: { userId },
+            // params: { userId },
             headers: {
               Authorization: token.current,
             },
@@ -123,13 +84,6 @@ const UserDashboard = () => {
     );
   });
 
-
-  // const setCurrentTrip = (tripId) => {
-  //   // Update the trips to mark the selected trip as current and others as not current
-  //   userData.trips.forEach((trip) => {
-  //     trip.status = trip.id === tripId ? "Ongoing" : "Upcoming";
-  //   });
-  // };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -173,44 +127,28 @@ const UserDashboard = () => {
         return (
           <div className="content-section">
             <h2>Connections</h2>
-            <ul>
-              {userData.connections.map((connection, index) => (
-                <li key={index}>{connection}</li>
-              ))}
-            </ul>
+            
           </div>
         );
       case "savedDestinations":
         return (
           <div className="content-section">
             <h2>Saved Destinations</h2>
-            <ul>
-              {userData.savedDestinations.map((destination, index) => (
-                <li key={index}>{destination}</li>
-              ))}
-            </ul>
+            
           </div>
         );
       case "recommendedDestinations":
         return (
           <div className="content-section">
             <h2>Recommended Destinations</h2>
-            <ul>
-              {userData.recommendedDestinations.map((destination, index) => (
-                <li key={index}>{destination}</li>
-              ))}
-            </ul>
+            
           </div>
         );
       case "notifications":
         return (
           <div className="content-section">
             <h2>Notifications</h2>
-            <ul>
-              {userData.notifications.map((notification, index) => (
-                <li key={index}>{notification}</li>
-              ))}
-            </ul>
+            
           </div>
         );
       case "accountSettings":

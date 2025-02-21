@@ -45,7 +45,10 @@
   }
 
   .edit-content{
-    width: 60%;
+    width: min(600px,80%);
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .image-container{

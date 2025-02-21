@@ -1,12 +1,11 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Function to refresh access token
-export const refreshToken = async () => {
+export const refreshToken = async (userId) => {
 
   const refreshToken = localStorage.getItem('refreshToken');
-  const userId=localStorage.getItem('user_Id');
+  // const userId=localStorage.getItem('user_Id');
 
   try {
     const response = await axios.post(`${BASE_URL}/user/refresh-token`, { refreshToken,userId });

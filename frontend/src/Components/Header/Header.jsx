@@ -9,21 +9,20 @@ import { SiImessage } from "react-icons/si";
 import { AiFillHome, AiOutlineInfoCircle } from "react-icons/ai";
 import { BiTrip } from "react-icons/bi";
 import { isTokenExpired } from "../../utils/isTokenExpired";
+import { useDispatch, useSelector } from "react-redux";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [userName, setUserName] = useState(localStorage.getItem("user_Name"));
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  // const refreshToken = localStorage.getItem("refreshToken");
+  const {userName}=useSelector(store=>store.user)
+  const dispatch=useDispatch()
+   const [token, setToken] = useState(localStorage.getItem("token"));
   const [refreshToken, setRefreshToken] = useState(
     localStorage.getItem("refreshToken")
   );
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user_Name");
-    localStorage.removeItem("user_id");
     localStorage.removeItem("refreshToken");
+    dispatch({type:"REMOVEUSER"})
     setToken("");
-    setUserName("");
     // navigate("/login");
   };
   if (refreshToken && isTokenExpired(refreshToken)) {

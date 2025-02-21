@@ -6,6 +6,9 @@ const collection = require("../config/collection");
 const crypto = require('crypto');
 const sendVerificationEmail = require('../utils/sendVerificationEmail');
 const sendOtp = require('../utils/sendOtp');
+const { response } = require('express');
+const { ObjectId } = require("mongodb");
+
 
 module.exports = {
   signUp: (user) => {
@@ -62,20 +65,21 @@ module.exports = {
   },
   
   login: (user) => {
-    // console.log(user)
+    console.log(user)
     return new promise(async (resolve, reject) => {
       existingUser = await db
         .get()
         .collection(collection.User_Collection)
-        .findOne({"isVerified": true, email: user.loginEmail });
+        .findOne({"isVerified": true, email: user.email });
+       
       if (existingUser) {
-        if (await bcrypt.compare(user.loginPassword, existingUser.password)) {
-          // console.log('user logedin')
-          // console.log(existingUser)
+        if (await bcrypt.compare(user.password, existingUser.password)) {
           resolve({
             status: true,
             userName: existingUser.name,
             userId: existingUser._id,
+            image:existingUser.image,
+            email:existingUser.email
           });
         } else {
           reject({ status: false });
@@ -109,46 +113,70 @@ module.exports = {
     })
 
   },
-  resetPassword:({email,otp,newPassword}) =>{
-    // console.log(email,otp,newPassword)
-    return new Promise(async(resolve, reject) => {
-      const user = await db.get().collection(collection.User_Collection).findOne({ email, resetPasswordOtp: otp,  resetPasswordExpires: { $gt: Date.now() } });
-      
-      if (!user) {
-        // console.log('no user found')
-        reject({ error: 'Invalid OTP or OTP has expired' });
-      }else{
-        const saltRounds = 10;
-       password = await bcrypt.hash(newPassword, saltRounds);
-        await db.get().collection(collection.User_Collection).updateOne(
-          { email },
-          {
-            $set: {
-              password: password,
-              resetPasswordOtp: null,
-              resetPasswordExpires: null,
-            },
-          }
-        );
-        resolve({ success: true });
-      }
-    })
+  resetPassword: async ({ email, otp, newPassword }) => {
+    try {
+        // Find user with valid OTP and check if it's not expired
+        const user = await db.get().collection(collection.User_Collection).findOne({
+            email,
+            resetPasswordOtp: otp,
+            resetPasswordExpires: { $gt: Date.now() } // Check if OTP is still valid
+        });
 
-  },
-  getUserItineraries:(userId)=>{
-    return new Promise((resolve, reject) =>{
-      const itineraries = db.get().collection(collection.ITINERARY_Collection).find({userId}).toArray()
-      if(itineraries){
-        resolve(itineraries)
-      }else{
-        reject({ error: 'No itineraries found' })
-      }
-    })
-  },
-  updateUserProfile:(userId,imageData)=>{
-    return new Promise((resolve,reject)=>{
-      const user=db.get().collection(collection.TOURIST_Collection).updateOne({userId},{$set:{image:imageData}})
-      resolve({success:true,imageData})
+        if (!user) {
+            throw { error: 'Invalid OTP or OTP has expired' }; // Proper error throwing
+        }
+
+        // Hash the new password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update user password and reset OTP fields
+        await db.get().collection(collection.User_Collection).updateOne(
+            { email },
+            {
+                $set: {
+                    password: hashedPassword,
+                    resetPasswordOtp: null,
+                    resetPasswordExpires: null,
+                },
+            }
+        );
+
+        return { success: true }; // No need to use resolve()
+
+    } catch (err) {
+        throw { error: 'Database error', details: err }; // Proper error handling
+    }
+},
+
+  getUserItineraries: async (userId) => {
+    try {
+        const itineraries = await db.get()
+            .collection(collection.ITINERARY_Collection)
+            .find({ userId })
+            .toArray();
+
+        if (itineraries.length > 0) {
+            // console.log(itineraries);
+            return itineraries;  // No need to manually resolve, async functions return Promises
+        } else {
+            throw { error: 'No itineraries found' };  // Throwing an error, which will be caught
+        }
+    } catch (err) {
+        throw { error: 'Database error', details: err };  // Proper error handling
+    }
+}
+,
+  updateUserProfilePic:({userId,imageData})=>{
+    console.log(userId,imageData[2])
+    return new Promise(async(resolve,reject)=>{
+     db.get().collection(collection.User_Collection).updateOne({_id:new ObjectId(userId)},{$set:{image:imageData}}).then(response=>{
+        resolve({success:true})
+      }).catch(error=>{
+        reject('Image Updating failed')
+      })
+    
+      
     })
   }
 

@@ -7,13 +7,14 @@ import "boxicons/css/boxicons.min.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { loginUser } from "../../services/authService";
+import {useDispatch} from 'react-redux'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Account = () => {
   const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(false);
-
+  const dispatch=useDispatch()
   const toggle = () => {
     setIsSignIn(!isSignIn);
   };
@@ -71,28 +72,18 @@ const Account = () => {
   const [loginPassword, setLoginPassword] = useState("");
   const [loginshowPassword, setLoginShowPassword] = useState(false);
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${BASE_URL}/user/login`, {
-        loginEmail,
-        loginPassword,
-      });
-      // Handle successful login
-      // console.log(response.data);
-      if (response.data.status) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
-        localStorage.setItem("user_Id", response.data.userId);
-        localStorage.setItem("user_Name", response.data.userName);
-        navigate("/");
-      } else {
-        alert(response.data.loggedError);
-      }
+      const data = await loginUser(loginEmail,loginPassword)
+        dispatch({type:"SETUSER",payload:data})
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        navigate("/"); 
     } catch (error) {
       // Handle login error
-      // console.error(error);
-      alert("Network issue. Please try again later.");
+      alert(error.message);
     }
   };
   const handleForgotPassword = (e) => {

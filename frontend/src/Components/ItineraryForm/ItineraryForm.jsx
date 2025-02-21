@@ -23,9 +23,8 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   var coordinates = useSelector((state) => state.location);
   var formData = useSelector((state) => state.form);
   var token = localStorage.getItem("token");
-  const userId = localStorage.getItem("user_Id");
+  const userId = useSelector(store=>store.user.userId)
   const [map, setMap] = useState(false);
-
   const newItinerary = {};
   const [itinerary, setItinerary] = useState(newItinerary);
   const [name, setName] = useState(oldName);
@@ -108,7 +107,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       navigate("/authenticate");
       return;
     } else if (isTokenExpired(token)) {
-      token = await refreshToken();
+      token = await refreshToken(userId);
       if (!token) {
         navigate("/authenticate");
       }
