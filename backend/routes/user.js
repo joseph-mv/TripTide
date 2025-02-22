@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const { resolve } = require("promise");
 dotenv.config();
 function generateAccessToken(user) {
-  console.log('generate access token')
+  console.log('generate access token',user)
   return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1800s" });
 }
 const generateRefreshToken = (user) => {

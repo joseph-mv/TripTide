@@ -20,6 +20,7 @@ db.connect((err) => {
 });
 var tripRouter = require("./routes/tripPlan");
 var userRouter = require("./routes/user");
+var friendsRouter =require('./routes/friends')
 
 // var adminRouter = require('./routes/admin');
 app.use(logger);
@@ -31,6 +32,8 @@ app.use(express.json({ limit: "1mb" }));
 // app.use(cookieParser());
 app.use("/", tripRouter);
 app.use("/user", userRouter);
+app.use("/friends",friendsRouter );
+
 // app.use('/admin', adminRouter);
 
 // Start server

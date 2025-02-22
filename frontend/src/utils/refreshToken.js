@@ -16,7 +16,7 @@ export const refreshToken = async (userId) => {
     localStorage.setItem('token', newAccessToken);
     return newAccessToken;
   } catch (error) {
-    
+    console.log('error',error)
     console.error('Error refreshing token', error);
     return null;
   }

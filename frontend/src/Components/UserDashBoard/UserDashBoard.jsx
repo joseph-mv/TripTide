@@ -22,6 +22,7 @@ import OngoingTrips from "./OngoingTrips/OngoingTrips";
 import Navbar from "./NavBar/Navbar";
 import Profile from "./Profile/Profile";
 import { useSelector } from "react-redux";
+import Connections from "./Connections/Connections";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UserDashboard = () => {
@@ -125,10 +126,7 @@ const UserDashboard = () => {
         );
       case "connections":
         return (
-          <div className="content-section">
-            <h2>Connections</h2>
-            
-          </div>
+          <Connections/>
         );
       case "savedDestinations":
         return (
