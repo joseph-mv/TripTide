@@ -46,13 +46,19 @@
 
   .edit-content{
     width: min(600px,80%);
+    max-height: 80vh;
     display:flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
   }
-
+  
   .image-container{
     cursor:crosshair ; 
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* .image-container::after{

@@ -89,7 +89,7 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
       img.src = selectedImage;
       img.onload = function () {
         imgRef.current = img;
-        canvas.width = "400";
+        canvas.width =Math.min('400', window.innerWidth*0.5)
         canvas.height = canvas.width / (img.width / img.height); //canvas has same aspect ratio of img
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
@@ -132,19 +132,23 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
     }
   }, [selectedImage, zoom, x, y, crop]);
 
-  const handleMouseDown = () => {
+  const handlePointerDown = () => {
+    console.log('touch down')
     setIsDragging(true);
     setXLast(x);
     setYLast(y);
   };
 
-  const handleMouseMove = (e) => {
+  const handlePointerMove = (e) => {
     if (isDragging) {
+      const x=e?.touches?.[0]?.clientX ?? e.clientX
+      const y=e?.touches?.[0]?.clientY ?? e.clientY
+      
       const canvas = canvasRef.current;
 
       const rect = canvas.getBoundingClientRect();
-      const newX = xLast + e.clientX - rect.left - rect.width / 2;
-      const newY = yLast + e.clientY - rect.top - rect.height / 2;
+      const newX = xLast + x - rect.left - rect.width / 2;
+      const newY = yLast + y - rect.top - rect.height / 2;
       if (newX > -rect.width && newX < rect.width) {
         setX(newX);
       }
@@ -154,7 +158,8 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
+    console.log('touch up')
     setIsDragging(false);
   };
   const handleCrop = () => {
@@ -185,16 +190,22 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
           className="close-icon"
           onClick={closePopup}
         />
-
+        <div className="image-container">
         <canvas
           ref={canvasRef}
-          className="image-container"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
+          
+          onMouseDown={handlePointerDown}
+          onMouseMove={handlePointerMove}
+          onMouseUp={handlePointerUp}
+          onTouchStart={handlePointerDown}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerUp}
         >
           Your browser does not support the cropping image
         </canvas>
+        </div>
+       
+
         <div>
           <input type="range" value={zoom * 100} onChange={handleZoom} />
           {crop ? (
