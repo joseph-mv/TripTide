@@ -65,7 +65,7 @@ module.exports = {
   },
   
   login: (user) => {
-    console.log(user)
+    
     return new promise(async (resolve, reject) => {
       existingUser = await db
         .get()

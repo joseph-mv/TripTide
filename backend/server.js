@@ -1,7 +1,5 @@
-var express = require("express");
 const cors = require("cors");
-var path = require("path");
-var cookieParser = require("cookie-parser");
+var express = require("express");
 var logger = require("./utils/logger");
 var db = require("./config/connection");
 require("dotenv").config();

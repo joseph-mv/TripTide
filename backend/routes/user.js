@@ -1,44 +1,12 @@
-var express = require("express");
-var router = express.Router();
-const dotenv = require("dotenv");
-var jwt = require("jsonwebtoken");
+const express = require("express");
+const router = express.Router();
+const jwt = require("jsonwebtoken");
 
-var userHelper = require("../Helpers/user-helper");
-var itineraryHelper = require("../Helpers/itinerary-helper");
+const userHelper = require("../Helpers/user-helper");
+const itineraryHelper = require("../Helpers/itinerary-helper");
+const verifyToken = require("../middleware/authMiddleware");
+const { generateAccessToken, generateRefreshToken } = require("../config/jwt");
 
-dotenv.config();
-function generateAccessToken(user) {
-  console.log("generate access token", user);
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1800s" });
-}
-const generateRefreshToken = (user) => {
-  console.log("generate refreshToken");
-  return jwt.sign(user, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "7d",
-  });
-};
-
-function verifyToken(req, res, next) {
-  const token = req.headers["authorization"];
-
-  console.log(token)
-
-  if (!token) {
-    return res.status(401).json({ error: "Invalid token format" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded Token:", decoded);
-
-    req.userId = decoded.userId || decoded.username // Attach userId to request for later use
-    next();
-  } catch (error) {
-    console.error("JWT Verification Error:", error.message);
-
-    return res.status(401).json({ error: "Invalid or expired token" });
-  }
-}
 
 
 router.post("/sign-up", (req, res) => {
@@ -81,7 +49,7 @@ router.post("/login", (req, res) => {
         const token = generateAccessToken({ userId: response.userId });
         const refreshToken = generateRefreshToken({ userId: response.userId });
 
-        res.status(201).json({
+        res.status(200).json({
           token,
           refreshToken,
           ...response,
