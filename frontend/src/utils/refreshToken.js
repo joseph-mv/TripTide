@@ -8,7 +8,7 @@ export const refreshToken = async (userId) => {
   // const userId=localStorage.getItem('user_Id');
 
   try {
-    const response = await axios.post(`${BASE_URL}/user/refresh-token`, { refreshToken,userId });
+    const response = await axios.post(`${BASE_URL}/auth/refresh-token`, { refreshToken,userId });
     // console.log(response)
     const newAccessToken = response.data.token;
     

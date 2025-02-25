@@ -46,7 +46,7 @@ const Account = () => {
     }
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/user/sign-up`, {
+      const response = await axios.post(`${BASE_URL}/auth/sign-up`, {
         name,
         email,
         password,
