@@ -52,7 +52,7 @@ const Account = () => {
         password,
       });
       setLoading(false);
-      // console.log(response);
+      console.log(response);
       if (response.data.msg) {
         toast.success(response.data.msg);
         // console.log(response.data.msg);
@@ -61,9 +61,9 @@ const Account = () => {
       }
       // Handle successful registration, e.g., redirect to login page
     } catch (error) {
+      console.log(error);
       setLoading(false);
-      setError("Network issue. Please try again later.");
-      // console.error(error);
+      setError(error.response?.data?.error ?? "Network issue. Please try again later.");
 
       // Handle registration error
     }

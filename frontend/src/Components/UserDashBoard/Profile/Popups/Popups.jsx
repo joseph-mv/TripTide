@@ -132,14 +132,15 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
     }
   }, [selectedImage, zoom, x, y, crop]);
 
-  const handlePointerDown = () => {
-    console.log('touch down')
+  const handlePointerDown = (e) => {
+    e.preventDefault();
     setIsDragging(true);
     setXLast(x);
     setYLast(y);
   };
 
   const handlePointerMove = (e) => {
+    e.preventDefault();
     if (isDragging) {
       const x=e?.touches?.[0]?.clientX ?? e.clientX
       const y=e?.touches?.[0]?.clientY ?? e.clientY
@@ -158,8 +159,8 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
     }
   };
 
-  const handlePointerUp = () => {
-    console.log('touch up')
+  const handlePointerUp = (e) => {
+    e.preventDefault();
     setIsDragging(false);
   };
   const handleCrop = () => {

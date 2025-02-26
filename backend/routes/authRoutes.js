@@ -2,23 +2,15 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
-const userHelper = require("../Helpers/user-helper");
+const userHelper = require("../controllers/user-helper");
+const authController=require('../controllers/authContoller')
 const { generateAccessToken, generateRefreshToken } = require("../config/jwt");
 
-router.post("/sign-up", (req, res) => {
-  userHelper
-    .signUp(req.body)
-    .then((response) => res.json(response))
-    .catch((error) => {
-      console.error("Sign-up error:", error);
-      res.status(500).json({ message: "Internal Server Error" });
-    });
-});
+router.post("/sign-up", authController.signUp);
 
 router.get("/verify-email", (req, res) => {
-  userHelper
-    .verifyEmail(req.query.token)
-    .then((response) => {
+  authController.verifyEmail(req.query.token)
+    .then((response) => {     
       res.json(response);
     })
     .catch((error) => {

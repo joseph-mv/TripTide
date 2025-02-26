@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var tripPlanHelper=require('../Helpers/tripPlan-helper')
+var tripPlanHelper=require('../controllers/tripPlan-helper')
 
 router.get('/suggetions',(req,res)=>{
    // console.log('suggetions',req.query)

@@ -6,19 +6,20 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 const VerifyEmail = () => {
   const location = useLocation();
   const [message, setMessage] = useState("");
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const query = new URLSearchParams(location.search);
+  const token = query.get("token");
   useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const token = query.get("token");
 
     const verifyEmail = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/auth/verify-email?token=${token}`
+          `${BASE_URL}/auth/verify-email?token=${token}`
         );
         // console.log(response);
         setMessage(response.data);
       } catch (error) {
+        console.log(error)
         setMessage(error.response.data);
       }
     };
@@ -31,6 +32,7 @@ const VerifyEmail = () => {
   return (
     <div className="message-container">
       <div className="message-box">
+        
         {isSuccess ? (
           <>
             <FaCheckCircle className="message-icon success-icon" />

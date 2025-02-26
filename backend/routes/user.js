@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const userHelper = require("../Helpers/user-helper");
-const itineraryHelper = require("../Helpers/itinerary-helper");
+const userHelper = require("../controllers/user-helper");
+const itineraryHelper = require("../controllers/itinerary-helper");
 const verifyToken = require("../middleware/authMiddleware");
 
 
@@ -10,7 +10,6 @@ router.post("/save-itinerary", verifyToken, (req, res) => {
   itineraryHelper
     .addItinerary(req.body)
     .then((response) => {
-      // console.log(response)
       res.json(response);
     })
     .catch((err) => {

@@ -1,5 +1,5 @@
 var express = require('express');
-const friendsHelper = require('../Helpers/friends-helper');
+const friendsHelper = require('../controllers/friends-helper');
 
 var router = express.Router();
 
