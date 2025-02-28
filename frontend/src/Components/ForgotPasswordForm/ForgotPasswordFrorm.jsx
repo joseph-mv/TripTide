@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
+import { ToastContainer, toast } from "react-toastify";
 import "./ForgotPasswordForm.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom";
 
@@ -30,12 +30,13 @@ const ForgotPasswordForm = () => {
       setLoading(false);
       if (response.data.msg) {
         setOtpSent(true);
-      } else {
-        setError(response.data.error);
+        toast.success(response.data.msg);
       }
-    } catch (err) {
+    } catch (error) {
       setLoading(false);
-      setError("Error sending OTP. Please try again.");
+      setError(
+        error.response?.data?.error || "Error sending OTP. Please try again."
+      );
     }
   };
 
@@ -70,19 +71,22 @@ const ForgotPasswordForm = () => {
       setLoading(false);
 
       if (response.data.success) {
-        alert("Password has been reset successfully.");
-        navigate("/authenticate");
-      } else {
-        setError(response.data.error);
+      toast.success("Password has been reset successfully.");
+      setTimeout(()=>navigate("/authenticate"),1500) ;
       }
-    } catch (err) {
-      setError("Error resetting password. Please try again.");
+    } catch (error) {
+      setLoading(false);
+      setError(
+        error.response?.data?.error ||
+          "Error resetting password. Please try again."
+      );
     }
   };
 
   return (
     <div className="forgot-password-container">
       <div className="forgot-password-form">
+        <ToastContainer />
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -36,9 +36,11 @@ const Account = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginshowPassword, setLoginShowPassword] = useState(false);
 
   const handleSignup = async (e) => {
-    // console.log(name, email);
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -56,10 +58,7 @@ const Account = () => {
       if (response.data.msg) {
         toast.success(response.data.msg);
         // console.log(response.data.msg);
-      } else {
-        setError(response.data.error);
-      }
-      // Handle successful registration, e.g., redirect to login page
+      } 
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -68,9 +67,6 @@ const Account = () => {
       // Handle registration error
     }
   };
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [loginshowPassword, setLoginShowPassword] = useState(false);
 
 
   const handleLogin = async (e) => {
@@ -83,7 +79,8 @@ const Account = () => {
         navigate("/"); 
     } catch (error) {
       // Handle login error
-      alert(error.message);
+      console.log(error)
+      alert(error.message)
     }
   };
   const handleForgotPassword = (e) => {

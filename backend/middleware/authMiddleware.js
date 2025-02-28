@@ -20,7 +20,7 @@ function verifyToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId || decoded.username; // Attach userId to request for later use
+    req.userId = decoded.userId  // Attach userId to request for later use
     next(); // Proceed to the next middleware
   } catch (error) {
     console.error("JWT Verification Error:", error.message);

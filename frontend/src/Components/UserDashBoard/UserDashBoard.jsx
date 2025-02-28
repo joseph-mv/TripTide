@@ -28,13 +28,11 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 const UserDashboard = () => {
   var token = useRef(localStorage.getItem("token"));
   const [trips, setTrips] = useState([]);
-  //  console.log(token)
   const [activeTab, setActiveTab] = useState("currentTrip");
   const navigate = useNavigate();
   const today = new Date(); // Current date and time
   const currentDate = new Date(today.toISOString().split("T")[0]); // Today's date at 00:00:00
   const userData=useSelector(store=>store.user)
-  // console.log(user,'sdjlkjl')
   useEffect(() => {
     async function getUser() {
       if (!token.current) {
@@ -44,7 +42,7 @@ const UserDashboard = () => {
       } 
       else if (isTokenExpired(token.current)) {
         console.log("Token expired");
-        token.current = await refreshToken(userData.userId);
+        token.current = await refreshToken();
         if (!token.current) {
           navigate("/authenticate");
         }

@@ -5,8 +5,7 @@ import { axiosInstance } from "./api";
     try {
         const response=  await axiosInstance.post('/auth/login',{email,password})
         if(response.data.status) return response.data
-        throw new Error( response.data.loggedError)
     } catch (error) {
-        throw new Error(error.message)
+        throw new Error(error.response?.data?.error ?? "Network issue. Please try again later.")
     }
   }
