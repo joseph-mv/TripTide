@@ -17,7 +17,7 @@ db.connect((err) => {
   }
 });
 
-const tripRouter = require("./routes/tripPlan");
+const tripRouter = require("./routes/tripPlanRoutes");
 const authRouter=require("./routes/authRoutes")
 const userRouter = require("./routes/user");
 const friendsRouter =require('./routes/friends')

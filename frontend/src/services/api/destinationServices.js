@@ -2,9 +2,9 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
  export const fetchDestinations = async (coordinates,activities) => {
-  console.log(coordinates)
+  console.log(activities)
     try {
-      const response = await axios.get(`${BASE_URL}/suggetions`, {
+      const response = await axios.get(`${BASE_URL}/suggestions`, {
         params: {
           coordinates: coordinates.coordinates,
           distance: coordinates.distance,
