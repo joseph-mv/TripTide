@@ -26,7 +26,7 @@ const UserTrip = ({ trip, setTrips, current }) => {
     e.stopPropagation();
 
     try {
-      const response = await axios.delete(`${BASE_URL}/user/delete-trip`, {
+      const response = await axios.delete(`${BASE_URL}/user/delete-itinerary`, {
         params: { id: trip._id },
         headers: {
           Authorization: token,
