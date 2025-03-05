@@ -1,36 +1,28 @@
 const express = require("express");
+
+const userController = require("../controllers/userController");
+const verifyToken = require("../middleware/authMiddleware");
+const itineraryController = require("../controllers/itineraryController");
+
 const router = express.Router();
 
-const userHelper = require("../controllers/user-helper");
-const itineraryController = require("../controllers/itineraryController");
-const verifyToken = require("../middleware/authMiddleware");
-
+/**
+ * @module UserRoutes
+ * @description Routes for user itinerary management and profile updates.
+ *
+ * @route   POST  /api/user/save-itinerary       - Save a new itinerary.
+ * @route   GET   /api/user/user-itineraries     - Get all itineraries for the logged-in user.
+ * @route   DELETE /api/user/delete-itinerary    - Delete an itinerary by ID.
+ * @route   PUT   /api/user/edit-itinerary       - Edit an existing itinerary.
+ * @route   PUT   /api/user/update-profile-pic   - Update the user's profile picture.
+ *
+ * @middleware verifyToken - Ensures authentication for all user-related routes.
+ */
 
 router.post("/save-itinerary", verifyToken, itineraryController.addItinerary);
-
-router.get("/user-dashboard", verifyToken, (req, res) => {
-  console.log(req.userId);
-  userHelper
-    .getUserItineraries(req.userId)
-    .then((response) => {
-      res.json(response);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
-});
-
+router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
 router.delete("/delete-itinerary", verifyToken, itineraryController.deleteItinerary);
-
-router.post("/edit-itinerary", verifyToken, itineraryController.editItinerary);
-
-router.post("/updateProfilePic", verifyToken, (req, res) => {
-  userHelper
-    .updateUserProfilePic({ ...req.body, userId: req.userId })
-    .then((response) => {
-      res.status(200).json(response);
-    })
-    .catch((error) => res.json(error));
-});
+router.put("/edit-itinerary", verifyToken, itineraryController.editItinerary);
+router.put("/updateProfilePic", verifyToken,userController.updateUserProfilePic);
 
 module.exports = router;

@@ -9,7 +9,7 @@ import { axiosInstance } from "./api"
 export const updateProfilePic=async(imageData)=>{ 
  try {
   const token=localStorage.getItem('token')
-  const response=await axiosInstance.post('user/updateProfilePic',{imageData},{
+  const response=await axiosInstance.put('user/updateProfilePic',{imageData},{
     headers: {
       Authorization: token,
     },

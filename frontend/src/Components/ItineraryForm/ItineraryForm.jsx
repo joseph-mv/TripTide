@@ -23,7 +23,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   var coordinates = useSelector((state) => state.location);
   var formData = useSelector((state) => state.form);
   var token = localStorage.getItem("token");
-  const userId = useSelector(store=>store.user.userId)
+  const userId = useSelector((store) => store.user.userId);
   const [map, setMap] = useState(false);
   const newItinerary = {};
   const [itinerary, setItinerary] = useState(newItinerary);
@@ -131,17 +131,20 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
     };
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/user/${
-          _id ? `edit-itinerary?id=${_id}` : "save-itinerary"
-        }`,
-        tripItinerary,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const endpoint = _id
+        ? `${BASE_URL}/user/edit-itinerary?id=${_id}` // PUT for editing
+        : `${BASE_URL}/user/save-itinerary`; // POST for new itinerary
+
+      const method = _id ? "put" : "post"; // Dynamically set method
+
+      const response = await axios({
+        method,
+        url: endpoint,
+        data: tripItinerary,
+        headers: {
+          Authorization: token,
+        },
+      });
       if (response.data) {
         alert("Your Itinerary has been saved");
         navigate("/");
