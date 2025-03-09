@@ -17,10 +17,10 @@ const TouristSpotsList = () => {
   const [toDelete, setToDelete] = useState({});
   const[isAdd, setIsAdd] = useState(false)
   const places = coordinates.sortedSelectedPlaces;
-  console.log(coordinates);
+  // console.log(coordinates);
   useEffect(() => {
     var selectedPlaces = Object.values(coordinates.selectedPlaces);
-    console.log(selectedPlaces)
+    // console.log(selectedPlaces)
     //sorting selected places by distance from starting point
     selectedPlaces = selectedPlaces.sort(
       (a, b) => a.distFromStart - b.distFromStart

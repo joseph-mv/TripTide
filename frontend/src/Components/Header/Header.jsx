@@ -23,7 +23,7 @@ const Header = () => {
     localStorage.removeItem("refreshToken");
     dispatch({type:"REMOVEUSER"})
     setToken("");
-    // navigate("/login");
+    setIsOpen(false)
   };
   if (refreshToken && isTokenExpired(refreshToken)) {
     // console.log("Refresh token expired");
@@ -31,6 +31,7 @@ const Header = () => {
     handleLogout();
   }
   const toggleMenu = () => {
+    console.log('toggle')
     if (!isOpen) {
       document.body.classList.add("fixed-body");
     } else {
@@ -87,6 +88,7 @@ const Header = () => {
             <input
               className="menu-toggle"
               type="checkbox"
+              checked={isOpen} 
               id="burger"
               onChange={toggleMenu}
             />
@@ -96,32 +98,32 @@ const Header = () => {
           </label>
         </button>
         <nav className={isOpen ? "nav-open" : ""}>
-          <Link className="link" to="/">
+          <Link className="link" onClick={toggleMenu} to="/">
             <AiFillHome />
             &nbsp;&nbsp; <span>Home</span>
           </Link>
-          <Link className="link" to="/destinations">
+          <Link className="link" onClick={toggleMenu} to="/destinations">
             <FaMapLocation /> &nbsp;&nbsp;Destinations
           </Link>
-          <Link className="link" to="/trips">
+          <Link className="link" onClick={toggleMenu} to="/trips">
             <BiTrip />
             &nbsp;&nbsp;Trips
           </Link>
-          <Link className="link" to="/about">
+          <Link className="link" onClick={toggleMenu} to="/about">
             {" "}
             <AiOutlineInfoCircle />
             &nbsp;&nbsp;About
           </Link>
-          <Link className="link" to="/contact">
+          <Link className="link" onClick={toggleMenu} to="/contact">
             {" "}
             <SiImessage />
             &nbsp;&nbsp;Contact
           </Link>
-          <Link className="link" to={userName?"/account":"/authenticate"}>
+          <Link className="link" onClick={toggleMenu} to={userName?"/account":"/authenticate"}>
             <MdAccountCircle />
             &nbsp;&nbsp;{userName ? userName : "Account"}
           </Link>
-          <Link onClick={handleLogout} className="link" to="/authenticate">
+          <Link onClick={handleLogout} className="link"  to="/authenticate">
             &nbsp;&nbsp; &nbsp;&nbsp;{userName ? "Logout" : ""}
           </Link>
         </nav>

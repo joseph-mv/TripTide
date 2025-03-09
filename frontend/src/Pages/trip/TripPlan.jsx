@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./TripPlannerForm.css";
+import "../../styles/pages/trip/TripPlan.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { today } from "../../utils/date";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const TripPlannerForm = () => {
+const TropPlan = () => {
   const currencies = [
     "INR",
     "USD",
@@ -394,4 +394,4 @@ const TripPlannerForm = () => {
   );
 };
 
-export default TripPlannerForm;
+export default TropPlan;

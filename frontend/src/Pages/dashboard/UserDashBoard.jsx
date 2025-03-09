@@ -1,29 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./UserDashBoard.css"; // Import the CSS file
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClock,
-  faUsers,
-  faBicycle,
-  faRoute,
-  faHourglassHalf,
-  faDollarSign,
-  faStickyNote,
-  faEye,
-  faImage,
-} from "@fortawesome/free-solid-svg-icons";
-
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+
+
+import "../../styles/pages/dashboard/UserDashBoard.css"; // Import the CSS file
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { refreshToken } from "../../utils/refreshToken";
-import axios from "axios";
-import UserTrip from "./UserTrip/UserTrip";
-import OngoingTrips from "./OngoingTrips/OngoingTrips";
-import Navbar from "./NavBar/Navbar";
-import Profile from "./Profile/Profile";
-import { useSelector } from "react-redux";
-import Connections from "./Connections/Connections";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { getUserInformation } from "../../services/userService";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import {
+//   faClock,
+//   faUsers,
+//   faBicycle,
+//   faRoute,
+//   faHourglassHalf,
+//   faDollarSign,
+//   faStickyNote,
+//   faEye,
+//   faImage,
+// } from "@fortawesome/free-solid-svg-icons";
+
+
+import UserTrip from "../../Components/UserDashBoard/UserTrip/UserTrip";
+import OngoingTrips from "../../Components/UserDashBoard/OngoingTrips/OngoingTrips";
+import Navbar from "../../Components/UserDashBoard/NavBar/Navbar";
+import Profile from "../../Components/UserDashBoard/Profile/Profile";
+import Connections from "../../Components/UserDashBoard/Connections/Connections";
+
 
 const UserDashboard = () => {
   var token = useRef(localStorage.getItem("token"));
@@ -49,20 +52,12 @@ const UserDashboard = () => {
       }
 
       try {
-        const response = await axios.get(
-          `${BASE_URL}/user/user-dashboard`,
-          {
-            // params: { userId },
-            headers: {
-              Authorization: token.current,
-            },
-          }
-        );
-        setTrips(response.data);
+        const response = await getUserInformation()
+        setTrips(response);    
       } catch (error) {
-        // console.error(error);
-        // setErrorMessage("Deposit failed. Please try again later.");
+        alert(error.message)
       }
+     
     }
     getUser();
   }, []);

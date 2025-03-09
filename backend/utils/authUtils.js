@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 
 const sendVerificationEmail = async (email, verificationToken) => {
   const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
+  console.log(verificationLink)
   const mailOptions = {
     from: `TripTide <${process.env.EMAIL_USER}>`,
     to: email,

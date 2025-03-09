@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "./Contact.css";
+import '../styles/pages/Contact.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
-const Contact = () => {
+const ContactPage = () => {
   const [contactForm,setContactForm]=useState({name:'',email:'',subject:'',message:''})
   const handleChange=(e)=>{
     setContactForm({...contactForm,[e.target.name]:e.target.value})
@@ -114,4 +114,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactPage;

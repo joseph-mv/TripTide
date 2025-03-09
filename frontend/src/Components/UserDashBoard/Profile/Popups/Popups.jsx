@@ -2,7 +2,7 @@ import { faEye, faImage, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import "./Popups.css";
-import { updateProfilePic } from "../../../../services/user";
+import { updateProfilePic } from "../../../../services/userService";
 import { useDispatch } from "react-redux";
 export const ButtonPopup = ({
   handleProfilePicTab,

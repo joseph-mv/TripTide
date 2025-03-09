@@ -1,17 +1,16 @@
 import React from "react";
-import "./About.css";
+import "../styles/pages/About.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const About = () => {
-  // const [loaded, setLoaded] = useState(false);
+
   return (
     <div className="about-section">
       <h1>About Us</h1>
       <section className="about-introduction">    
-       <img src="/image/about1.webp" data-aos="fade-right" ></img>
+       <img src="/image/about1.webp" alt="" data-aos="fade-right" ></img>
            <div>
         <h2>Escape the Ordinary: Plan Your Adventure</h2>
         <p>
@@ -73,7 +72,7 @@ const About = () => {
       </section>
       
       </div>
-      <img src="/image/about2.webp" data-aos="fade-left"  ></img>
+      <img src="/image/about2.webp" alt="" data-aos="fade-left"  ></img>
       </div>
       
       

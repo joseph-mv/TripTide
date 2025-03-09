@@ -3,10 +3,10 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
-import "./ForgotPasswordForm.css"; // Import the CSS file
+import "../../styles/pages/auth/ResetPassword.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom";
 
-const ForgotPasswordForm = () => {
+const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -187,4 +187,4 @@ const ForgotPasswordForm = () => {
   );
 };
 
-export default ForgotPasswordForm;
+export default ResetPassword;

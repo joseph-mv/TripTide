@@ -31,8 +31,28 @@ addItinerary: async (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  
 
+ getItinerary :async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      // Query MongoDB using Native Driver
+      const itinerary = await db
+        .get()
+        .collection(collection.ITINERARY_Collection)
+        .findOne({ _id: new ObjectId(id) });
+  
+      // If itinerary not found, return 404
+      if (!itinerary) {
+        return res.status(404).json({ error: "Itinerary not found" });
+      }
+      res.status(200).json(itinerary);
+    } catch (error) {
+      console.error("Error fetching itinerary:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+  
   /**
    * @function deleteItinerary
    * @description Deletes an itinerary from the database.
@@ -60,26 +80,6 @@ addItinerary: async (req, res) => {
     }
   },
   
-  editItinerary: async(req,res) => {
-    const { id } = req.query;
-    const itinerary=req.body
-      await db
-        .get()
-        .collection(collection.ITINERARY_Collection)
-        .updateOne(
-          { _id: new ObjectId(id) }, // Find the document by ID
-          {
-            $set: itinerary, // Update fields with the provided data
-          },
-          { upsert: false } // Ensure this is only an update, not an insert
-        )
-        .then((data) => {
-          res.status(200).json(true);
-        })
-        .catch((err) => {
-          res.status(500).json({ message: err.message });
-        });
-  },
 
 /**
  * @function editItinerary
@@ -94,7 +94,7 @@ editItinerary: async (req, res) => {
   try {
     const { id } = req.query;
     const itinerary = req.body;
-
+console.log(itinerary)
     // 1 Update the itinerary
     const result = await db
       .get()

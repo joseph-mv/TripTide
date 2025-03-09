@@ -13,6 +13,8 @@ module.exports = {
    * @returns {Object} JSON response containing itineraries or an error message.
    */
   getUserItineraries: async (req, res) => {
+
+
     try {
       const userId = req.userId;
 
@@ -25,7 +27,7 @@ module.exports = {
       const itineraries = await db
         .get()
         .collection(collection.ITINERARY_Collection)
-        .find({ userId })
+        .find({ userId },{ projection: { _id: 1, name: 1, "details.startDate": 1,'details.endDate':1 } })
         .toArray();
 
       // 3️ Check if itineraries exist
@@ -84,4 +86,11 @@ module.exports = {
       return res.status(500).json({ error: "Internal Server Error." });
     }
   },
+
+
+  
 };
+
+
+
+

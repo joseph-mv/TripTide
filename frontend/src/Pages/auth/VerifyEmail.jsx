@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import "./VerifyEmail.css";
+import "../../styles/pages/auth/VerifyEmail.css";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 const VerifyEmail = () => {
   const location = useLocation();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
-import "./Account.css"; // Make sure to import your CSS
+import "../../styles/pages/auth/Authentication.css"; // Make sure to import your CSS
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
 import axios from "axios";
 import "boxicons/css/boxicons.min.css";
@@ -11,7 +11,7 @@ import { loginUser } from "../../services/authService";
 import {useDispatch} from 'react-redux'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const Account = () => {
+const AuthenticationPage = () => {
   const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(false);
   const dispatch=useDispatch()
@@ -282,4 +282,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default AuthenticationPage;

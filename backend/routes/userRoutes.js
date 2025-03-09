@@ -21,6 +21,7 @@ const router = express.Router();
 
 router.post("/save-itinerary", verifyToken, itineraryController.addItinerary);
 router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
+router.get('/get-itinerary/:id',itineraryController.getItinerary)
 router.delete("/delete-itinerary", verifyToken, itineraryController.deleteItinerary);
 router.put("/edit-itinerary", verifyToken, itineraryController.editItinerary);
 router.put("/updateProfilePic", verifyToken,userController.updateUserProfilePic);

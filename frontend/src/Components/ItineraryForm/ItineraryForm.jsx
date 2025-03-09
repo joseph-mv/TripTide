@@ -22,18 +22,18 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const dispatch = useDispatch();
   var coordinates = useSelector((state) => state.location);
   var formData = useSelector((state) => state.form);
+  console.log(oldItinerary,formData)
   var token = localStorage.getItem("token");
   const userId = useSelector((store) => store.user.userId);
   const [map, setMap] = useState(false);
   const newItinerary = {};
   const [itinerary, setItinerary] = useState(newItinerary);
   const [name, setName] = useState(oldName);
-
   //creating new Itinerary object
   useEffect(() => {
-    if (!oldItinerary) {
-      let date = formData.startDate;
-
+    let date = formData.startDate;
+    if (!oldItinerary &&date ) {
+      console.log('creating new itineray')    
       for (let i = 0; i < coordinates.noOfDays; i++) {
         newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
         date = getNextDate(date);
@@ -147,7 +147,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       });
       if (response.data) {
         alert("Your Itinerary has been saved");
-        navigate("/");
+        navigate("/account");
       }
     } catch (error) {}
   };
@@ -219,7 +219,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
         <input
           type="text"
           onChange={(e) => setName(e.target.value)}
-          value={name}
+          value={oldName  || name}
           placeholder="Enter itinerary name"
           required
         />
