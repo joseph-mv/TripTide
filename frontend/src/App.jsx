@@ -8,7 +8,7 @@ import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import BackToTop from "./Components/BackToTop/BackToTop";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
-import { About, Authentication, Contact, Destinations, EditItinerary, Home, Itinerary, PlanDetails, ResetPassword, TripPlan, UserDashboard, VerifyEmail } from "./Pages";
+import { About, Authentication, Contact, Destinations, EditItinerary, Home, Itinerary, NotFound, PlanDetails, ResetPassword, TripPlan, UserDashboard, VerifyEmail } from "./Pages";
 
 function App() {
   useEffect(() => {
@@ -36,6 +36,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/account" element={<UserDashboard />} />
           <Route path="/account/edit-itinerary" element={<EditItinerary />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <BackToTop/>
         <Footer />

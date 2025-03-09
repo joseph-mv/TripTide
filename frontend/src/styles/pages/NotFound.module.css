@@ -1,0 +1,77 @@
+.notFoundContainer {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+  }
+  
+  .notFoundContent {
+    max-width: 32rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .iconContainer {
+    margin-bottom: 2rem;
+  }
+  
+  .errorIcon {
+    height: 6rem;
+    width: 6rem;
+    color: #ef4444;
+    margin: 0 auto;
+    animation: bounce 1s infinite;
+  }
+  
+  .errorCode {
+    font-size: 3.75rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+  
+  .errorTitle {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+  }
+  
+  .errorMessage {
+    color: #facc15;
+    margin-bottom: 2rem;
+  }
+  
+  .homeLink {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #facc15; /* Yellow */
+    color: #1e3a8a; /* Dark blue */
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .homeLink:hover {
+    background-color: #eab308;
+  }
+  .homeIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
