@@ -57,7 +57,7 @@ const checkExistingUser = async (email) => {
   const user = await db
     .get()
     .collection(collection.User_Collection)
-    .findOne({ email: email });
+    .findOne({ email: {$eq:email} });
   return user;
 };
 

@@ -4,7 +4,7 @@ export { default as Contact } from "./Contact.jsx";
 export { default as Authentication } from "./auth/Authentication";
 export { default as VerifyEmail } from "./auth/VerifyEmail.jsx";
 export { default as ResetPassword } from "./auth/ResetPassword";
-export { default as Destinations } from "./destinations/Destinations";
+export { default as Destinations } from "./Destinations";
 export { default as TripPlan } from "./trip/TripPlan";
 export { default as PlanDetails } from "./trip/PlanDetails";
 export { default as Itinerary } from "./trip/Itinerary";

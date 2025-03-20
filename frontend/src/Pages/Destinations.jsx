@@ -1,11 +1,12 @@
-import React, { useRef, useEffect, useState } from "react";
+import axios from "axios";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import "./Destinations.css";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import React, { useRef, useEffect, useState } from "react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import axios from "axios";
-import TouristSpots from "../../Components/TouristSpots/TouristSpots";
+
+import "../styles/pages/Destinations.css";
+import TouristSpots from "../Components/TouristSpots/TouristSpots";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 function Destinations() {
   const mapContainerRef = useRef(null);

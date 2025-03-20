@@ -9,6 +9,7 @@ import Footer from "./Components/Footer/Footer";
 import BackToTop from "./Components/BackToTop/BackToTop";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import { About, Authentication, Contact, Destinations, EditItinerary, Home, Itinerary, NotFound, PlanDetails, ResetPassword, TripPlan, UserDashboard, VerifyEmail } from "./Pages";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   useEffect(() => {
@@ -22,6 +23,7 @@ function App() {
     <div>
       <BrowserRouter>
         <ScrollToTop />
+        <ToastContainer />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
