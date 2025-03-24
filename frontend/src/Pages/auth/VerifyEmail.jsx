@@ -1,58 +1,67 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useLocation } from "react-router-dom";
-import "../../styles/pages/auth/VerifyEmail.css";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
+import "../../styles/pages/auth/VerifyEmail.css";
+import { verifyEmail } from "../../services/authService";
+import { ROUTES } from "../../routes";
+
 const VerifyEmail = () => {
   const location = useLocation();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const query = new URLSearchParams(location.search);
   const token = query.get("token");
-  useEffect(() => {
 
-    const verifyEmail = async () => {
+  useEffect(() => {
+    /*
+     * Performs necessary verification checks during page load.
+     */
+    const verify = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/auth/verify-email?token=${token}`
-        );
-        // console.log(response);
-        setMessage(response.data);
+        setLoading(true);
+        const response = await verifyEmail(token);
+        setMessage(response.msg);
       } catch (error) {
-        console.log(error)
-        setMessage(error.response.data);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    verifyEmail();
-  }, [location.search]);
-
-  const isSuccess = message && !message.error;
+    verify();
+  }, [token]);
 
   return (
     <div className="message-container">
-      <div className="message-box">
-        
-        {isSuccess ? (
-          <>
-            <FaCheckCircle className="message-icon success-icon" />
-            <div className="message-title">Email Verified Successfully!</div>
+      {loading ? (
+        <div style={{ scale: "3" }} className="loading"></div>
+      ) : (
+        <div className="message-box">
+          {message ? (
+            <>
+              {/* Success message */}
+              <FaCheckCircle className="message-icon success-icon" />
+              <div className="message-title">{message}</div>
 
-            <a href="/authenticate" className="message-button">
-              Go to Login
-            </a>
-          </>
-        ) : (
-          <>
-            <FaTimesCircle className="message-icon failure-icon" />
-            <div className="message-title">Email Verification Failed</div>
+              <Link to={ROUTES.AUTHENTICATE} className="message-button">
+                Go to Login
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* Error message */}
+              <FaTimesCircle className="message-icon failure-icon" />
+              <div className="message-title">{error}</div>
 
-            <a href="/contact" className="message-button">
-              Contact Support
-            </a>
-          </>
-        )}
-      </div>
+              <Link to={ROUTES.CONTACT} className="message-button">
+                Contact Support
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
