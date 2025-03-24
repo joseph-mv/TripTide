@@ -270,8 +270,9 @@ module.exports = {
             $unset: { resetPasswordOtp: "", resetPasswordExpires: "" },
           }
         );
-      // 54 Return success response
-      res.status(200).json({ success: true });
+
+      // 4 Return success response
+      res.status(200).json({ msg:"Password has been reset successfully." });
     } catch (error) {
       console.log(error);
       res
