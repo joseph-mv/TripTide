@@ -4,6 +4,19 @@ const db = require("../config/connection");
 const collection = require("../config/collection");
 
 module.exports = {
+
+
+  contactMessages:async(req,res)=>{
+    try {
+      const formData=req.body
+      response=await db.get().collection(collection.CONTACT_MSG_Collection).insertOne(formData)
+      res.status(200).json({message:'Your message has been received. We will contact you as soon as possible.'})
+    } catch (error) {
+      console.error("Error fetching user itineraries:", error);
+      res.status(500).json({ error: "Internal Server error" });
+    }
+  },
+
   /**
    * @function getUserItineraries
    * @description Fetches all itineraries for a specific user.

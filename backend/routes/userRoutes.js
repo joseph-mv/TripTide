@@ -18,7 +18,7 @@ const router = express.Router();
  *
  * @middleware verifyToken - Ensures authentication for all user-related routes.
  */
-
+router.post('/contact',userController.contactMessages)
 router.post("/save-itinerary", verifyToken, itineraryController.addItinerary);
 router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
 router.get('/get-itinerary/:id',itineraryController.getItinerary)

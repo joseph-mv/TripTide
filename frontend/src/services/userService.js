@@ -1,4 +1,15 @@
 import { axiosInstance } from "./api"
+const NETWORK_ISSUE_MSG="Network issue. Please try again later."
+
+
+export const contact=async(formData)=>{
+  try {
+    const response=await axiosInstance.post('user/contact',formData)
+    return response.data.message
+  } catch (error) {
+    throw new Error (error.response?.data?.error || NETWORK_ISSUE_MSG)
+  }
+}
 
 export const getUserInformation=async()=>{
   try {
