@@ -36,6 +36,7 @@ const ContactPage = () => {
       setContactForm({name:'',email:'',subject:'',message:''})
     }
   };
+  
   return (
     <div className="contact-section">
       <h1>Contact Us</h1>

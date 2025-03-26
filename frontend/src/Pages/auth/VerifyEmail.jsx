@@ -6,6 +6,10 @@ import "../../styles/pages/auth/VerifyEmail.css";
 import { verifyEmail } from "../../services/authService";
 import { ROUTES } from "../../routes";
 
+/**
+ * **Verify email Page**
+ * verification check while loading page
+ */
 const VerifyEmail = () => {
   const location = useLocation();
   const [error, setError] = useState("");

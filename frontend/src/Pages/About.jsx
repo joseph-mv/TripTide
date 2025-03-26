@@ -24,7 +24,7 @@ const keyPoints = [
   },
 ];
 /**
- * About component
+ * About page
  */
 const About = () => {
   return (

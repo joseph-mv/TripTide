@@ -8,7 +8,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { SiImessage } from "react-icons/si";
 import { AiFillHome, AiOutlineInfoCircle } from "react-icons/ai";
 import { BiTrip } from "react-icons/bi";
-import { isTokenExpired } from "../../utils/isTokenExpired";
+import { isTokenExpired } from "../../../utils/isTokenExpired";
 import { useDispatch, useSelector } from "react-redux";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);

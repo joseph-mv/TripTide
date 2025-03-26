@@ -1,17 +1,27 @@
-import React, { Suspense } from "react";
-import Hero from "../Components/Hero/Hero";
-import Features from "../Components/Features/Features";
-const TopDestinations=React.lazy(()=>import('../Components/TopDestinations/TopDestinations'))
+import React from "react";
+import { useDispatch } from "react-redux";
 
+import Hero from "../Components/home/Hero/Hero";
+import FeatureSection from "../Components/home/Features/Features";
+import TopDestinations from "../Components/home/TopDestinations/TopDestinations";
+
+/**
+ *
+ * Home page of Triptide
+ */
 function Home() {
+  const dispatch = useDispatch();
+
+  //reset trip plan form
+  dispatch({
+    type: "RESET_FORM",
+  });
+
   return (
     <div>
       <Hero />
-      <Features />
-      <Suspense fallback={<div>loading...</div> }>
+      <FeatureSection />
       <TopDestinations />
-      </Suspense>
-     
     </div>
   );
 }

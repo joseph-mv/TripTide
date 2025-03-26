@@ -1,6 +1,13 @@
-import React from "react";
 import "./FeatureCard.css"; // Import the CSS file
 
+/**
+ * FeatureCard in Feature section
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.icon -Icon of feature
+ * @param {string} props.title -Title of feature
+ * @param {string} props.description -Description of feature
+ */
 const FeatureCard = ({ icon, title, description }) => {
   return (
     <div className="feature-card" data-aos="fade-left">

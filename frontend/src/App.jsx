@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import Header from "./Components/Header/Header";
-import Footer from "./Components/Footer/Footer";
+import Header from "./Components/layout/Header/Header";
+import Footer from "./Components/layout/Footer/Footer";
 import BackToTop from "./Components/BackToTop/BackToTop";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import { About, Authentication, Contact, Destinations, EditItinerary, Home, Itinerary, NotFound, PlanDetails, ResetPassword, TripPlan, UserDashboard, VerifyEmail } from "./Pages";
