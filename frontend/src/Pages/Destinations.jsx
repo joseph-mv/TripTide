@@ -1,15 +1,43 @@
-import axios from "axios";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { toast } from "react-toastify";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import React, { useRef, useEffect, useState } from "react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import "../styles/pages/Destinations.css";
 import TouristSpots from "../Components/TouristSpots/TouristSpots";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import {  getNearbyDestinations } from "../services/api/destinationServices";
+
+const types = [
+  "Tourist Attraction",
+  "Tourist Destination",
+  "Natural Park",
+  "Waterfall",
+  "Nature Reserve",
+  "Dam",
+  "Lake",
+  "Hiking",
+  "Caves",
+  "Amusement Park",
+  "Campsite",
+  "City",
+  "Beach",
+  "Resort",
+  "Historical monument",
+  "Museum",
+  "Zoo",
+  "Desert",
+];
+const activities = [
+  "Sightseeing",
+  "Adventure",
+  "Shopping",
+  "Relaxation",
+  "Cultural",
+];
 function Destinations() {
-  const mapContainerRef = useRef(null);
+  const mapContainerRef = useRef(null); //html div for map
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const placesRef = useRef();
@@ -51,11 +79,17 @@ function Destinations() {
   });
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
-  // console.log(form)
 
+  //for show input while click on the button
+  const [activeInput, setActiveInput] = useState(null);
+  const handleSymbolClick = (inputName) => {
+    setActiveInput(activeInput === inputName ? null : inputName);
+  };
+
+  //for distance types and activities
   const handleChange = (event) => {
     const { type, name, value, checked } = event.target;
-    // console.log(name)
+
     if (type === "number") {
       setForm({ ...form, [name]: Math.abs(value) });
     } else if (name === "activities") {
@@ -68,6 +102,7 @@ function Destinations() {
     }
   };
 
+  // Load map
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
@@ -107,7 +142,8 @@ function Destinations() {
     });
     return () => map.remove();
   }, [lng, lat]);
-  // console.table(form.activities)
+
+  //current location of device mark on the map is it available
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -123,71 +159,24 @@ function Destinations() {
       // console.log("Geolocation is not supported by this browser.");
     }
   }, []);
-  const [activeInput, setActiveInput] = useState(null);
-  const handleSymbolClick = (inputName) => {
-    setActiveInput(activeInput === inputName ? null : inputName);
-  };
-  const types = [
-    "Tourist Attraction",
-    "Tourist Destination",
-    "Natural Park",
-    "Waterfall",
-    "Nature Reserve",
-    "Dam",
-    "Lake",
-    "Hiking",
-    "Caves",
-    "Amusement Park",
-    "Campsite",
-    "City",
-    "Beach",
-    "Resort",
-    "Historical monument",
-    "Museum",
-    "Zoo",
-    "Desert",
-  ];
-  const activities = [
-    "Sightseeing",
-    "Adventure",
-    "Shopping",
-    "Relaxation",
-    "Cultural",
-  ];
 
+  //fetch Destinations based on the filters
   const handleFilter = async () => {
-    // console.log(form)
-    // console.log(loading)
-    setPlaces([]);
-    if (form.coordinates.length === 0) {
-      return alert("Please select a place");
-    }
-    setLoading(true);
     try {
-      // console.log(loading);
-      const response = await axios.get(`${BASE_URL}/destinations`, {
-        params: form,
-      });
-      setLoading(false);
-      if (response.data.length === 0) {
-        alert(
-          "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."
-        );
-      } else {
-        placesRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-
-      setPlaces(response.data);
-      // console.log(response.data)
-    } catch (err) {
-      console.error("Error filtering destinations", err);
-      alert("Network issue. Please try again later.");
+      setPlaces([]);
+      setLoading(true);
+      const response = await getNearbyDestinations(form);
+      setPlaces(response);
+      placesRef.current.scrollIntoView({ behavior: "smooth" });
+    } catch (error) {
+      console.error("Error filtering destinations", error);
+      toast.error(error.message );
+    }finally{
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // console.log(places)
     if (places.length > 0) {
       places.forEach((place, i) => {
         const el = document.createElement("div");

@@ -1,18 +1,37 @@
 import axios from "axios";
+import { axiosInstance } from "../api";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
- export const fetchDestinations = async (coordinates,activities) => {
-  console.log(activities)
-    try {
-      const response = await axios.get(`${BASE_URL}/suggestions`, {
-        params: {
-          coordinates: coordinates.coordinates,
-          distance: coordinates.distance,
-          activities: activities,
-        },
-      });
-      return response.data
-    } catch (err) {
-      throw err
-    } 
-  };
+export const fetchDestinations = async (coordinates, activities) => {
+  console.log(activities);
+  try {
+    const response = await axios.get(`${BASE_URL}/suggestions`, {
+      params: {
+        coordinates: coordinates.coordinates,
+        distance: coordinates.distance,
+        activities: activities,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getNearbyDestinations = async (form) => {
+  try {
+    if (!form.coordinates.length) {
+      throw new Error("Please select a place");
+    }
+
+    const response = await axiosInstance.get("/destinations", { params: form });
+    if (!response.data.length) {
+      throw new Error(
+        "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."
+      );
+    }
+    return response.data
+  } catch (error) {
+    throw new Error(error.message || "Network issue. Please try again later.");
+  }
+};
