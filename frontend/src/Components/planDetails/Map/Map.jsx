@@ -4,8 +4,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { isTokenExpired } from "../../utils/isTokenExpired";
-import { refreshToken } from "../../utils/refreshToken";
+import { isTokenExpired } from "../../../utils/isTokenExpired";
+import { refreshToken } from "../../../utils/refreshToken";
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 function Map() {
