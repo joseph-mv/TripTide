@@ -6,9 +6,9 @@ import { useRef, useEffect, useState } from "react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 
-export const useDestinationMap=(setForm,mapContainerRef,lng,lat)=>{
+export const useDestinationMap=(setForm,lng,lat,)=>{
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-    //   const mapContainerRef = useRef(null);
+      const mapContainerRef = useRef(null); //html div for map
       const mapRef = useRef(null);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export const useDestinationMap=(setForm,mapContainerRef,lng,lat)=>{
           accessToken: mapboxgl.accessToken,
           mapboxgl: mapboxgl,
         });
-    
+        
         if (lng && lat) {
           // Add a marker at the current location
           setForm((prev) => ({
@@ -33,9 +33,10 @@ export const useDestinationMap=(setForm,mapContainerRef,lng,lat)=>{
             coordinates: [lng, lat],
           }));
           new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
-    
           map.setCenter([lng, lat]);
         }
+       
+        
     
         map.addControl(geocoder, "top-left");
         geocoder.on("result", (event) => {
@@ -50,4 +51,6 @@ export const useDestinationMap=(setForm,mapContainerRef,lng,lat)=>{
         });
         return () => map.remove();
       }, [lng, lat]);
+
+      return {mapContainerRef,mapRef}
 }

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { getRectangleCorners } from '../../assets/mapRectangle';
 import "./SuggestedLocations.css";
 
-import TouristSpots from "../TouristSpots/TouristSpots";
+import TouristSpots from "../destinations/TouristSpots/TouristSpots";
 import { fetchDestinations } from "../../services/api/destinationServices";
 function SuggestedLocations() {
   const dispatch = useDispatch();
