@@ -31,7 +31,7 @@ function App() {
           <Route path={ROUTES.AUTHENTICATE} element={<Authentication />} />
           <Route path="/destinations" element={<Destinations />} />
           <Route path="/trip-plan" element={<TripPlan />} />
-          <Route path="/plan-details" element={<PlanDetails />} />
+          <Route path={ROUTES.PLAN_DETAILS} element={<PlanDetails />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ResetPassword />} />
           <Route path="/plan-details/itinerary" element={<Itinerary />} />

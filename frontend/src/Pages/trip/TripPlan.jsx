@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { BiTransferAlt } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import "../../styles/pages/trip/TripPlan.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,134 +10,81 @@ import {
   faAnglesLeft,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import Suggestions from "../../assets/Suggetions/Suggestions";
+
+import { ROUTES } from "../../routes";
+import "../../styles/pages/trip/TripPlan.css";
+import GeocodedInput from "../../Components/tripPlan/GeocodedInput";
+import { currencySymbols, validateDateRange, today } from "../../utils";
 import {
   pageVariants1,
   pageVariants2,
   pageTransition,
-} from "../../animation/tripplan";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { today } from "../../utils/date";
-const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+} from "../../animation/tripPlan";
 
-const TropPlan = () => {
-  const currencies = [
-    "INR",
-    "USD",
-    "EUR",
-    "GBP",
-    "JPY",
-    "AUD",
-    "CAD",
-    "CHF",
-    "CNY",
-    "SEK",
-    "NZD",
-  ];
+const vehicleOptions = [
+  { value: "", label: "Select..." },
+  { value: "bike", label: "Bike" },
+  { value: "car", label: "Car" },
+  { value: "bus", label: "Bus" },
+  { value: "other", label: "Other" },
+];
+const activities = [
+  { name: "sightseeing", label: "Sightseeing" },
+  { name: "adventure", label: "Adventure" },
+  { name: "shopping", label: "Shopping" },
+  { name: "relaxation", label: "Relaxation" },
+  { name: "cultural", label: "Cultural" },
+  { name: "others", label: "Others" },
+];
 
+/**
+ * Trip plan page consist of two form for collecting trip details 
+ * and store in fromReducer
+ */
+
+const TripPlan = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const formData = useSelector((state) => state.form);
   const [currentPage, setCurrentPage] = useState(1);
+  const formData = useSelector((state) => state.form);
 
-  const [suggestions1, setSuggestions1] = useState([]); //for Destination input
-  const [suggestions2, setSuggestions2] = useState([]); // for Starting Point
-  const [idxSugg1, setIdxSugg1] = useState(-1);
-  const [idxSugg2, setIdxSugg2] = useState(-1);
-
-  // Reset locationReducer state to initial when navigating back from the plan-details page.
+  // Reset locationReducer state to initial state while navigating back from the plan-details page.
   dispatch({
     type: "RESET_ LOCATION",
   });
 
   const handleChange = (e) => {
     dispatch({ type: "UPDATE", payload: e.target });
-    setIdxSugg1(0);
-    setIdxSugg2(0);
   };
 
-  // For selecting from Suggestions
-  const handleKeyDown = (e) => {
-    // console.log(e.target)
-    if (e.key === "ArrowDown") {
-      if (e.target.id === "destination") {
-        setIdxSugg1((pre) => (pre + 1) % suggestions1.length);
-      } else if (e.target.id === "startingPoint") {
-        setIdxSugg2((pre) => (pre + 1) % suggestions2.length);
-      }
-    } else if (e.key === "ArrowUp") {
-      if (e.target.id === "destination") {
-        setIdxSugg1(
-          (pre) => (pre + suggestions1.length - 1) % suggestions1.length
-        );
-      } else if (e.target.id === "startingPoint") {
-        setIdxSugg2(
-          (pre) => (pre + suggestions2.length - 1) % suggestions2.length
-        );
-      }
-    } else if (e.key === "Enter") {
-      if (e.target.id === "destination" && idxSugg1 >= 0) {
-        dispatch({
-          type: "DESTINATION_SUGGETION",
-          payload: suggestions1[idxSugg1].properties,
-        });
-        setSuggestions1([]);
-        setIdxSugg1(-1);
-      } else if (e.target.id === "startingPoint" && idxSugg2 >= 0) {
-        dispatch({
-          type: "STARTING_SUGGETION",
-          payload: suggestions2[idxSugg2].properties,
-        });
-        setSuggestions2([]);
-        setIdxSugg2(-1);
-      }
-    }
-  };
-
-  // Fetch geocoded suggestions for Destination and Starting Point
-  const fetchGeocodedResults = async (e) => {
-    try {
-      const response = await axios.get(
-        `https://api.mapbox.com/search/geocode/v6/forward?q=${
-          formData[e.target.id]
-        }&types=street%2Clocality%2Cplace%2Cregion%2Cdistrict&language=en&access_token=${mapboxToken}`
-      );
-      // console.log(response)
-      if (e.target.id === "destination") {
-        setSuggestions1(response.data.features);
-      } else {
-        setSuggestions2(response.data.features);
-      }
-    } catch (error) {
-      console.error("Error fetching geocoded suggestions:", error);
-    }
+  //Swap between Destination and Starting Location
+  const handleSwap = () => {
+    dispatch({
+      type: "SWAP_PLACES",
+    });
   };
 
   const handleSubmit = (e) => {
-    if (currentPage === 2) {
-      navigate("/plan-details");
-    }
-    //checking between startDate and endDate
-    const { startDate, endDate } = formData;
-    if (new Date(startDate) > new Date(endDate)) {
-      toast.error("Start date cannot be later than end date");
-      e.preventDefault();
-      return false;
-    }
     e.preventDefault();
+    if (currentPage === 2) {
+      navigate(ROUTES.PLAN_DETAILS);
+    }
+    const { startDate, endDate } = formData;
+    const { success, message } = validateDateRange(startDate, endDate);
+    if (!success) {
+      toast.error(message);
+      return;
+    }
     setCurrentPage((pre) => 1 + (pre % 2));
   };
 
   return (
     <div>
-      <ToastContainer />
       <div className="trip-planner-form">
         <AnimatePresence mode="wait">
           <form onSubmit={handleSubmit}>
+            
+            {/* First form */}
             {currentPage === 1 && (
               <motion.div
                 className="page"
@@ -147,53 +96,33 @@ const TropPlan = () => {
                 transition={pageTransition}
               >
                 <h2>Plan Your Trip</h2>
+
+                {/* Destination */}
                 <div className="form-group">
                   <label htmlFor="destination">Destination:</label>
-                  <input
-                    type="text"
+                  <GeocodedInput
                     id="destination"
                     name="destination"
                     value={formData.destination}
-                    onChange={(e) => {
-                      fetchGeocodedResults(e);
-                      handleChange(e);
-                    }}
-                    onKeyDown={handleKeyDown}
-                    required
+                    handleChange={handleChange}
                   />
-                  {suggestions1.length > 0 && formData.destination && (
-                    <Suggestions
-                      suggestions={suggestions1}
-                      setSuggestions={setSuggestions1}
-                      destination={formData.destination}
-                      idx={idxSugg1}
-                    />
-                  )}
                 </div>
 
+                {/* Swap button */}
+                <BiTransferAlt onClick={handleSwap} className="swap-btn" />
+
+                {/* Starting Point */}
                 <div className="form-group">
                   <label htmlFor="startingPoint">Starting Location:</label>
-
-                  <input
-                    type="text"
+                  <GeocodedInput
                     id="startingPoint"
                     name="startingPoint"
                     value={formData.startingPoint}
-                    onChange={(e) => {
-                      fetchGeocodedResults(e);
-                      handleChange(e);
-                    }}
-                    onKeyDown={handleKeyDown}
-                    required
+                    handleChange={handleChange}
                   />
-                  {suggestions2.length > 0 && formData.startingPoint && (
-                    <Suggestions
-                      suggestions={suggestions2}
-                      setSuggestions={setSuggestions2}
-                      idx={idxSugg2}
-                    />
-                  )}
                 </div>
+
+                {/* Start Date */}
                 <div className="form-group">
                   <label htmlFor="startDate">Start Date:</label>
                   <input
@@ -206,6 +135,8 @@ const TropPlan = () => {
                     required
                   />
                 </div>
+
+                {/* End Date */}
                 <div className="form-group">
                   <label htmlFor="endDate">End Date:</label>
                   <input
@@ -218,6 +149,8 @@ const TropPlan = () => {
                     required
                   />
                 </div>
+
+                {/* Number of People */}
                 <div className="form-group">
                   <label htmlFor="numPeople">Number of People:</label>
                   <input
@@ -229,11 +162,14 @@ const TropPlan = () => {
                     onChange={handleChange}
                   />
                 </div>
+
                 <button id="nxtBtn" type="submit" className="nxtBtn">
                   Next <FontAwesomeIcon className="icon" icon={faAnglesRight} />
                 </button>
               </motion.div>
             )}
+
+            {/* Second form */}
             {currentPage === 2 && (
               <motion.div
                 className="page"
@@ -245,6 +181,8 @@ const TropPlan = () => {
                 transition={pageTransition}
               >
                 <h2>Plan Your Trip</h2>
+
+                {/* Budget */}
                 <div className="form-group budget">
                   <label htmlFor="budget">Budget:</label>
                   <input
@@ -263,13 +201,14 @@ const TropPlan = () => {
                     value={formData.currency}
                     onChange={handleChange}
                   >
-                    {currencies.map(
-                      (currency) =>
-                        <option value={currency}>{currency}</option>
-                    )}
+                    {}
+                    {Object.keys(currencySymbols).map((currency) => (
+                      <option value={currency}>{currency}</option>
+                    ))}
                   </select>
                 </div>
 
+                {/* Transportation types */}
                 <div className="form-group">
                   <label htmlFor="transportation">Transportation:</label>
                   <select
@@ -279,93 +218,36 @@ const TropPlan = () => {
                     onChange={handleChange}
                     required
                   >
-                    <option value="">Select...</option>
-                    <option value="bike">Bike</option>
-                    <option value="car">Car</option>
-                    <option value="bus">Bus</option>
-                    {/* <option value="train">Train</option>
-                    <option value="plane">Plane</option> */}
-                    <option value="other">Other</option>
+                    {vehicleOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
+
+                {/* Activities */}
                 <div className="form-group ">
                   <label>Activities:</label>
                   <div className="activities">
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="sightseeing"
-                          checked={formData.activities.sightseeing}
-                          onChange={handleChange}
-                        />
-                        Sightseeing
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="adventure"
-                          checked={formData.activities.adventure}
-                          onChange={handleChange}
-                        />
-                        Adventure
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="shopping"
-                          checked={formData.activities.shopping}
-                          onChange={handleChange}
-                        />
-                        Shopping
-                      </label>
-                    </div>
-
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="relaxation"
-                          checked={formData.activities.relaxation}
-                          onChange={handleChange}
-                        />
-                        Relaxation
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="cultural"
-                          checked={formData.activities.cultural}
-                          onChange={handleChange}
-                        />
-                        Cultural
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          className="activity"
-                          type="checkbox"
-                          name="others"
-                          checked={formData.activities.others}
-                          onChange={handleChange}
-                        />
-                        Others
-                      </label>
-                    </div>
+                    {activities.map((activity) => (
+                      <div key={activity.name}>
+                        <label>
+                          <input
+                            className="activity"
+                            type="checkbox"
+                            name={activity.name}
+                            checked={formData.activities[activity.name]}
+                            onChange={handleChange}
+                          />
+                          {activity.label}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </div>
+
+                {/* Notes */}
                 <div className="form-group">
                   <label htmlFor="notes">Notes:</label>
                   <textarea
@@ -375,6 +257,7 @@ const TropPlan = () => {
                     onChange={handleChange}
                   ></textarea>
                 </div>
+
                 <div className="buttons">
                   <button className="prvBtn" onClick={() => setCurrentPage(1)}>
                     <FontAwesomeIcon className="icon" icon={faAnglesLeft} />
@@ -394,4 +277,4 @@ const TropPlan = () => {
   );
 };
 
-export default TropPlan;
+export default TripPlan;
