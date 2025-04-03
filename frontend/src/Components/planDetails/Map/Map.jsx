@@ -113,15 +113,15 @@ function Map() {
   }, [coordinates]);
 
   const handlePlan = () => {
-    if (!token) {
+    // if (!token) {
       
-      navigate("/authenticate");
-      return;
-    } else if (isTokenExpired(token)) {
+    //   navigate("/authenticate");
+    //   return;
+    // } else if (isTokenExpired(token)) {
   
-      token = refreshToken();
-      if (!token) navigate("/authenticate");
-    }
+    //   token = refreshToken();
+    //   if (!token) navigate("/authenticate");
+    // }
     if (Object.keys(coordinates.selectedPlaces).length === 0)
       return alert("Select atleast one destination");
     navigate("itinerary");

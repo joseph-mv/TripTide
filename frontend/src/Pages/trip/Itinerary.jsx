@@ -1,7 +1,7 @@
-import React from "react";
-import SelectedLocations from "../../Components/SelectedLocations/SelectedLocations";
-import ItineraryForm from "../../Components/ItineraryForm/ItineraryForm";
 import "../../styles/pages/trip/Itinerary.css";
+import ItineraryForm from "../../Components/ItineraryForm/ItineraryForm";
+import SelectedLocations from "../../Components/SelectedLocations/SelectedLocations";
+
 function Itinerary() {
   return (
     <div>

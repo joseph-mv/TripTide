@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "boxicons/css/boxicons.min.css";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import "../../styles/pages/auth/Authentication.css";
@@ -13,6 +13,7 @@ import { loginUser } from "../../services/authService";
  * @param {Function} props.toggleAuthView - Function to switch to the sign-up view
  */
 const LoginForm = ({ toggleAuthView }) => {
+  const location=useLocation()
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +23,8 @@ const LoginForm = ({ toggleAuthView }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const route=location.state || '/' //go back to previous route
+  console.log(route)
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -31,7 +34,7 @@ const LoginForm = ({ toggleAuthView }) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("refreshToken", data.refreshToken);
       setLoading(false);
-      navigate("/");// Redirect to home
+      navigate(route ,{replace:true});// Redirect to home and does'nt go back to login page
     } catch (error) {
       console.log(error);
       setLoading(false);

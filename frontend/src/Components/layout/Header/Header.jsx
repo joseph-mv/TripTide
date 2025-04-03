@@ -1,6 +1,6 @@
 // src/components/Header.js
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { motion } from "framer-motion";
 import { FaMapLocation } from "react-icons/fa6";
@@ -11,6 +11,7 @@ import { BiTrip } from "react-icons/bi";
 import { isTokenExpired } from "../../../utils/isTokenExpired";
 import { useDispatch, useSelector } from "react-redux";
 const Header = () => {
+  const navigate=useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const {userName}=useSelector(store=>store.user)
   const dispatch=useDispatch()
@@ -123,7 +124,7 @@ const Header = () => {
             <MdAccountCircle />
             &nbsp;&nbsp;{userName ? userName : "Account"}
           </Link>
-          <Link onClick={handleLogout} className="link"  to="/authenticate">
+          <Link onClick={handleLogout} className="link"   to="/authenticate">
             &nbsp;&nbsp; &nbsp;&nbsp;{userName ? "Logout" : ""}
           </Link>
         </nav>
