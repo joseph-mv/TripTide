@@ -30,16 +30,21 @@ function App() {
         <Routes>
           <Route path={ROUTES.HOME} element={<Home />} />
           <Route path={ROUTES.AUTHENTICATE} element={<Authentication />} />
-          <Route path="/destinations" element={<ProtectedRoute> <Destinations /></ProtectedRoute>} />
-          <Route path="/trip-plan" element={<TripPlan />} />
+          <Route path={ROUTES.TRIP_PLAN} element={<TripPlan />} />
           <Route path={ROUTES.PLAN_DETAILS} element={<PlanDetails />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/forgot-password" element={<ResetPassword />} />
+          <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmail />} />
+          <Route path={ROUTES.FORGOT_PASSWORD} element={<ResetPassword />} />
           <Route path={ROUTES.ABOUT} element={<About />} />
           <Route path={ROUTES.CONTACT} element={<Contact />} />
-          <Route path="/plan-details/itinerary" element={<ProtectedRoute><Itinerary /></ProtectedRoute> } />
-          <Route path="/account" element={<UserDashboard />} />
-          <Route path="/account/edit-itinerary" element={<EditItinerary />} />
+
+          {/* Protected Routes  */}
+          <Route element={<ProtectedRoute />}>
+          <Route path={ROUTES.DESTINATIONS} element={ <Destinations />} />
+          <Route path={ROUTES.CREATE_ITINERARY} element={<Itinerary /> } />
+          <Route path={ROUTES.DASHBOARD} element={<UserDashboard /> } />
+          </Route>
+          
+          <Route path={ROUTES.EDIT_ITINERARY} element={<EditItinerary />} />
           <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
         </Routes>
         <BackToTop/>

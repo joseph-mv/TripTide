@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {  useLocation, useNavigate } from "react-router-dom";
+import {  Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { refreshToken } from "../../utils/refreshToken";
 import { isTokenExpired } from "../../utils/isTokenExpired";
@@ -12,7 +12,7 @@ import { isTokenExpired } from "../../utils/isTokenExpired";
  * - If `isAuthenticated`, renders the protected content (`children`).
  * - Otherwise, redirects users to the authentication page.
 */
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
     const location=useLocation()
     let token = localStorage.getItem("token");
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children }) => {
       }
    }, [])
     
-return children
+return <Outlet/>
 };
 
 export default ProtectedRoute;

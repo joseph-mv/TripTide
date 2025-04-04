@@ -6,6 +6,7 @@ import DeleteConfirmationModal from "../../DeleteConfirmationModal/DeleteConfirm
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";
+import { ROUTES } from "../../../routes";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UserTrip = ({ trip, setTrips, current }) => {
@@ -41,7 +42,7 @@ const UserTrip = ({ trip, setTrips, current }) => {
     }
   };
   const handleClick = () => {
-    navigate("edit-itinerary", { state: { tripId:trip._id } });
+    navigate(ROUTES.EDIT_ITINERARY, { state: { tripId:trip._id } });
   };
   return (
     <li onClick={handleClick} className="trip-item" key={trip._id}>

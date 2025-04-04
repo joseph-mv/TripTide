@@ -17,7 +17,7 @@ function Suggestions({ suggestions, setSuggestions, destination, idx }) {
             key={index}
             className={index === idx ? "highlight" : ""}
             onClick={(e) => {
-              destination
+              destination==='destination'
                 ? dispatch({
                     type: "DESTINATION_SUGGESTION",
                     payload: suggestion.properties,

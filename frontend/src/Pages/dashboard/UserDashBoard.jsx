@@ -1,89 +1,44 @@
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useState } from "react";
 
-
-import "../../styles/pages/dashboard/UserDashBoard.css"; // Import the CSS file
-import { isTokenExpired } from "../../utils/isTokenExpired";
-import { refreshToken } from "../../utils/refreshToken";
+import { filterTrips } from "../../utils/tripUtils";
+import "../../styles/pages/dashboard/UserDashBoard.css";
 import { getUserInformation } from "../../services/userService";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import {
-//   faClock,
-//   faUsers,
-//   faBicycle,
-//   faRoute,
-//   faHourglassHalf,
-//   faDollarSign,
-//   faStickyNote,
-//   faEye,
-//   faImage,
-// } from "@fortawesome/free-solid-svg-icons";
-
-
-import UserTrip from "../../Components/UserDashBoard/UserTrip/UserTrip";
-import OngoingTrips from "../../Components/UserDashBoard/OngoingTrips/OngoingTrips";
 import Navbar from "../../Components/UserDashBoard/NavBar/Navbar";
 import Profile from "../../Components/UserDashBoard/Profile/Profile";
+import UserTrip from "../../Components/UserDashBoard/UserTrip/UserTrip";
 import Connections from "../../Components/UserDashBoard/Connections/Connections";
+import OngoingTrips from "../../Components/UserDashBoard/OngoingTrips/OngoingTrips";
 
-
+/**
+ * UserDashBoard page
+ * render content based on the activeTab , shows user information and edit options
+ */
 const UserDashboard = () => {
-  var token = useRef(localStorage.getItem("token"));
   const [trips, setTrips] = useState([]);
   const [activeTab, setActiveTab] = useState("currentTrip");
-  const navigate = useNavigate();
-  const today = new Date(); // Current date and time
-  const currentDate = new Date(today.toISOString().split("T")[0]); // Today's date at 00:00:00
-  const userData=useSelector(store=>store.user)
- 
+  const userData = useSelector((store) => store.user);
+
+  //fetch all trips of user
   useEffect(() => {
     async function getUser() {
-      if (!token.current) {
-        // console.log("No token");
-        navigate("/authenticate");
-        return;
-      } 
-      else if (isTokenExpired(token.current)) {
-        console.log("Token expired");
-        token.current = await refreshToken();
-        if (!token.current) {
-          navigate("/authenticate");
-        }
-      }
-
       try {
-        const response = await getUserInformation()
-        setTrips(response);    
+        const response = await getUserInformation();
+        setTrips(response);
       } catch (error) {
-        alert(error.message)
+        console.log(error.message);
       }
-     
     }
     getUser();
   }, []);
-  const upcomingTrips = trips.filter((trip) => {
-    const startDate = new Date(trip.details.startDate);
-    return startDate.getTime() > currentDate.getTime();
-  });
-  const completedTrips = trips.filter((trip) => {
-    const endDate = new Date(trip.details.endDate);
-    return endDate.getTime() < currentDate.getTime();
-  });
-  const ongoingTrips = trips.filter((trip) => {
-    const startDate = new Date(trip.details.startDate);
-    const endDate = new Date(trip.details.endDate);
-    return (
-      startDate.getTime() <= currentDate.getTime() &&
-      endDate.getTime() >= currentDate.getTime()
-    );
-  });
 
+  const [upcomingTrips,completedTrips,ongoingTrips]=filterTrips(trips)
 
+  // render content corresponding to activeTab
   const renderContent = () => {
     switch (activeTab) {
       case "currentTrip":
-       return <OngoingTrips ongoingTrips={ongoingTrips}/>
+        return <OngoingTrips ongoingTrips={ongoingTrips} />;
       case "upcomingTrips":
         return (
           <div className="content-section">
@@ -119,28 +74,23 @@ const UserDashboard = () => {
           </div>
         );
       case "connections":
-        return (
-          <Connections/>
-        );
+        return <Connections />;
       case "savedDestinations":
         return (
           <div className="content-section">
             <h2>Saved Destinations</h2>
-            
           </div>
         );
       case "recommendedDestinations":
         return (
           <div className="content-section">
             <h2>Recommended Destinations</h2>
-            
           </div>
         );
       case "notifications":
         return (
           <div className="content-section">
             <h2>Notifications</h2>
-            
           </div>
         );
       case "accountSettings":
@@ -155,14 +105,11 @@ const UserDashboard = () => {
     }
   };
 
-
-
   return (
     <div className="dashboard-container">
-     
-    <Profile userData={userData}/>
+      <Profile userData={userData} />
       {/* Navbar */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Dynamic Content */}
       {renderContent()}

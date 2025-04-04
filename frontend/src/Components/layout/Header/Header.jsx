@@ -10,6 +10,7 @@ import { AiFillHome, AiOutlineInfoCircle } from "react-icons/ai";
 import { BiTrip } from "react-icons/bi";
 import { isTokenExpired } from "../../../utils/isTokenExpired";
 import { useDispatch, useSelector } from "react-redux";
+import { ROUTES } from "../../../routes";
 const Header = () => {
   const navigate=useNavigate()
   const [isOpen, setIsOpen] = useState(false);
@@ -99,32 +100,32 @@ const Header = () => {
           </label>
         </button>
         <nav className={isOpen ? "nav-open" : ""}>
-          <Link className="link" onClick={toggleMenu} to="/">
+          <Link className="link" onClick={toggleMenu} to={ROUTES.HOME}>
             <AiFillHome />
             &nbsp;&nbsp; <span>Home</span>
           </Link>
-          <Link className="link" onClick={toggleMenu} to="/destinations">
+          <Link className="link" onClick={toggleMenu} to={ROUTES.DESTINATIONS}>
             <FaMapLocation /> &nbsp;&nbsp;Destinations
           </Link>
-          <Link className="link" onClick={toggleMenu} to="/trips">
+          <Link className="link" onClick={toggleMenu} to={ROUTES.TRIPS}>
             <BiTrip />
             &nbsp;&nbsp;Trips
           </Link>
-          <Link className="link" onClick={toggleMenu} to="/about">
+          <Link className="link" onClick={toggleMenu} to={ROUTES.ABOUT}>
             {" "}
             <AiOutlineInfoCircle />
             &nbsp;&nbsp;About
           </Link>
-          <Link className="link" onClick={toggleMenu} to="/contact">
+          <Link className="link" onClick={toggleMenu} to={ROUTES.CONTACT}>
             {" "}
             <SiImessage />
             &nbsp;&nbsp;Contact
           </Link>
-          <Link className="link" onClick={toggleMenu} to={userName?"/account":"/authenticate"}>
+          <Link className="link" onClick={toggleMenu} to={userName?ROUTES.DASHBOARD:ROUTES.AUTHENTICATE}>
             <MdAccountCircle />
             &nbsp;&nbsp;{userName ? userName : "Account"}
           </Link>
-          <Link onClick={handleLogout} className="link"   to="/authenticate">
+          <Link onClick={handleLogout} className="link"   to={ROUTES.AUTHENTICATE}>
             &nbsp;&nbsp; &nbsp;&nbsp;{userName ? "Logout" : ""}
           </Link>
         </nav>

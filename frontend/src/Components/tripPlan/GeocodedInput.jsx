@@ -55,7 +55,7 @@ const GeocodedInput = ({ handleChange, name, ...props }) => {
         <Suggestions
           suggestions={suggestions}
           setSuggestions={setSuggestions}
-            destination={name}
+          destination={name}
           idx={sugIdx}
         />
       )}

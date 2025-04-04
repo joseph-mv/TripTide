@@ -16,6 +16,7 @@ import { getPrevDate } from "../../utils/prevDate";
 import { today } from "../../utils/date";
 import { dayAfterNumber } from "../../utils/dayAfternumbers";
 import { reverseDate } from "../../utils/reverseDate";
+import { ROUTES } from "../../routes";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
@@ -147,7 +148,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       });
       if (response.data) {
         alert("Your Itinerary has been saved");
-        navigate("/account");
+        navigate(ROUTES.DASHBOARD);
       }
     } catch (error) {}
   };
