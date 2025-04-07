@@ -6,6 +6,14 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import "../../styles/pages/auth/Authentication.css";
 import { signupUser } from "../../services/authService";
+import { useForm } from "../../hooks/useForm";
+
+const initialForm={
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+}
 
 /**
  * SignupForm component handles user registration with form validation and submission.
@@ -13,51 +21,23 @@ import { signupUser } from "../../services/authService";
  * @param {Function} props.toggleAuthView - Function to switch to the sign-in view
  */
 const SignupForm = ({ toggleAuthView }) => {
-  // Form state
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setError(""); // Clear error when user starts typing
-  };
-
-  const handleSignup = async (e) => {
-    e.preventDefault();
-
-    // Validate password match
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await signupUser(name, email, password);
-      setLoading(false);
+  
+  const {form,handleChange,handleSubmit,error,loading}=useForm(initialForm,async()=>{
+    if (password !== confirmPassword) return
+    const response = await signupUser(name, email, password);
       toast.success(response);
-    } catch (error) {
-      setLoading(false);
-      setError(error.message ?? "Network issue. Please try again later.");
-    }
-  };
+  })
 
-  const { name, email, password, confirmPassword } = formData;
+  const { name, email, password, confirmPassword } = form;
 
   return (
     <div className="col align-items-center flex-col sign-up">
       <div className="form-wrapper align-items-center">
         <div className="form sign-up">
-          <form onSubmit={handleSignup}>
+          <form onSubmit={handleSubmit}>
             {/* Name Input */}
             <div className="input-group">
               <i className="bx bxs-user"></i>
@@ -65,7 +45,7 @@ const SignupForm = ({ toggleAuthView }) => {
                 type="text"
                 name="name"
                 value={name}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 placeholder="Name"
                 required
               />
@@ -78,7 +58,7 @@ const SignupForm = ({ toggleAuthView }) => {
                 type="email"
                 name="email"
                 value={email}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 required
                 placeholder="Email"
               />
@@ -92,7 +72,7 @@ const SignupForm = ({ toggleAuthView }) => {
                 placeholder="Password"
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 minLength={6}
                 required
               />
@@ -119,7 +99,7 @@ const SignupForm = ({ toggleAuthView }) => {
                 placeholder="Confirm password"
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 minLength={6}
                 required
               />
@@ -139,6 +119,7 @@ const SignupForm = ({ toggleAuthView }) => {
             </div>
 
             {/* Error Message */}
+            {password!==confirmPassword && <p className="error">"Passwords do not match"</p>}
             {{ error } && <p className="error">{error}</p>}
 
             {/* Submit Button */}
