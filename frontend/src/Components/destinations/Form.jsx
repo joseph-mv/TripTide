@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 const INPUT = {
   DISTANCE: "distance",
   TYPE: "type",
@@ -27,19 +27,17 @@ const types = [
 ];
 
 const activities = [
-  "Sightseeing",
-  "Adventure",
-  "Shopping",
-  "Relaxation",
-  "Cultural",
+  "sightseeing",
+  "adventure",
+  "shopping",
+  "relaxation",
+  "cultural",
 ];
 const Form = ({form, handleChange,activeInput,setActiveInput}) => {
 
-  
   const handleSymbolClick = (inputName) => {
     setActiveInput(activeInput === inputName ? null : inputName);
   };
-
   return (
     <div className="form-component">
       {/* Distance input */}
@@ -101,9 +99,9 @@ const Form = ({form, handleChange,activeInput,setActiveInput}) => {
                   onChange={handleChange}
                   value={activity}
                   name={INPUT.ACTIVITIES}
-                  checked={form.activities[activity.toLowerCase()]}
+                  checked={form.activities[activity]}
                 />{" "}
-                {activity}
+                {activity.charAt(0).toUpperCase()+activity.slice(1) }
               </label>
             ))}
           </div>

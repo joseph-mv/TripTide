@@ -9,6 +9,7 @@ import { useDestinationMap } from "../hooks/useDestinationMap";
 import { useCurrentLocation } from "../hooks/useCurrentLocation";
 import { getNearbyDestinations } from "../services/api/destinationServices";
 import TouristSpots from "../Components/destinations/TouristSpots/TouristSpots";
+import { toast } from "react-toastify";
 
 const initialForm = {
   place: "",
@@ -56,7 +57,7 @@ function Destinations() {
   //For show inputs while click on the buttons at right side of map
   const [activeInput, setActiveInput] = useState(null);
 
-  const { form, loading, handleChange, handleSubmit, setForm } = useForm(
+  const { form, loading, handleChange, handleSubmit, setForm,error } = useForm(
     initialForm,
     async () => {
       setPlaces([]);
@@ -65,6 +66,10 @@ function Destinations() {
       placesRef.current.scrollIntoView({ behavior: "smooth" }); //automatic scroll to places section
     }
   );
+  useEffect(() => {
+    if(error) toast.error(error)
+  }, [error])
+  
 
   const { lng, lat } = useCurrentLocation();
 
