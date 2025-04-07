@@ -22,7 +22,7 @@ const UserDashboard = () => {
   //fetch all trips of user
   useEffect(() => {
     async function getUser() {
-      try {
+      try {      
         const response = await getUserInformation();
         setTrips(response);
       } catch (error) {

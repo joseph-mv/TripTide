@@ -42,7 +42,6 @@ module.exports = {
         .collection(collection.ITINERARY_Collection)
         .find({ userId },{ projection: { _id: 1, name: 1, "details.startDate": 1,'details.endDate':1 } })
         .toArray();
-
       // 3️ Check if itineraries exist
       if (!itineraries.length) {
         return res.status(404).json({ error: "No itineraries found." });

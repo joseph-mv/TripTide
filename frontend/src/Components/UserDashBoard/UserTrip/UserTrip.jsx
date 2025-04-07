@@ -42,7 +42,7 @@ const UserTrip = ({ trip, setTrips, current }) => {
     }
   };
   const handleClick = () => {
-    navigate(ROUTES.EDIT_ITINERARY, { state: { tripId:trip._id } });
+    navigate(ROUTES.EDIT_ITINERARY+'/'+trip._id, { state: { tripId:trip._id } });
   };
   return (
     <li onClick={handleClick} className="trip-item" key={trip._id}>

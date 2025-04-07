@@ -3,7 +3,7 @@ import { axiosInstance } from "../api";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-export const fetchDestinations = async (coordinates, activities) => {
+export const getRouteDestinations = async (coordinates, activities) => {
   console.log(activities);
   try {
     const response = await axios.get(`${BASE_URL}/suggestions`, {

@@ -17,13 +17,14 @@ import { today } from "../../utils/date";
 import { dayAfterNumber } from "../../utils/dayAfternumbers";
 import { reverseDate } from "../../utils/reverseDate";
 import { ROUTES } from "../../routes";
+import useDebounce from "../../hooks/useDebounce";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   var coordinates = useSelector((state) => state.location);
   var formData = useSelector((state) => state.form);
-  console.log(oldItinerary,formData)
+  console.log(oldItinerary, formData);
   var token = localStorage.getItem("token");
   const userId = useSelector((store) => store.user.userId);
   const [map, setMap] = useState(false);
@@ -33,8 +34,8 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   //creating new Itinerary object
   useEffect(() => {
     let date = formData.startDate;
-    if (!oldItinerary &&date ) {
-      console.log('creating new itineray')    
+    if (!oldItinerary && date) {
+      console.log("creating new itineray");
       for (let i = 0; i < coordinates.noOfDays; i++) {
         newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
         date = getNextDate(date);
@@ -220,7 +221,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
         <input
           type="text"
           onChange={(e) => setName(e.target.value)}
-          value={oldName  || name}
+          value={oldName || name}
           placeholder="Enter itinerary name"
           required
         />

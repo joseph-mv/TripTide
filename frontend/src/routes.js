@@ -9,7 +9,7 @@ export const ROUTES = {
     VERIFY_EMAIL:"/verify-email" ,
     FORGOT_PASSWORD:"/forgot-password",  
     CREATE_ITINERARY:"/plan-details/itinerary", 
-    EDIT_ITINERARY:"/account/edit-itinerary",
+    EDIT_ITINERARY:"/dashboard/edit-itinerary",
     DASHBOARD:'/dashboard',
     TRIPS:"/trips",
     NOT_FOUND: "*", 

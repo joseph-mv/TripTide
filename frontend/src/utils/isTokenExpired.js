@@ -7,7 +7,7 @@ export const isTokenExpired = (token) => {
     const currentTime = Date.now() / 1000; // Convert to seconds
     return decoded.exp < currentTime;
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return true;
   }
 };

@@ -42,9 +42,9 @@ function App() {
           <Route path={ROUTES.DESTINATIONS} element={ <Destinations />} />
           <Route path={ROUTES.CREATE_ITINERARY} element={<Itinerary /> } />
           <Route path={ROUTES.DASHBOARD} element={<UserDashboard /> } />
+          <Route path={ROUTES.EDIT_ITINERARY+'/:tripId'} element={<EditItinerary />} />
           </Route>
           
-          <Route path={ROUTES.EDIT_ITINERARY} element={<EditItinerary />} />
           <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
         </Routes>
         <BackToTop/>
