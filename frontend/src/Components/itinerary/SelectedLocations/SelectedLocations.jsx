@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import "./SelectedLocations.css";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
+import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/DeleteConfirmationModal";
 import { faPlusCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { haversineDistance } from "../../utils/haversineDistance";
-import { reverseDate } from "../../utils/reverseDate";
+import { haversineDistance } from "../../../utils/haversineDistance";
+import { reverseDate } from "../../../utils/reverseDate";
 import AddLocations from "./AddLocations";
 
 const TouristSpotsList = () => {

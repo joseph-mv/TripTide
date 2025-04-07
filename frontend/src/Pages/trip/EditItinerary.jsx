@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 
 import "../../styles/pages/trip/Itinerary.css";
 import { getItinerary } from "../../services/userService";
-import ItineraryForm from "../../Components/ItineraryForm/ItineraryForm";
+import ItineraryForm from "../../Components/itinerary/ItineraryForm/ItineraryForm";
 import { getRouteDestinations } from "../../services/api/destinationServices";
-import SelectedLocations from "../../Components/SelectedLocations/SelectedLocations";
+import SelectedLocations from "../../Components/itinerary/SelectedLocations/SelectedLocations";
 
 /**
  * Edit Itinerary Page

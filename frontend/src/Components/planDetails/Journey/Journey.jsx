@@ -1,4 +1,4 @@
-import LocationCard from "../../LocationCard/LocationCard";
+import LocationCard from "./LocationCard/LocationCard";
 import { useDispatch, useSelector } from "react-redux";
 import "./Jouney.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +11,7 @@ import {
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import WarningPopup from "../../WarningPopup/WarningPopup";
+import WarningPopup from "../../common/WarningPopup/WarningPopup";
 import { formatDuration } from "../../../utils/formatDuration";
 
 const Journey = () => {

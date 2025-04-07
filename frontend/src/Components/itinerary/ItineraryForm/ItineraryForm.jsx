@@ -2,22 +2,22 @@
 import React, { useEffect, useState } from "react";
 import "./ItineraryForm.css";
 import { useDispatch, useSelector } from "react-redux";
-import ItineraryToDo from "../ItineraryToDo/ItineraryToDo";
-import { getNextDate } from "../../utils/nextDate";
-import MapPopup from "../MapPopup/MapPopup";
+import ItineraryToDo from '../ItineraryForm/ItineraryToDo/ItineraryToDo';
+import { getNextDate } from "../../../utils/nextDate";
+import MapPopup from "../../MapPopup/MapPopup";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { isTokenExpired } from "../../utils/isTokenExpired";
-import { refreshToken } from "../../utils/refreshToken";
-import { currencySymbols } from "../../utils/currencySymbols";
-import { dailyItinerary } from "../../utils/dailyItinerary";
-import { getPrevDate } from "../../utils/prevDate";
-import { today } from "../../utils/date";
-import { dayAfterNumber } from "../../utils/dayAfternumbers";
-import { reverseDate } from "../../utils/reverseDate";
-import { ROUTES } from "../../routes";
-import useDebounce from "../../hooks/useDebounce";
+import { isTokenExpired } from "../../../utils/isTokenExpired";
+import { refreshToken } from "../../../utils/refreshToken";
+import { currencySymbols } from "../../../utils/currencySymbols";
+import { dailyItinerary } from "../../../utils/dailyItinerary";
+import { getPrevDate } from "../../../utils/prevDate";
+import { today } from "../../../utils/date";
+import { dayAfterNumber } from "../../../utils/dayAfternumbers";
+import { reverseDate } from "../../../utils/reverseDate";
+import { ROUTES } from "../../../routes";
+
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();

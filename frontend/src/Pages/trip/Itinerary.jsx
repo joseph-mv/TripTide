@@ -1,6 +1,6 @@
 import "../../styles/pages/trip/Itinerary.css";
-import ItineraryForm from "../../Components/ItineraryForm/ItineraryForm";
-import SelectedLocations from "../../Components/SelectedLocations/SelectedLocations";
+import ItineraryForm from "../../Components/itinerary/ItineraryForm/ItineraryForm";
+import SelectedLocations from "../../Components/itinerary/SelectedLocations/SelectedLocations";
 
 /**
  * Itinerary page- for Creating new Itinerary 

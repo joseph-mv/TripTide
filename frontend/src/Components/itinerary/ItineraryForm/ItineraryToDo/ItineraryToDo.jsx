@@ -1,11 +1,11 @@
 // src/ItineraryToDo.js
 import React, { useState } from "react";
 import "./ItineraryToDo.css";
-import { convertTo12HourFormat } from "../../utils/convertTo12HourFormat";
+import { convertTo12HourFormat } from "../../../../utils/convertTo12HourFormat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { useSelector } from "react-redux";
-import { reverseDate } from "../../utils/reverseDate";
+import { reverseDate } from "../../../../utils/reverseDate";
 
 const ItineraryToDo = ({ day, item, setItinerary }) => {
   // console.log((item.todo))

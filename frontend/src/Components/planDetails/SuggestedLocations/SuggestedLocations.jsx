@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./SuggestedLocations.css";
 
 import TouristSpots from "../../destinations/TouristSpots/TouristSpots";
-import { fetchDestinations } from "../../../services/api/destinationServices";
+import { getRouteDestinations } from "../../../services/api/destinationServices";
 function SuggestedLocations() {
   const dispatch = useDispatch();
   const coordinates = useSelector((state) => state.location);
@@ -15,7 +15,7 @@ function SuggestedLocations() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const data = await fetchDestinations(coordinates, formData.activities);
+      const data = await getRouteDestinations(coordinates, formData.activities);
       dispatch({
         type: "ADD_DESTINATIONS",
         payload: data,

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { haversineDistance } from "../../../utils/haversineDistance";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import Heart from "../../../assets/Heart";
+import Heart from "../../ui/Heart";
 
 function TouristSpots({ addDestination, destination, index, locAround }) {
   const selectedPlaces = useSelector((state) => state.location.selectedPlaces);

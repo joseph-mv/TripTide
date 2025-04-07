@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./UserTrip.css"; // Import the CSS file
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import DeleteConfirmationModal from "../../DeleteConfirmationModal/DeleteConfirmationModal";
+import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/DeleteConfirmationModal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";

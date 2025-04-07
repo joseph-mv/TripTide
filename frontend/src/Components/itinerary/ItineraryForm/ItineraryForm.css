@@ -1,0 +1,169 @@
+/* ItineraryForm.css */
+.itineraryDetails{
+  position: relative;
+    width: 1000px;
+    max-width: calc(100vw - 300px);
+    padding: 0px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    flex-shrink: 2;
+    margin-right: 2%;
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; 
+  }
+  .itineraryDetails::-webkit-scrollbar {
+    width: 0; 
+    background: transparent;
+ }
+
+/* ItineraryDetails.css */
+.itinerary-details {
+  display: flex;
+
+  justify-content: space-between;
+  padding-top: 10px;
+ 
+}
+
+.column {
+  padding: 0 10px;
+ 
+}
+.itinerary-details .map{
+ 
+  cursor: pointer;
+  &:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s;
+  }
+}
+
+.desCard {
+  margin-top: -10px;
+  margin-right: -10px;
+  color: black;
+  border-radius: 4px;
+  /* height: 80px; */
+  font-size: 1rem;
+  border: 1px solid #250808;
+  background-color: white;
+  border-radius: 8px;
+  padding: 5px 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+  max-width: 200px;
+ text-align: center;
+ text-overflow: ellipsis;
+ /* max-height: 80px; */
+}
+.startDateInput{
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  margin: 4px;
+ 
+}
+.itineraryDetails h1{
+  font-size: 1.6rem;
+  text-align: center;
+  color: orange;
+  margin: 5px;
+}
+.saveItinerary{
+  margin:10px 50% ;
+  
+  transform: translateX(-50%);
+ 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10%;
+  
+
+}
+.saveItinerary input{
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  height:50px;
+  margin-bottom: 10px;
+}
+.addDayBtn{
+  background-color: green;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.delDayBtn{
+  background-color: red;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  float:right;
+  margin-left: auto;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+ 
+}
+.delDayBtn:hover, .addDayBtn:hover {
+  transform: scale(1.05);
+}
+.saveBtn {
+  background-color: #000000;
+  color: orange;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.saveBtn i {
+  margin-right: 8px;
+  font-size: 18px;
+  transform: rotateY(40deg);
+  
+}
+
+.saveBtn:hover {
+  background-color: #2a2828;
+ & i{
+    transform: rotateY(0deg);
+  }
+  
+}
+
+.saveBtn:active {
+  background-color: rgba(36, 31, 31, 0.77);
+
+}
+
+@media (max-width: 800px){
+  .itineraryDetails{
+    position: relative;
+      width: 98%;
+      max-width:98%;
+     height: 80vh;
+      margin-left: 1%;
+      /* background-color: red; */
+      padding: 0px 10px;
+    }
+}
+
+
+ 
