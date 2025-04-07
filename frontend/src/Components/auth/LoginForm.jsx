@@ -4,8 +4,14 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import { useForm } from "../../hooks/useForm";
 import "../../styles/pages/auth/Authentication.css";
 import { loginUser } from "../../services/authService";
+
+const initialForm = {
+  email: "",
+  password: "",
+};
 
 /**
  * LoginForm component handles user login with email and password.
@@ -13,34 +19,22 @@ import { loginUser } from "../../services/authService";
  * @param {Function} props.toggleAuthView - Function to switch to the sign-up view
  */
 const LoginForm = ({ toggleAuthView }) => {
-  const location=useLocation()
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const route = location.state || "/"; //go back to previous route or home page
   const [showPassword, setShowPassword] = useState(false);
 
-  const route=location.state || '/' //go back to previous route
-  console.log(route)
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
+  const { form, error, handleChange, handleSubmit, loading } = useForm(
+    initialForm,
+    async () => {
       const data = await loginUser(email, password);
       dispatch({ type: "SETUSER", payload: data });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      setLoading(false);
-      navigate(route ,{replace:true});// Redirect to home and does'nt go back to login page
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-      setError(error.message);
+      navigate(route, { replace: true }); //  Does'nt go back to login page while click browser's back button
     }
-  };
+  );
+  const { email, password } = form;
 
   const handleForgotPassword = (e) => {
     e.preventDefault();
@@ -49,19 +43,16 @@ const LoginForm = ({ toggleAuthView }) => {
   return (
     <div className="col align-items-center flex-col sign-in">
       <div className="form-wrapper align-items-center">
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <div className="form sign-in">
-
             {/* Email Input */}
             <div className="input-group">
               <i className="bx bxs-user"></i>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => {
-                  setError("");
-                  setEmail(e.target.value);
-                }}
+                name="email"
+                onChange={handleChange}
                 placeholder="Email"
                 required
               />
@@ -73,10 +64,8 @@ const LoginForm = ({ toggleAuthView }) => {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => {
-                  setError("");
-                  setPassword(e.target.value);
-                }}
+                name="password"
+                onChange={handleChange}
                 placeholder="Password"
                 required
               />
@@ -115,7 +104,6 @@ const LoginForm = ({ toggleAuthView }) => {
                 Sign up here
               </b>
             </p>
-
           </div>
         </form>
       </div>
