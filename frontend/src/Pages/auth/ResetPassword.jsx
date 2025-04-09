@@ -14,7 +14,7 @@ import PasswordResetForm from "../../Components/auth/PasswordResetForm";
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [otpSent, setOtpSent] = useState(true);// Tracks whether OTP has been sent
+  const [otpSent, setOtpSent] = useState(false);// Tracks whether OTP has been sent
  
   return (
     <div className="forgot-password-container">

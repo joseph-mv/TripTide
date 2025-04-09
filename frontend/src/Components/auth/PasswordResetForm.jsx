@@ -1,10 +1,16 @@
-import { useState } from "react";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import { useForm } from "../../hooks/useForm";
 import "../../styles/pages/auth/ResetPassword.css";
 import { resetPassword } from "../../services/authService";
+
+const initialForm = {
+  newPassword: "",
+  confirmPassword: "",
+};
 
 /**
  * **PasswordResetForm Component**
@@ -15,14 +21,29 @@ import { resetPassword } from "../../services/authService";
  * @param {Function} props.setError - Function to update error messages.
  */
 const PasswordResetForm = ({ email, setError }) => {
-  const [otp, setOtp] = useState(["", "", "", ""]); // Stores the OTP digits
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const [otp, setOtp] = useState(["", "", "", ""]); // Stores the OTP digits
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { form, handleChange, error, handleSubmit, loading } = useForm(
+    initialForm,
+    async () => {
+      if (newPassword !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+      const response = await resetPassword(email, otp.join(""), newPassword);
+      toast.success(response);
+      navigate("/authenticate");
+    }
+  );
+
+  const { newPassword, confirmPassword } = form;
+
+  useEffect(() => {
+    setError(error);
+  }, [error]);
 
   /**
    * Handles OTP input changes.
@@ -53,30 +74,8 @@ const PasswordResetForm = ({ email, setError }) => {
     }
   };
 
-  /**
-   * Handles the process of resetting a user's password.
-   */
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    setLoading(true);
-    try {
-      const response = await resetPassword(email, otp.join(""), newPassword);
-      setLoading(false);
-
-      toast.success(response);
-      navigate("/authenticate");
-    } catch (error) {
-      setLoading(false);
-      setError(error.message || "Error resetting password. Please try again.");
-    }
-  };
   return (
-    <form onSubmit={handleResetPassword}>
-      {otp.join("")}
+    <form onSubmit={handleSubmit}>
       <h2>Enter OTP</h2>
 
       {/* OTP Input Fields */}
@@ -102,9 +101,10 @@ const PasswordResetForm = ({ email, setError }) => {
         <input
           type={showNewPassword ? "text" : "password"}
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          name="newPassword"
+          onChange={handleChange}
           placeholder="Enter new password"
-          maxLength={6}
+          minLength={6}
           required
         />
         {newPassword && (
@@ -126,11 +126,12 @@ const PasswordResetForm = ({ email, setError }) => {
       <div className="input-group">
         <input
           type={showConfirmPassword ? "text" : "password"}
+          name="confirmPassword"
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={handleChange}
           placeholder="Confirm new password"
           required
-          maxLength={6}
+          minLength={6}
         />
         {confirmPassword && (
           <button
