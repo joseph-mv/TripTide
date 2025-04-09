@@ -1,41 +1,17 @@
+import { activities, INPUT, types } from "../../config/desFormConfig";
 
-const INPUT = {
-  DISTANCE: "distance",
-  TYPE: "type",
-  ACTIVITIES: "activities",
-};
+/**
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.form - form of inputs.
+ * @param {Function} props.handleChange - Function to update inputs.
+ * @param {string} props.activeInput - string to identify active input.
+ * @param {Function} props.setActiveInput- Function to update active input.
+ */
+const DesForm = ({form, handleChange,activeInput,setActiveInput}) => {
 
-const types = [
-  "Tourist Attraction",
-  "Tourist Destination",
-  "Natural Park",
-  "Waterfall",
-  "Nature Reserve",
-  "Dam",
-  "Lake",
-  "Hiking",
-  "Caves",
-  "Amusement Park",
-  "Campsite",
-  "City",
-  "Beach",
-  "Resort",
-  "Historical monument",
-  "Museum",
-  "Zoo",
-  "Desert",
-];
-
-const activities = [
-  "sightseeing",
-  "adventure",
-  "shopping",
-  "relaxation",
-  "cultural",
-];
-const Form = ({form, handleChange,activeInput,setActiveInput}) => {
-
-  const handleSymbolClick = (inputName) => {
+  //only show active input in the map
+  const handleActiveInput = (inputName) => {
     setActiveInput(activeInput === inputName ? null : inputName);
   };
   return (
@@ -56,7 +32,7 @@ const Form = ({form, handleChange,activeInput,setActiveInput}) => {
         )}
         <div
           className={`symbol  ${activeInput === INPUT.DISTANCE && "clicked"}`}
-          onClick={() => handleSymbolClick(INPUT.DISTANCE)}
+          onClick={() => handleActiveInput(INPUT.DISTANCE)}
         >
           📏
         </div>
@@ -82,7 +58,7 @@ const Form = ({form, handleChange,activeInput,setActiveInput}) => {
         )}
         <div
           className={`symbol  ${activeInput === INPUT.TYPE && "clicked"}`}
-          onClick={() => handleSymbolClick(INPUT.TYPE)}
+          onClick={() => handleActiveInput(INPUT.TYPE)}
         >
           🌐
         </div>
@@ -108,7 +84,7 @@ const Form = ({form, handleChange,activeInput,setActiveInput}) => {
         )}
         <div
           className={`symbol  ${activeInput === INPUT.ACTIVITIES && "clicked"}`}
-          onClick={() => handleSymbolClick(INPUT.ACTIVITIES)}
+          onClick={() => handleActiveInput(INPUT.ACTIVITIES)}
         >
           🏃
         </div>
@@ -117,4 +93,4 @@ const Form = ({form, handleChange,activeInput,setActiveInput}) => {
   );
 };
 
-export default Form;
+export default DesForm;

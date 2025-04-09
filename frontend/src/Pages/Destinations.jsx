@@ -1,15 +1,15 @@
+import { toast } from "react-toastify";
 import React, { useRef, useEffect, useState } from "react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import "../styles/pages/Destinations.css";
 import { useForm } from "../hooks/useForm";
-import Form from "../Components/destinations/Form";
 import { createMarker } from "../utils/createMarker";
+import DesForm from "../Components/destinations/DesForm";
 import { useDestinationMap } from "../hooks/useDestinationMap";
 import { useCurrentLocation } from "../hooks/useCurrentLocation";
 import { getNearbyDestinations } from "../services/api/destinationServices";
 import TouristSpots from "../Components/destinations/TouristSpots/TouristSpots";
-import { toast } from "react-toastify";
 
 const initialForm = {
   place: "",
@@ -109,7 +109,7 @@ function Destinations() {
         <div className="des-map-position" ref={mapContainerRef}></div>
 
         {/* Inputs for filtering */}
-        <Form
+        <DesForm
           form={form}
           handleChange={handleChange}
           activeInput={activeInput}
