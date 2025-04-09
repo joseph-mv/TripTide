@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import{ useEffect } from "react";
 import { toast } from "react-toastify";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import { useForm } from "../../hooks/useForm";
 import "../../styles/pages/auth/ResetPassword.css";
 import { forgotPassword } from "../../services/authService";
+
 /**
  * **EmailForm Component**
  * - Handles sending OTP to the user's email for password reset.
@@ -11,41 +13,31 @@ import { forgotPassword } from "../../services/authService";
  * @param {Object} props - Component props
  * @param {Function} props.setOtpSent - Function to update OTP sent status.
  * @param {Function} props.setError - Function to update error messages.
- * @param {string} props.email - The user's email.
  * @param {Function} props.setEmail - Function to update email state.
  */
-const EmailForm = ({ setOtpSent, setError, email, setEmail }) => {
-  const [loading, setLoading] = useState(false);
+const EmailForm = ({ setOtpSent, setError,  setEmail }) => {
+  const { form,handleChange,handleSubmit,loading,error } = useForm({ email:'' }, async () => {
+    const response = await forgotPassword(email);
+    setEmail(email)
+    toast.success(response);
+    setOtpSent(true);
+  });
+ const {email}=form
 
-  /**
-   * Handles the email submission to send an OTP.
-   */
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await forgotPassword(email);
-      toast.success(response);
-      setOtpSent(true);
-      setLoading(false);
-      setError("");
-    } catch (error) {
-      setLoading(false);
-      setError(error.message || "Error sending OTP. Please try again.");
-    }
-  };
+ useEffect(() => {
+   setError(error)
+ }, [error])
+ 
 
   return (
-    <form onSubmit={handleEmailSubmit}>
+    <form onSubmit={handleSubmit}>
       <h2>Forgot Password</h2>
       <div className="input-group">
         <input
           type="email"
+          name="email"
           value={email}
-          onChange={(e) => {
-            setError("");
-            setEmail(e.target.value);
-          }}
+          onChange={handleChange}
           placeholder="Enter your email"
           required
         />

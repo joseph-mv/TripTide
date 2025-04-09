@@ -29,7 +29,6 @@ const ResetPassword = () => {
             <EmailForm
               setOtpSent={setOtpSent}
               setError={setError}
-              email={email}
               setEmail={setEmail}
             />
           ) : (
