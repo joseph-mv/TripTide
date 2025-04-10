@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./BackToTop.css";
 
+/**
+ * BackToTop Button
+ * -for back to top of page
+ * */
 const BackToTop = () => {
   const [showButton, setShowButton] = useState(false);
 

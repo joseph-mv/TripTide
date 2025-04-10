@@ -1,55 +1,64 @@
 import React from "react";
-import "./Footer.css";
 import { Link } from "react-router-dom";
 
+import "./Footer.css";
+
+/**
+ * Footer component with logo, navigation links, social media icons, and copyright info.
+ */
 const Footer = () => {
+  // Footer navigation links
+  const footerLinks = [
+    { label: 'About Us', path: '/about', isInternal: true },
+    { label: 'Contact', path: '/contact', isInternal: true },
+    { label: 'Privacy & Policy', path: '#privacy', isInternal: false },
+    { label: 'Terms & Service', path: '#terms', isInternal: false },
+  ];
+
+  // Social media platforms with icons (Font Awesome)
+  const socialLinks = [
+    { iconClass: 'fab fa-facebook-f', url: 'https://facebook.com' },
+    { iconClass: 'fab fa-twitter', url: 'https://twitter.com' },
+    { iconClass: 'fab fa-instagram', url: 'https://instagram.com' },
+  ];
   return (
     <footer className="footer">
-      {/* <hr></hr> */}
       <div className="footer-content">
+        {/* Logo */}
         <div className="footer-logo">
           <h1>TripTide</h1>
         </div>
+
+        {/* Navigation Links */}
         <div className="footer-links">
           <ul>
-            <li>
-              <Link to="/about">About Us</Link>
-            </li>
-            <li>
-            <Link to="/contact">Contact</Link>
-              
-            </li>
-            <li>
-              <a href="#privacy">Privacy & Policy</a>
-            </li>
-            <li>
-              <a href="#terms">Terms & Service</a>
-            </li>
+            {footerLinks.map(({ label, path, isInternal }) => (
+              <li key={label}>
+                {isInternal ? (
+                  <Link to={path}>{label}</Link>
+                ) : (
+                  <a href={path}>{label}</a>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
+
+         {/* Social Media Links */}
         <div className="footer-social">
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fab fa-facebook-f"></i>
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fab fa-instagram"></i>
-          </a>
+          {socialLinks.map(({ iconClass, url }) => (
+            <a
+              key={url}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className={iconClass}></i>
+            </a>
+          ))}
         </div>
+        
+        {/* Info */}
         <div className="footer-info">
           <p>
             &copy; {new Date().getFullYear()} TripTide. All rights reserved.
