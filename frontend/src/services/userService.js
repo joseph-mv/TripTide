@@ -15,7 +15,7 @@ export const contact=async(formData)=>{
 export const getUserInformation=async()=>{
   try {
     const token=localStorage.getItem('token')
-    await jwtCheck(token)
+    await jwtCheck()
     const response=await axiosInstance.get('user/user-dashboard',{
       headers: {
         Authorization: token,
@@ -53,6 +53,6 @@ export const getItinerary=async(id)=>{
   return response.data
 
  } catch (error) {
-  
+  console.log(error)
  }
 }

@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import  { useEffect, useState } from "react";
 
+import { ROUTES } from "../../routes";
+import { useNavigate } from "react-router-dom";
 import { filterTrips } from "../../utils/tripUtils";
 import "../../styles/pages/dashboard/UserDashBoard.css";
 import { getUserInformation } from "../../services/userService";
@@ -15,6 +17,7 @@ import OngoingTrips from "../../Components/UserDashBoard/OngoingTrips/OngoingTri
  * render content based on the activeTab , shows user information and edit options
  */
 const UserDashboard = () => {
+  const navigate=useNavigate()
   const [trips, setTrips] = useState([]);
   const [activeTab, setActiveTab] = useState("currentTrip");
   const userData = useSelector((store) => store.user);
@@ -27,6 +30,7 @@ const UserDashboard = () => {
         setTrips(response);
       } catch (error) {
         console.log(error.message);
+        navigate(ROUTES.AUTHENTICATE)
       }
     }
     getUser();

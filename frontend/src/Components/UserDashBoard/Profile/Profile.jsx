@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import { ButtonPopup, ImageChangePopup, ImagePopup } from "./Popups/Popups";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../../routes";
 const Profile = ({ userData }) => {
+  const dispatch=useDispatch()
   const [profilePicTab, setProfilePicTab] = useState(false);
   const [isShowImage, setIsShowImage] = useState(false);
   const [isChangeImage, setIsChangeImage] = useState(false);
@@ -29,9 +33,11 @@ const Profile = ({ userData }) => {
     }
   };
 
-  useEffect(() => {
-    
-  }, [])
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    dispatch({type:"REMOVEUSER"})
+  };
   
 
   return (
@@ -59,6 +65,10 @@ const Profile = ({ userData }) => {
        <ImageChangePopup setIsChangeImage={setIsChangeImage} selectedImage={selectedImage}  />
       
       )}
+   <Link onClick={handleLogout} className="link"   to={ROUTES.AUTHENTICATE}>
+              &nbsp;&nbsp; &nbsp;&nbsp;{ "Logout" }
+            </Link>
+
     </div>
   );
 };
