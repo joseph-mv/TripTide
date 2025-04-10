@@ -8,8 +8,8 @@ import { createMarker } from "../utils/createMarker";
 import DesForm from "../Components/destinations/DesForm";
 import { useDestinationMap } from "../hooks/useDestinationMap";
 import { useCurrentLocation } from "../hooks/useCurrentLocation";
+import DesSpot from "../Components/destinations/DesSpot/DesSpot";
 import { getNearbyDestinations } from "../services/api/destinationServices";
-import TouristSpots from "../Components/destinations/TouristSpots/TouristSpots";
 
 const initialForm = {
   place: "",
@@ -130,7 +130,7 @@ function Destinations() {
       {/* Places after successful response */}
       <div ref={placesRef} className="places">
         {places.map((place, index) => (
-          <TouristSpots destination={place} index={index} locAround />
+             <DesSpot destination={place} index={index}/>
         ))}
       </div>
     </div>

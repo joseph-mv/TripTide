@@ -1,8 +1,9 @@
 import React, {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { getRectangleCorners } from '../../assets/mapRectangle';
-import "./SuggestedLocations.css";
 
+
+import "./SuggestedLocations.css";
 import TouristSpots from "../../destinations/TouristSpots/TouristSpots";
 import { getRouteDestinations } from "../../../services/api/destinationServices";
 function SuggestedLocations() {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { axiosInstance } from "../api";
+import { jwtCheck } from "../../utils/authUtils";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -48,3 +49,19 @@ export const getGeocodedSuggestions = async (query) => {
     return [];
   }
 };
+
+export const getDestDetails = async (siteLabel) => {
+  try {
+    const response = await axios.get(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${siteLabel}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      ' "Unfortunately, we were unable to locate details for this place."'
+    );
+  }
+};
+
+

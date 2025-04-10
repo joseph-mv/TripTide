@@ -1,0 +1,73 @@
+
+  /* location around a coordinates */
+  
+  .destination-card2 {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: scroll;
+    max-width: 300px;
+    margin: 0 auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 250px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .destination-card2 .favorite {
+    position: absolute;
+    top: 5px;
+    right: 2px;
+  }
+  .destination-card2::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+  
+  .destination-card2:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  .destination-card2 .destination-title {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    text-align: start;
+    font-size: 1.5rem;
+  }
+  
+  .destination-card2 .destination-index {
+    font-weight: bold;
+    color: #ff6347;
+    margin-right: 10px;
+  }
+  
+  .destination-card2 .card-image {
+    object-fit: cover;
+    border-radius: 8px;
+    object-position: 0% 0%;
+    height: 200px;
+    border-bottom: 2px solid #eee;
+  }
+  
+  .destination-card2 .destination-content {
+    padding: 20px;
+  }
+  
+  .destination-card2 .typeLabel {
+    /* margin-left: 10px; */
+    text-align: start;
+    font-size: 1em;
+    font-weight: 600;
+    color: black;
+  }
+  .destination-card2 .error{
+    color: red;
+  }
+  .destination-card2 .card-description {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.4;
+    /* font-weight: bolder; */
+  }
+  
