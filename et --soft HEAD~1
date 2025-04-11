@@ -1,0 +1,77 @@
+[33m1f850ab[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m Merge branch 'master' of https://github.com/joseph-mv/Trip-Tide
+[33mefb6cf6[m refactor: create Layout component and centralize all layout-related imports with comments
+[33mbc3fbef[m fix:automatic logout while refresh token is expires
+[33m8c9ef1c[m Refactor: Generalize LazyImage component with more props and replace React.lazy in TopDestination
+[33mfd52c54[m refactor:move features array from Features component to featuresConfig
+[33m7e0fabc[m Refactor: Split TouristSpots component into TouristSpots and DesSpot, migrate getDestDetails, and create LazyImage component
+[33m739bbd3[m refactor:Rename Form to DesForm and add desFormconfig for migrating DesForm
+[33m851d17c[m refactor:migrate EmailForm to use useForm for form handling
+[33mc29095e[m refactor:migrate PassWordResetForm to use useForm for form handling
+[33md39ba44[m refactor:migrate SignupForm to use useForm for form handling
+[33me04b5be[m[33m ([m[1;31morigin/master[m[33m)[m refactor:migrate LoginForm to use useForm for form handling
+[33m869e283[m refactor:migrate LoginForm to use useForm for form handling
+[33m9350df0[m fix:add error state and handlechange generalisation in useForm hook
+[33m548778c[m refactor:restruchere folder and files  in components folder
+[33m2f5b509[m refactor: add comments for EditItenerary page and some changes
+[33mb0aa2d1[m modularize DashBoard page with tripUtils and  protectedRoute, edit in route.js file, and use Outlet in ProtetedRoute component
+[33m0bb2721[m feat:add protectedRoute component with Redirect users back to protected route after login
+[33mf1d9f1a[m refactor: add comments to PlanDetailsPage and move its child components to components/PlanDetails/
+[33m341e501[m Modularize Tripplan page with GeocodedInput component, dateUtils, destination services function for place suggestions, and implement a swap button for starting point and destination
+[33mfc55d02[m refactor: modularize Destination page with useForm, useCurrentLocation, useDestinationMap hooks, Form component, and createMarker function. (Existing logic extracted)
+[33m247baa5[m refactor: move destination fetching to destinationService
+[33mf6bfb05[m refactor:add more Routes in route.js
+[33m0febeb5[m refactor:add comment for NotFound page
+[33mcb4fb87[m refactor:Add proper comments in Home page and related components, also restruchere TopDestination component by edit and add Destination component
+[33ma4709b3[m feat: add contact message feature for store user contact form store in db
+[33m03bfcf7[m refactor:add proper comments in VerifyEmail page , create verifyEmail fuction in authService and create route.js file for manage all routes path
+[33m845831a[m refactor: add proper comments in componets and page related to ResetPassword
+[33m0cd4f99[m refactor: create LoginForm and SignupForm components for authentication and add proper comments
+[33m76b36e7[m feat:Add NotFound page
+[33m4653131[m refactor:modify folder struchere and componets in pages folder, also add styles folder and move styles for pages into it
+[33m5282603[m refactor:add jsdoc ,proper comment and error handling for userController and friendsController
+[33m9b6c595[m refactor:add jsdoc ,proper comment and error handling for itineraryController
+[33mfaf8575[m refactor:create tripPlanController.js moved trip  related services from tripPlanHelper, also add jsdoc, proper commands and error handling
+[33m87a57fd[m refactor:create authController.js moved  add authentication related services from userHelper, also add jsdoc, proper commands and error handling
+[33m9069852[m refractor:give proper comment and js doc for signup function in authController
+[33ma15c3ea[m fix: add onTouchMove support and improve image scaling on smaller screens
+[33m449d6bd[m Merge branch 'master' of https://github.com/joseph-mv/Trip-Tide
+[33mfdda2f7[m fix: update frontend API calls to match new backend routes
+[33med15f2a[m refactor: modularize routes,config,  and middleware
+[33m835e577[m refactor: modularize routes,config,  and middleware
+[33md12f381[m refractor:better error handling in user.js
+[33mf57d5c6[m feat:add users searching
+[33maf8d4c6[m feat:add feature of adding profile picture in db
+[33md878a84[m feat:Create a setup for view profile image and crop image for uploading
+[33m626cfd9[m refractor:For old itinerary edit, fetch desinations and dispatch
+[33ma9101b8[m feat:Add new feature for adding destinations from itinearary page
+[33mccf4208[m chore: migrate React project to Vite
+[33m2bc20ac[m style:buttons and input in itinerary form
+[33mecf20dd[m  feat:add feature of edit startDate in itinerary form
+[33m60c34aa[m feat:Add delete last future
+[33mf628c18[m[33m ([m[1;31morigin/addTodo[m[33m, [m[1;32maddTodo[m[33m)[m feat:add Day future in itinerary form
+[33m1d1a3f0[m refractor:Add seperate file for some function, comments, avoid unwanted code
+[33mec0c30e[m feat:add Itinerary edit save  functionalty
+[33m874e65b[m Create OngoingTrips component
+[33m6ae63f6[m account section
+[33mc6c536a[m display ongoing ,upcoming and completed trips by sorted, add delete button and make it functional
+[33m2112f8d[m  started userdashboard forntend and backend
+[33mbe6a881[m top destination spinner change, hero height change
+[33mac179bf[m  contact section and jpg to webp
+[33m999dc1f[m create about page
+[33m542876c[m  footer responsive,aos once,tourist spots error in red,spinner in top destintion and loading for each image, login after verified
+[33mc02903b[m  add one feature in features
+[33m1aa5a3d[m  add paragraph
+[33m10e13ab[m scrollIntoView to destinations after findout
+[33m175fcc7[m  solve some errors in destinations,add faviorite btn in destinations, and css edits
+[33m8e31b18[m  font size change
+[33m06f28f2[m changes in  Destinations
+[33ma8c712d[m  add feature search destinations around locatins, add aos , some css changes
+[33m0fa7de1[m  add ScrollToTop component, more responsive
+[33m06fa048[m  LazyLoading for images in Top destinations and Tourist spots, use thumbnail insted of original image in touristSpots
+[33m2ce8f90[m change in mapbox api in locationcard
+[33m659167e[m Add home page componets, Restrict some features for users which dont signup, delete from selected places,add map view as popup, create itinerary form with todo
+[33m8a09f49[m create componet journey by using mapbox directions , unsplash api and wikidata api
+[33m24ad18e[m create react-redux store, also create formReducer by deleting useState
+[33m8c29b40[m use mapbox geocode api for suggest destination and starting point while onchange
+[33m5e4111e[m form of planing trip
+[33m8a605c1[m I started a new project for trippers.also created hero ,account and header component

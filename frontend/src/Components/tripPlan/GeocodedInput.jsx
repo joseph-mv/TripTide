@@ -1,38 +1,40 @@
 import React, { useState } from "react";
+
+import Suggestions from "./Suggestions/Suggestions";
 import { getGeocodedSuggestions } from "../../services/api/destinationServices";
-import Suggestions from "./Suggetions/Suggestions";
-import { useDispatch } from "react-redux";
 
-const GeocodedInput = ({ handleChange, name, ...props }) => {
-  const dispatch = useDispatch();
-  const [suggestions, setSuggestions] = useState([]); //for Destination input
+/**
+ * GeocodedInput
+ * Typically used for address or location input fields where location-based suggestions or processing are needed.
+ * 
+ * @param {Object} props - The props for the component.
+ * @param {function} props.handleChange - Callback function to handle input changes.
+ * @param {string} props.name - Name attribute for the input, useful for form identification.
+ * @param {function} props.keyEnter - Callback function triggered on Enter key press.
+ * @param {...any} props - Additional props passed down to the input element.
+ * 
+ * @returns {JSX.Element} A geocoded text input component.
+ */
+const GeocodedInput = ({ handleChange, name, keyEnter, ...props }) => {
   const [sugIdx, setSugIdx] = useState(-1);
+  const [suggestions, setSuggestions] = useState([]);
 
+  // fetch suggestions form mapbox
   const fetchGeocodedResults = async (e) => {
     const response = await getGeocodedSuggestions(e.target.value);
     setSuggestions(response);
   };
 
+  //key actions
   const handleKeyDown = (e) => {
-
     if (e.key === "ArrowDown") {
-
       setSugIdx((pre) => (pre + 1) % suggestions.length);
     } else if (e.key === "ArrowUp") {
       setSugIdx((pre) => (pre + suggestions.length - 1) % suggestions.length);
-    } else if (e.key === "Enter") {
-        e.preventDefault()
-      if (e.target.id === "destination" && sugIdx >= 0) {
-        dispatch({
-          type: "DESTINATION_SUGGESTION",
-          payload: suggestions[sugIdx].properties,
-        });
-      } else if (e.target.id === "startingPoint" && sugIdx >= 0) {
-        dispatch({
-          type: "STARTING_SUGGESTION",
-          payload: suggestions[sugIdx].properties,
-        });
-      }
+    } else if (e.key === "Enter" && sugIdx >= 0) {
+      e.preventDefault();
+      keyEnter(suggestions, sugIdx);
+
       setSuggestions([]);
       setSugIdx(-1);
     }
@@ -51,12 +53,13 @@ const GeocodedInput = ({ handleChange, name, ...props }) => {
         required
         {...props}
       />
-      {suggestions.length > 0 &&  (
+      {/* suggestions */}
+      {suggestions.length > 0 && (
         <Suggestions
           suggestions={suggestions}
           setSuggestions={setSuggestions}
-          destination={name}
           idx={sugIdx}
+          handleMouseClick={keyEnter}
         />
       )}
     </>

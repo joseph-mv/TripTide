@@ -105,6 +105,10 @@ const TripPlan = () => {
                     name="destination"
                     value={formData.destination}
                     handleChange={handleChange}
+                    keyEnter={(suggestions,sugIdx)=>dispatch({
+                      type: "DESTINATION_SUGGESTION",
+                      payload: suggestions[sugIdx].properties,
+                    })}
                   />
                 </div>
 
@@ -119,6 +123,10 @@ const TripPlan = () => {
                     name="startingPoint"
                     value={formData.startingPoint}
                     handleChange={handleChange}
+                    keyEnter={(suggestions,sugIdx)=>dispatch({
+                      type: "STARTING_SUGGESTION",
+                      payload: suggestions[sugIdx].properties,
+                    })}
                   />
                 </div>
 
