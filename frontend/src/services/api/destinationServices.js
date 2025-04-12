@@ -45,7 +45,7 @@ export const getGeocodedSuggestions = async (query) => {
     );
     return response.data.features;
   } catch (error) {
-    console.error("Error fetching geocoded suggestions:", error);
+    console.log("Error fetching geocoded suggestions:", error);
     return [];
   }
 };
@@ -64,4 +64,44 @@ export const getDestDetails = async (siteLabel) => {
   }
 };
 
+export const getCoordinatesAndWikiID = async (query) => {
+  try {
+    const response = await getGeocodedSuggestions(query);
+    if (!response.length) {
+      throw new Error("Place does'nt exist");
+    }
+    let wikiId = response[0]?.properties?.context?.place?.wikidata_id || "";
+    if (!wikiId) {
+      wikiId = response[0]?.properties?.context?.region?.wikidata_id || "";
+    }
+    const coords = response[0]?.properties?.coordinates || {};
+    return { coords, wikiId };
+  } catch (error) {
+    console.log("Error fetching geocoded suggestions:", error);
+    throw new Error(error.message);
+  }
+};
 
+export const getDestDescription=async(wikidataId)=>{
+  try {
+    const response = await axios.get(
+      `https://www.wikidata.org/wiki/Special:EntityData/${wikidataId}.json`
+    )
+    return response.data.entities[wikidataId].descriptions.en.value
+  } catch (error) {
+    return ''
+  }
+}
+
+export const getDestImage=async(name)=>{
+  const accessKey = import.meta.env.VITE_UNSPLASH_ACESSS_KEY;
+  try {
+    const response = await axios.get(
+      `https://api.unsplash.com/photos/random?query=${name} landscape&client_id=${accessKey}`
+    );
+    return (response.data.urls.small);
+  } catch (error) {
+    console.error(`Error fetching image for ${name}:`, error);
+    return '/image/location.png';
+  }
+}
