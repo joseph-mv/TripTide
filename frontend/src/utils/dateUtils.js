@@ -1,5 +1,8 @@
 export const today = new Date().toISOString().split("T")[0];
   
+export function reverseDate(){
+  return this.split('-').reverse().join('-');
+  }
 
 export const validateDateRange=(startDate,endDate)=>{
     if (new Date(startDate) > new Date(endDate)) {

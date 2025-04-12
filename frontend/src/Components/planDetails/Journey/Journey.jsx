@@ -1,6 +1,6 @@
-import LocationCard from "./LocationCard/LocationCard";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./Jouney.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRotateRight,
@@ -8,72 +8,51 @@ import {
   faCarSide,
   faVanShuttle,
 } from "@fortawesome/free-solid-svg-icons";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import WarningPopup from "../../common/WarningPopup/WarningPopup";
-import { formatDuration } from "../../../utils/formatDuration";
 
+import "./Journey.css";
+import LocationCard from "./LocationCard/LocationCard";
+import WarningPopup from "./WarningPopup/WarningPopup";
+import { reverseDate } from "../../../utils/dateUtils";
+import { getRoutes } from "../../../services/tripServices";
+import { formatDuration } from "../../../utils/formatDuration";
+import { selectRouteGeoCoords } from "../../../utils/tripUtils";
+
+/**
+ * Journey component 
+ * 
+ * fetch routes from mapbox api and save in redux
+ * shows starting and destination point with routes details.
+ * facility for change routes
+ */
 const Journey = () => {
   const dispatch = useDispatch();
   const [errMsg, setErrMsg] = useState("");
   const [routeNum, setRouteNum] = useState(0);
   const [routes, setRoutes] = useState([]);
   const formData = useSelector((state) => state.form);
-  const coordinates = useSelector((state) => state.location);
+  const trip = useSelector((state) => state.location);
 
- 
-  function handleRouteChange() {
-    dispatch({ type: "RESET_ PLACE" });
-    dispatch({ type: "REMOVE_DESTINATIONS" });
-    setRouteNum((prev) => (prev + 1) % routes.length);
-  }
-
-  const getDirections = async (start, end) => {
-    if (start.longitude) {
-      // console.log(start)
-      const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-      // console.log(accessToken)
-      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
-
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-        // console.log(data);
-        setErrMsg("");
-        // setData(data)
-        setRoutes(data.routes);
-        // console.log(data.routes)
-      } catch (error) {
-        console.error("Error fetching directions:", error);
-        let msg = error.response?.data?.message;
-        setErrMsg(msg);
-      }
-    }
-  };
-
+  //Get all routes between starting point and destination.
   useEffect(() => {
-    getDirections(coordinates.startingPoint, coordinates.destination);
-  }, [coordinates.startingPoint, coordinates.destination]);
- 
+    const get = async () => {
+      try {
+        const response = await getRoutes(trip.startingPoint, trip.destination);
+        setRoutes(response);
+      } catch (error) {
+        setErrMsg(error.message);
+      }
+    };
+    get();
+  }, [trip.startingPoint, trip.destination]);
 
+  // select route from routes array based on the routeNum and dispatch it.
   useEffect(() => {
     if (routes.length > 0) {
-      let route = routes[routeNum];
-      let routeGeometry = route.geometry;
-      let length = route.geometry.coordinates.length;
-      let distance = (route.distance / 1000).toFixed(2);
-      let time = formatDuration(route.duration);
-      let coordinates = []; //for pushing the coordinates
-      //push points from geometry to coordinates
-      for (
-        let i = Math.floor(length / 10);
-        i < length && length > 10;
-        i += Math.floor(length / 10)
-      ) {
-        coordinates.push(route.geometry.coordinates[i]);
-      }
-      coordinates.push(route.geometry.coordinates[length - 1]); //push last coordinate
+      const route = routes[routeNum];
+      const routeGeometry = route.geometry;
+      const distance = (route.distance / 1000).toFixed(2);
+      const time = formatDuration(route.duration);
+      const coordsAlongRoute = selectRouteGeoCoords(routeGeometry);
 
       dispatch({
         type: "ROUTE_GEOMETRY",
@@ -81,14 +60,14 @@ const Journey = () => {
       });
       dispatch({
         type: "COORDINATES",
-        payload: coordinates,
+        payload: coordsAlongRoute,
       });
-      
+
       dispatch({
         type: "DISTANCE",
-        payload: distance +" KM",
+        payload: distance + " KM",
       });
-      
+
       dispatch({
         type: "TRAVELTIME",
         payload: time,
@@ -96,24 +75,36 @@ const Journey = () => {
     }
   }, [routes, routeNum]);
 
+  function handleRouteChange() {
+    dispatch({ type: "RESET_ PLACE" });
+    dispatch({ type: "REMOVE_DESTINATIONS" });
+    setRouteNum((prev) => (prev + 1) % routes.length);
+  }
+
   return (
     <div>
-      {coordinates.travelTime && (
-        
+      {/* Warning popup */}
+      {trip.travelTime && (
         <WarningPopup
-          travelTime={coordinates.travelTime}
+          travelTime={trip.travelTime}
           startDate={formData.startDate}
           endDate={formData.endDate}
         />
-      )}{" "}
+      )}
       <div className="connected-cards">
-        <LocationCard name={formData.startingPoint} startingPoint />
+        {/* Starting point card */}
+        <LocationCard
+          name={formData.startingPoint}
+          dispatchType="SET_STARTING_POINT"
+        />
+
+        {/* Route details */}
         <div className="path">
           <div className="dateDiv">
-            <h5>{formData?.startDate.split("-").reverse().join("/")}</h5>
-            <h5>{formData?.endDate.split("-").reverse().join("/")}</h5>
+            <h5>{reverseDate.call(formData?.startDate)}</h5>
+            <h5>{reverseDate.call(formData?.endDate)}</h5>
           </div>
-
+          {/* Moving vehicle */}
           <motion.span
             style={{ width: "100px" }}
             animate={{ x: `1000px`, rotate: [0, -20, 20, 0] }}
@@ -132,13 +123,14 @@ const Journey = () => {
           </motion.span>
 
           <h3>
-            {coordinates.distance ? (
+            {trip.distance ? (
               <>
-                <span>{coordinates.distance}</span> <span>{coordinates.travelTime}</span>
+                <span>{trip.distance}</span> <span>{trip.travelTime}</span>
               </>
             ) : (
               <span>{errMsg}</span>
             )}
+            {/* Route number and change button */}
             {routes.length > 1 && (
               <div className="route">
                 <h3>Route {routeNum + 1}</h3>
@@ -153,10 +145,12 @@ const Journey = () => {
             )}
           </h3>
         </div>
-
-        <LocationCard name={formData.destination} destination />
+        {/* Destination card  */}
+        <LocationCard
+          name={formData.destination}
+          dispatchType="SET_DESTINATION"
+        />
       </div>
-      {/* <Map/> */}
     </div>
   );
 };
