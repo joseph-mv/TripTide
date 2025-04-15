@@ -1,35 +1,43 @@
-import React, { useEffect, useState } from "react";
-import "./TouristSpots.css";
-
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { haversineDistance } from "../../../utils/haversineDistance";
 
-import { getDestDetails } from "../../../services/api/destinationServices";
+import "./TouristSpots.css";
 import LazyImage from "../../ui/LazyImage";
+import { haversineDistance } from "../../../utils/haversineDistance";
+import { getDestDetails } from "../../../services/api/destinationServices";
 
+/**
+ * TouristSpots component
+ * Renders details for a single tourist destination
+ * 
+ * @param {Object} props
+ * @param {Object} props.destination - Destination data to display
+ * @param {number} props.index - Index of the destination in the list
+ * @returns {JSX.Element}
+ */
 function TouristSpots({ destination, index }) {
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
+  const [details, setDetails] = useState("");
+  const [expanded, setExpanded] = useState(false);
   const selectedPlaces = useSelector((state) => state.location.selectedPlaces);
   const startingPoint = useSelector((state) => state.location.startingPoint);
-  const dispatch = useDispatch();
-  const [expanded, setExpanded] = useState(false);
-  const [details, setDetails] = useState("");
-  const [error, setError] = useState("");
 
-  // console.log(destination)
   const toggleCard = () => {
     setExpanded(!expanded);
   };
   const handleMouseLeave = () => {
     setExpanded(false);
   };
+
+  //TODO: implement moreDetails button action
   const handleMoreDetailsClick = () => {
     alert("More details clicked");
   };
   const handleCheckboxChange = (event, place, index) => {
-    event.stopPropagation();
+    event.stopPropagation(); //prevent event bubbling
     const id = place._id;
     if (selectedPlaces[id]) {
-      // delete selectedPlaces[id]
       dispatch({
         type: "DELETE_PLACE",
         payload: id,
@@ -67,6 +75,8 @@ function TouristSpots({ destination, index }) {
         onClick={toggleCard}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Check box */}
+        <label for="checkbox" className="checkbox-label"></label>
         <input
           type="checkbox"
           id="cardCheckbox"
@@ -74,7 +84,7 @@ function TouristSpots({ destination, index }) {
           onClick={(e) => e.stopPropagation()}
           className="checkbox"
         />
-        <label for="checkbox" className="checkbox-label"></label>
+
         <div className="index">{index + 1}</div>
         <div className="siteLabel">{destination.siteLabel}</div>
         <div className="typeLabel">{destination.typeLabel}</div>
@@ -85,6 +95,7 @@ function TouristSpots({ destination, index }) {
             error={error}
           />
 
+        {/* Description- after clicking card */}
           <p className="card-description">{details.extract}</p>
           {error && <p className="error">{error}</p>}
           <button

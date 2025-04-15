@@ -61,6 +61,9 @@ module.exports = {
       await Promise.all(promises);
 
       // 7 Send response
+      if (!touristLocations.size) {
+        return res.status(404).json({ error:"Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search" });
+      }
       res.status(201).json(Array.from(touristLocations.values()));
     } catch (error) {
       console.error("Error in searchAlong:", error);

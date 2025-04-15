@@ -1,17 +1,20 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { getRectangleCorners } from '../../assets/mapRectangle';
-
 
 import "./SuggestedLocations.css";
-import TouristSpots from "../../destinations/TouristSpots/TouristSpots";
+import TouristSpots from "../../common/TouristSpots/TouristSpots";
 import { getRouteDestinations } from "../../../services/api/destinationServices";
+
+/**
+ *SuggestedLocations component
+ * Fetches and displays suggested destinations
+ */
 function SuggestedLocations() {
   const dispatch = useDispatch();
-  const coordinates = useSelector((state) => state.location);
-  const formData = useSelector((state) => state.form);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const formData = useSelector((state) => state.form);
+  const coordinates = useSelector((state) => state.location);
 
   const fetchData = async () => {
     setLoading(true);
@@ -21,22 +24,17 @@ function SuggestedLocations() {
         type: "ADD_DESTINATIONS",
         payload: data,
       });
-    } catch (err) {
-      setError(err);
+    } catch (error) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    dispatch({ type: "RESET_ PLACE" }); //reset Selected places,useful while navigate backward
-
-    if (coordinates.destinations.length === 0) {
-      //fetch destinations if nothing is here
-      setLoading(true);
-      if (coordinates.distance) {
-        fetchData();
-      }
+    dispatch({ type: "RESET_ PLACE" }); 
+    if (!coordinates.destinations.length && coordinates.distance) {
+      fetchData();
     }
   }, [coordinates.distance]);
 
@@ -50,13 +48,7 @@ function SuggestedLocations() {
           {coordinates.destinations?.map((destination, index) => (
             <TouristSpots destination={destination} index={index} />
           ))}
-          {!loading && coordinates.destinations?.length === 0 && (
-            <div className="error">
-              {error
-                ? "Some network error"
-                : "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search."}
-            </div>
-          )}
+          {error && <div className="error">{error}</div>}
         </div>
       )}
     </div>

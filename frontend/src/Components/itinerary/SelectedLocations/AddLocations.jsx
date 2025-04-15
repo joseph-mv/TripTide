@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import TouristSpots from "../../destinations/TouristSpots/TouristSpots";
+import TouristSpots from "../../common/TouristSpots/TouristSpots";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 const AddLocations = ({addLocationPopup}) => {
