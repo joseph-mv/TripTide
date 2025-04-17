@@ -1,27 +1,32 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./SelectedLocations.css";
+import Location from "./Location";
 import AddLocations from "./AddLocations";
 import { reverseDate } from "../../../utils/reverseDate";
 import { haversineDistance } from "../../../utils/haversineDistance";
-import { faPlusCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/DeleteConfirmationModal";
 
-const SelectedLocations = () => {
+/**
+ * Displays a list of the starting point and the selected locations.
+ */
+const SelectedLocations = () => { 
   const dispatch = useDispatch();
-  var coordinates = useSelector((state) => state.location);
-  var formData = useSelector((state) => state.form);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [toDelete, setToDelete] = useState({});
-  const[isAdd, setIsAdd] = useState(false)
+  const formData = useSelector((state) => state.form);
+  const coordinates = useSelector((state) => state.location);
+  const [isAddingLocation, setIsAddingLocation] = useState(false);
   const places = coordinates.sortedSelectedPlaces;
-  // console.log(coordinates);
-  
+
+  let prevCoord = [
+    coordinates.startingPoint.longitude,
+    coordinates.startingPoint.latitude,
+  ];
+
+  //sorting selected places by distance from starting point.
   useEffect(() => {
-    var selectedPlaces = Object.values(coordinates.selectedPlaces);
-    //sorting selected places by distance from starting point
+    let selectedPlaces = Object.values(coordinates.selectedPlaces);
     selectedPlaces = selectedPlaces.sort(
       (a, b) => a.distFromStart - b.distFromStart
     );
@@ -32,89 +37,37 @@ const SelectedLocations = () => {
     });
   }, [coordinates.selectedPlaces]);
 
-  //for delete confirmation box
-  const handleOpenModal = (spot, index) => {
-    setToDelete({ spot: spot, index: index + 1 });
-
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirmDelete = () => {
-    // console.log(places[toDelete.index-1])
-    dispatch({
-      type: "DELETE_PLACE",
-      payload: places[toDelete.index-1].place._id,
-    });
-    const newPlaces = [
-      ...places.slice(0, toDelete.index - 1),
-      ...places.slice(toDelete.index),
-    ];
-    //  console.table(newPlaces)
-    dispatch({
-      type: "SET_SORTED",
-      payload: newPlaces,
-    });
-    setIsModalOpen(false);
-  };
-
-  var firstPoint = [
-    coordinates.startingPoint.longitude,
-    coordinates.startingPoint.latitude,
-  ];
+  
   const toggleAddLocation = function () {
-    setIsAdd(prev=>!prev)
+    setIsAddingLocation((prev) => !prev);
   };
-
 
   return (
     <div className="tourist-spots-list">
+      {/* Starting Point */}
       <div className="spot startingPoint">
         <h3 className="site-label">{formData.startingPoint}</h3>
         <h4>{reverseDate.call(formData.startDate)}</h4>
       </div>
 
+      {/* Selected Locations */}
       {places.map((spot, index) => {
-        var secondPoint = spot.place.location.coordinates;
-        var distance = haversineDistance(firstPoint, secondPoint) * 1.3;
-        firstPoint = secondPoint;
-
-        return (
-          <>
-            <div class="icon-container">
-              <span class="distance-text">{distance.toFixed(2)} km</span>
-              <i class="fa-solid fa-arrow-down-long"></i>
-            </div>
-            <div className="spot">
-              <div className="spot-header">
-                <span className="spot-index">{index + 1} </span>
-
-                <button
-                  className="delete-button"
-                  onClick={() => handleOpenModal(spot, index)}
-                >
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </button>
-              </div>
-              <DeleteConfirmationModal
-                content={'Are you sure you want to delete this destination?'}
-                isOpen={isModalOpen}
-                onRequestClose={handleCloseModal}
-                onConfirm={handleConfirmDelete}
-              />
-              <div className="spot-body">
-                <h3 className="site-label">{spot.place.siteLabel}</h3>
-                <p className="type-label">{spot.place.typeLabel}</p>
-              </div>
-            </div>
-          </>
-        );
+        const currCoord = spot.place.location.coordinates;
+        const distance = haversineDistance(prevCoord, currCoord) * 1.3;
+        prevCoord = currCoord;
+        return <Location key={index} distance={distance} spot={spot} index={index} />;
       })}
-      <FontAwesomeIcon onClick={toggleAddLocation} className="addButton" icon={faPlusCircle} />
-    {isAdd && <AddLocations  toggleAddLocation={toggleAddLocation}/>}
+
+      {/* Add Button */}
+      <FontAwesomeIcon
+        onClick={toggleAddLocation}
+        className="addButton"
+        icon={faPlusCircle}
+      />
+
+      {isAddingLocation && (
+        <AddLocations toggleAddLocation={toggleAddLocation} />
+      )}
     </div>
   );
 };
