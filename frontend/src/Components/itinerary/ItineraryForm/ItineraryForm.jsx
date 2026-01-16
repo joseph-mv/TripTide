@@ -6,7 +6,7 @@ import ItineraryToDo from '../ItineraryForm/ItineraryToDo/ItineraryToDo';
 import { getNextDate } from "../../../utils/nextDate";
 import MapPopup from "../../MapPopup/MapPopup";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { isTokenExpired } from "../../../utils/isTokenExpired";
 import { refreshToken } from "../../../utils/refreshToken";
@@ -31,6 +31,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const newItinerary = {};
   const [itinerary, setItinerary] = useState(newItinerary);
   const [name, setName] = useState(oldName);
+  const location = useLocation();
   //creating new Itinerary object
   useEffect(() => {
     let date = formData.startDate;
@@ -106,14 +107,15 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
   const handleItinerary = async (e) => {
     e.preventDefault();
     if (!token) {
-      navigate("/authenticate");
+      navigate(ROUTES.AUTHENTICATE,{ state: location.pathname });
       return;
     } else if (isTokenExpired(token)) {
-      token = await refreshToken(userId);
+      token = await refreshToken();
       if (!token) {
-        navigate("/authenticate");
+        navigate(ROUTES.AUTHENTICATE,{ state: location.pathname });
       }
     }
+  
 
     const tripItinerary = {
       userId,

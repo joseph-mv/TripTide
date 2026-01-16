@@ -37,11 +37,11 @@ function App() {
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ResetPassword />} />
             <Route path={ROUTES.ABOUT} element={<About />} />
             <Route path={ROUTES.CONTACT} element={<Contact />} />
+              <Route path={ROUTES.CREATE_ITINERARY} element={<Itinerary />} />
 
             {/* Protected Routes  */}
             <Route element={<ProtectedRoute />}>
               <Route path={ROUTES.DESTINATIONS} element={<Destinations />} />
-              <Route path={ROUTES.CREATE_ITINERARY} element={<Itinerary />} />
               <Route path={ROUTES.DASHBOARD} element={<UserDashboard />} />
               <Route
                 path={ROUTES.EDIT_ITINERARY + "/:tripId"}
