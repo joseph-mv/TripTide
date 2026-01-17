@@ -51,7 +51,7 @@ export default {
       // 4️ Return the itineraries
       return res.status(200).json(itineraries);
     } catch (err) {
-      console.error("Error fetching user itineraries:", error);
+      console.error("Error fetching user itineraries:", err);
       res.status(500).json({ error: "Internal Server error" }); // Proper error handling
     }
   },
@@ -65,7 +65,7 @@ export default {
    * @param {Object} res - Express response object.
    * @returns {Object} JSON response indicating success or failure.
    */
-  updateUserProfilePic: async (req, res) => {
+  updateUserProfilePic: async (req: Request, res: Response) => {
     try {
       const { imageData } = req.body;
       const userId = req.userId;
