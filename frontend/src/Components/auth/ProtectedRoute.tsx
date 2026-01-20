@@ -11,15 +11,15 @@ import { useDispatch } from "react-redux";
  * - If `isAuthenticated`, renders the protected content (`children`).
  * - Otherwise, redirects users to the authentication page.
  */
-const ProtectedRoute = () => {
+const ProtectedRoute: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let token = localStorage.getItem("token");
-  
+
   useEffect(() => {
-   const authCheck=async()=>{
-    if (!token) {
+    const authCheck = async () => {
+      if (!token) {
         navigate("/authenticate", { state: location.pathname });
         return;
       } else if (isTokenExpired(token)) {
@@ -29,8 +29,8 @@ const ProtectedRoute = () => {
           navigate("/authenticate", { state: location.pathname });
         }
       }
-   }
-   authCheck()
+    }
+    authCheck()
   }, []);
 
   return <Outlet />;

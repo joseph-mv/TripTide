@@ -1,5 +1,12 @@
 import { activities, INPUT, types } from "../../config/desFormConfig";
 
+interface DesFormProps {
+  form: any; // Explicit any for now as generic form state might vary or be complex, ideally matches FormDataState
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  activeInput: string | null;
+  setActiveInput: (input: string | null) => void;
+}
+
 /**
  * 
  * @param {Object} props - Component props
@@ -8,10 +15,10 @@ import { activities, INPUT, types } from "../../config/desFormConfig";
  * @param {string} props.activeInput - string to identify active input.
  * @param {Function} props.setActiveInput- Function to update active input.
  */
-const DesForm = ({form, handleChange,activeInput,setActiveInput}) => {
+const DesForm: React.FC<DesFormProps> = ({ form, handleChange, activeInput, setActiveInput }) => {
 
   //only show active input in the map
-  const handleActiveInput = (inputName) => {
+  const handleActiveInput = (inputName: string) => {
     setActiveInput(activeInput === inputName ? null : inputName);
   };
   return (
@@ -77,7 +84,7 @@ const DesForm = ({form, handleChange,activeInput,setActiveInput}) => {
                   name={INPUT.ACTIVITIES}
                   checked={form.activities[activity]}
                 />{" "}
-                {activity.charAt(0).toUpperCase()+activity.slice(1) }
+                {activity.charAt(0).toUpperCase() + activity.slice(1)}
               </label>
             ))}
           </div>

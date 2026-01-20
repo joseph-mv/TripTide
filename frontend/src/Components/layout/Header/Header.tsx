@@ -43,9 +43,16 @@ const navLinks = [
 /**
  * Header for navigation between pages
  */
+import { RootState } from "../../../redux/store";
+
+// ... existing imports
+
+/**
+ * Header for navigation between pages
+ */
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false); // for hamburg button(in smaller screen)
-  const { userName } = useSelector((store) => store.user);
+  const [isOpen, setIsOpen] = useState<boolean>(false); // for hamburg button(in smaller screen)
+  const { userName } = useSelector((store: RootState) => store.user);
 
   const toggleMenu = () => {
     if (!isOpen) {
@@ -59,14 +66,14 @@ const Header = () => {
   return (
     <div>
       <header>
-        
+
         {/* Logo */}
         <div className="logo">
           <motion.img
             src="../../../logo/3.png"
             alt="Logo"
             animate={shadowAnimation}
-            style={{ width: "150px", height: "auto" }} 
+            style={{ width: "150px", height: "auto" }}
           />
         </div>
 

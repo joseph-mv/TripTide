@@ -1,23 +1,24 @@
-import React from "react";
+interface HeartProps {
+  like: boolean;
+}
 
-export default function Heart({ like }) {
+export default function Heart({ like }: HeartProps) {
   return (
-<svg
-    viewBox="0 0 24 24" 
-    
+    <svg
+      viewBox="0 0 24 24"
       width="30px"
       height="24px"
-    stroke="black"
-     stroke-width="2"
+      stroke="black"
+      strokeWidth="2"
       data-aut-id="icon"
       fillRule="evenodd"
-      fill={like ? "red":'white'}
- >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      fill={like ? "red" : 'white'}
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
         {" "}

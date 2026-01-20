@@ -12,6 +12,11 @@ const initialForm = {
   confirmPassword: "",
 };
 
+interface PasswordResetFormProps {
+  email: string;
+  setError: (error: string) => void;
+}
+
 /**
  * **PasswordResetForm Component**
  * - Handles OTP verification and password reset.
@@ -20,7 +25,7 @@ const initialForm = {
  * @param {string} props.email - The user's email for password reset.
  * @param {Function} props.setError - Function to update error messages.
  */
-const PasswordResetForm = ({ email, setError }) => {
+const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }) => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", ""]); // Stores the OTP digits
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -48,29 +53,31 @@ const PasswordResetForm = ({ email, setError }) => {
   /**
    * Handles OTP input changes.
    */
-  const handleOtpChange = (e, index) => {
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
-    if (isNaN(value) || value.length > 1) return;
+    if (isNaN(Number(value)) || value.length > 1) return;
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
     // Move focus to the next field if a value is entered
     if (index < otp.length - 1) {
-      document.getElementById(`otp-${index + 1}`).focus();
+      document.getElementById(`otp-${index + 1}`)?.focus();
     }
   };
 
   /**
    *  Handles Backspace: Move focus back if current field is empty
    */
-  const handleKeyDown = (e, index) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace") {
-      e.preventDefault();
+      e.preventDefault(); // preventing default on backspace might block deletion if explicit clearing isn't perfect, but keeping existing logic structure
       const newOtp = [...otp];
       newOtp[index] = "";
       setOtp(newOtp);
-      document.getElementById(`otp-${index - 1}`).focus();
+      if (index > 0) {
+        document.getElementById(`otp-${index - 1}`)?.focus();
+      }
     }
   };
 

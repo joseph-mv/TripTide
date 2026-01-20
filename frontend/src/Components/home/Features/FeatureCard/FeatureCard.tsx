@@ -1,5 +1,11 @@
 import "./FeatureCard.css"; // Import the CSS file
 
+interface FeatureCardProps {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 /**
  * FeatureCard in Feature section
  * 
@@ -8,7 +14,7 @@ import "./FeatureCard.css"; // Import the CSS file
  * @param {string} props.title -Title of feature
  * @param {string} props.description -Description of feature
  */
-const FeatureCard = ({ icon, title, description }) => {
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
   return (
     <div className="feature-card" data-aos="fade-left">
       <div className="feature-icon">

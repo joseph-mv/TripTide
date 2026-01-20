@@ -8,11 +8,15 @@ import "../../styles/pages/auth/Authentication.css";
 import { signupUser } from "../../services/authService";
 import { useForm } from "../../hooks/useForm";
 
-const initialForm={
+const initialForm = {
   name: "",
   email: "",
   password: "",
   confirmPassword: "",
+}
+
+interface SignupFormProps {
+  toggleAuthView: () => void;
 }
 
 /**
@@ -20,18 +24,21 @@ const initialForm={
  * @param {Object} props - Component props
  * @param {Function} props.toggleAuthView - Function to switch to the sign-in view
  */
-const SignupForm = ({ toggleAuthView }) => {
+const SignupForm: React.FC<SignupFormProps> = ({ toggleAuthView }) => {
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
-  const {form,handleChange,handleSubmit,error,loading}=useForm(initialForm,async()=>{
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  const { form, handleChange, handleSubmit, error, loading } = useForm(initialForm, async () => {
+    const { name, email, password, confirmPassword } = form;
     if (password !== confirmPassword) return
     const response = await signupUser(name, email, password);
-      toast.success(response);
+    if (response) toast.success(response);
   })
 
   const { name, email, password, confirmPassword } = form;
+
+  console.log({ error })
 
   return (
     <div className="col align-items-center flex-col sign-up">
@@ -119,12 +126,12 @@ const SignupForm = ({ toggleAuthView }) => {
             </div>
 
             {/* Error Message */}
-            {password!==confirmPassword && <p className="error">"Passwords do not match"</p>}
-            {{ error } && <p className="error">{error}</p>}
+            {password !== confirmPassword && <p className="error">"Passwords do not match"</p>}
+            {error && <p className="error">{error}</p>}
 
             {/* Submit Button */}
             <button type="submit" disabled={loading}>
-              {loading && <div class="loading"></div>} Sign Up
+              {loading && <div className="loading"></div>} Sign Up
             </button>
 
             {/* Sign-In Link */}

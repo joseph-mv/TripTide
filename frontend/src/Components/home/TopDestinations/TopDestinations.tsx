@@ -4,12 +4,14 @@ import "./TopDestinations.css";
 import Destination from "./Destination/Destination";
 import { topDestinations } from "../../../services/tripServices";
 
+import { WikiPlace } from "../../../types";
+
 /**
  * Top destinations section in Home page to show random 12 top destinations
  */
-const TopDestinations = () => {
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading] = useState(true);
+const TopDestinations: React.FC = () => {
+  const [destinations, setDestinations] = useState<WikiPlace[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   //Fetch top Destinations when loading page
   useEffect(() => {
@@ -34,7 +36,7 @@ const TopDestinations = () => {
 
       <div className="destination-grid">
         {destinations.map((destination, index) => (
-          <Destination key={index}  destination={destination} />
+          <Destination key={index} destination={destination} />
         ))}
       </div>
     </section>

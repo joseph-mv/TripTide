@@ -13,30 +13,38 @@ const initialForm = {
   password: "",
 };
 
+interface LoginFormProps {
+  toggleAuthView: () => void;
+}
+
 /**
  * LoginForm component handles user login with email and password.
  * @param {Object} props - Component props
  * @param {Function} props.toggleAuthView - Function to switch to the sign-up view
  */
-const LoginForm = ({ toggleAuthView }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ toggleAuthView }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const route = location.state || "/"; //go back to previous route or home page
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { form, error, handleChange, handleSubmit, loading } = useForm(
     initialForm,
     async () => {
+      const { email, password } = form; // Access current form values
       const data = await loginUser(email, password);
-      dispatch({ type: "SETUSER", payload: data });
-      navigate(route, { replace: true }); //  Does'nt go back to login page while click browser's back button
+      if (data) {
+        dispatch({ type: "SETUSER", payload: data });
+        navigate(route, { replace: true }); //  Does'nt go back to login page while click browser's back button
+      }
     }
   );
+  console.log(form, error)
   const { email, password } = form;
 
-  const handleForgotPassword = (e) => {
+  const handleForgotPassword = (e: React.MouseEvent) => {
     e.preventDefault();
     navigate("/forgot-password");
   };
@@ -83,11 +91,11 @@ const LoginForm = ({ toggleAuthView }) => {
             </div>
 
             {/* Error Message */}
-            {{ error } && <p className="error">{error}</p>}
+            {error && <p className="error">{error}</p>}
 
             {/* Submit Button */}
             <button type="submit" disabled={loading}>
-              {loading && <div class="loading"></div>} Log in
+              {loading && <div className="loading"></div>} Log in
             </button>
 
             {/* Forgot Password Link */}

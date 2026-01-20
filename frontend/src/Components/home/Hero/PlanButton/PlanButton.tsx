@@ -4,12 +4,19 @@ import "./PlanButton.css";
 /**
  * Plan button with hover animation effect
  */
-function PlanButton() {
+interface PlanButtonProps {
+  className?: string;
+}
+
+/**
+ * Plan button with hover animation effect
+ */
+const PlanButton: React.FC<PlanButtonProps> = ({ className }) => {
   return (
-    <div className="planButton">
+    <div className={`planButton ${className || ''}`.trim()}>
       <button className="button">
         <div className="outline"></div>
-        
+
         {/* before  hovering */}
         <div className="state state--default">
           <div className="icon">
@@ -30,22 +37,22 @@ function PlanButton() {
             </svg>
           </div>
           <p>
-            <span style={{ "--i": 0 }}>P</span>
-            <span style={{ "--i": 1 }}>l</span>
-            <span style={{ "--i": 2 }}>a</span>
-            <span style={{ "--i": 3 }}>n</span>
+            <span style={{ "--i": 0 } as React.CSSProperties}>P</span>
+            <span style={{ "--i": 1 } as React.CSSProperties}>l</span>
+            <span style={{ "--i": 2 } as React.CSSProperties}>a</span>
+            <span style={{ "--i": 3 } as React.CSSProperties}>n</span>
 
-            <span style={{ "--i": 4 }}>a</span>
+            <span style={{ "--i": 4 } as React.CSSProperties}>a</span>
 
-            <span style={{ "--i": 5 }}>R</span>
-            <span style={{ "--i": 6 }}>o</span>
-            <span style={{ "--i": 7 }}>a</span>
-            <span style={{ "--i": 8 }}>d</span>
+            <span style={{ "--i": 5 } as React.CSSProperties}>R</span>
+            <span style={{ "--i": 6 } as React.CSSProperties}>o</span>
+            <span style={{ "--i": 7 } as React.CSSProperties}>a</span>
+            <span style={{ "--i": 8 } as React.CSSProperties}>d</span>
 
-            <span style={{ "--i": 9 }}>T</span>
-            <span style={{ "--i": 10 }}>r</span>
-            <span style={{ "--i": 11 }}>i</span>
-            <span style={{ "--i": 12 }}>p</span>
+            <span style={{ "--i": 9 } as React.CSSProperties}>T</span>
+            <span style={{ "--i": 10 } as React.CSSProperties}>r</span>
+            <span style={{ "--i": 11 } as React.CSSProperties}>i</span>
+            <span style={{ "--i": 12 } as React.CSSProperties}>p</span>
           </p>
         </div>
 
@@ -68,13 +75,13 @@ function PlanButton() {
             </svg>
           </div>
           <p>
-            <span style={{ "--i": 5 }}>L</span>
-            <span style={{ "--i": 6 }}>e</span>
-            <span style={{ "--i": 7 }}>t</span>
-            <span style={{ "--i": 8 }}>s</span>
-            <span style={{ "--i": 9 }}>G</span>
-            <span style={{ "--i": 10 }}>0</span>
-            <span style={{ "--i": 11 }}>!</span>
+            <span style={{ "--i": 5 } as React.CSSProperties}>L</span>
+            <span style={{ "--i": 6 } as React.CSSProperties}>e</span>
+            <span style={{ "--i": 7 } as React.CSSProperties}>t</span>
+            <span style={{ "--i": 8 } as React.CSSProperties}>s</span>
+            <span style={{ "--i": 9 } as React.CSSProperties}>G</span>
+            <span style={{ "--i": 10 } as React.CSSProperties}>0</span>
+            <span style={{ "--i": 11 } as React.CSSProperties}>!</span>
           </p>
         </div>
       </button>

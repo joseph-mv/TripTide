@@ -69,3 +69,19 @@ export interface AuthResponse {
     user?: any;
     error?: string;
 }
+
+export interface WikiPlace {
+    name: string;
+    description: string;
+    extract: string;
+    image: {
+        source: string;
+        width: number;
+        height: number;
+    };
+    coordinates: {
+        lat: number;
+        lon: number;
+    };
+    [key: string]: any;
+}

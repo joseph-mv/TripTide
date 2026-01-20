@@ -1,10 +1,16 @@
-import{ useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import { useForm } from "../../hooks/useForm";
 import "../../styles/pages/auth/ResetPassword.css";
 import { forgotPassword } from "../../services/authService";
+
+interface EmailFormProps {
+  setOtpSent: (sent: boolean) => void;
+  setError: (error: string) => void;
+  setEmail: (email: string) => void;
+}
 
 /**
  * **EmailForm Component**
@@ -15,19 +21,19 @@ import { forgotPassword } from "../../services/authService";
  * @param {Function} props.setError - Function to update error messages.
  * @param {Function} props.setEmail - Function to update email state.
  */
-const EmailForm = ({ setOtpSent, setError,  setEmail }) => {
-  const { form,handleChange,handleSubmit,loading,error } = useForm({ email:'' }, async () => {
+const EmailForm: React.FC<EmailFormProps> = ({ setOtpSent, setError, setEmail }) => {
+  const { form, handleChange, handleSubmit, loading, error } = useForm({ email: '' }, async () => {
     const response = await forgotPassword(email);
     setEmail(email)
     toast.success(response);
     setOtpSent(true);
   });
- const {email}=form
+  const { email } = form
 
- useEffect(() => {
-   setError(error)
- }, [error])
- 
+  useEffect(() => {
+    setError(error)
+  }, [error])
+
 
   return (
     <form onSubmit={handleSubmit}>

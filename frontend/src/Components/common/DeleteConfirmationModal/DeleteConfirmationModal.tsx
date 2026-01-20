@@ -11,7 +11,14 @@ import "./DeleteConfirmationModal.css";
  * @param {Function} props.onConfirm - Function to call when confirming deletion.
  * @returns {JSX.Element|null} DeleteConfirmationModal component.
  */
-const DeleteConfirmationModal = ({content, isOpen, onRequestClose, onConfirm }) => {
+interface DeleteConfirmationModalProps {
+  content: string;
+  isOpen: boolean;
+  onRequestClose: () => void;
+  onConfirm: () => void;
+}
+
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ content, isOpen, onRequestClose, onConfirm }) => {
   if (!isOpen) {
     document.body.classList.remove("fixed-body");
     return null;

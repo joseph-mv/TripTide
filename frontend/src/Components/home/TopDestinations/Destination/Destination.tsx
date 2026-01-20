@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import LazyImage from "../../../ui/LazyImage";
 
+import { WikiPlace } from "../../../../types";
+
 /**
  *  A card component displaying a top destination, with a flip interaction.
  * @param {Object} props -Component props
  * @param {Object} destination - An object containing information about the destination to be displayed.
  */
-const Destination = ({ destination }) => {
+interface DestinationProps {
+  destination: WikiPlace;
+}
+
+const Destination: React.FC<DestinationProps> = ({ destination }) => {
   const [flipped, setFlipped] = useState(false);
 
   // Change the flip state when the card is clicked.

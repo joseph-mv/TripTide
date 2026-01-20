@@ -7,8 +7,8 @@ import { features } from "../../../config/featuresConfig";
 /**
  * feature section in Home page with horizontal scrolling
  */
-const FeatureSection = () => {
-  const scrollRef = useRef(null);
+const FeatureSection: React.FC = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   /** Add custom horizontal wheel scrolling to scrollContainer */
   useEffect(() => {
@@ -16,7 +16,7 @@ const FeatureSection = () => {
 
     if (scrollContainer) {
       // Horizontal scroll wheel event
-      const handleWheel = (e) => {
+      const handleWheel = (e: WheelEvent) => {
         if (e.deltaY !== 0) {
           e.preventDefault();
           scrollContainer.scrollLeft += e.deltaY;
@@ -43,7 +43,7 @@ const FeatureSection = () => {
             description={feature.description}
           />
         ))}
-        
+
       </div>
     </div>
   );

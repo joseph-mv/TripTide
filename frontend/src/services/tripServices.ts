@@ -1,20 +1,10 @@
 import axios from "axios";
 import mustVisitPlaces from "../utils/mustVisitPlaces";
 
-interface WikiPlace {
-  name: string;
-  description: string;
-  extract: string;
-  image: {
-    source: string;
-    width: number;
-    height: number;
-  };
-  coordinates: {
-    lat: number;
-    lon: number;
-  };
-}
+import { WikiPlace } from "../types";
+
+// WikiPlace is now imported
+
 
 export const topDestinations = async (): Promise<WikiPlace[]> => {
   const randomIndex = Math.floor(Math.random() * (mustVisitPlaces.length - 25));

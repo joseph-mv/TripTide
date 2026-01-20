@@ -15,13 +15,26 @@ import { getDestDetails } from "../../../services/api/destinationServices";
  * @param {number} props.index - Index of the destination in the list
  * @returns {JSX.Element}
  */
-function TouristSpots({ destination, index }) {
+interface TouristSpotsProps {
+  destination: {
+    _id: string;
+    siteLabel: string;
+    typeLabel: string;
+    location: {
+      coordinates: [number, number]; // [lng, lat]
+    };
+    [key: string]: any;
+  };
+  index: number;
+}
+
+function TouristSpots({ destination, index }: TouristSpotsProps) {
   const dispatch = useDispatch();
-  const [error, setError] = useState("");
-  const [details, setDetails] = useState("");
-  const [expanded, setExpanded] = useState(false);
-  const selectedPlaces = useSelector((state) => state.location.selectedPlaces);
-  const startingPoint = useSelector((state) => state.location.startingPoint);
+  const [error, setError] = useState<string>("");
+  const [details, setDetails] = useState<any>(""); // Explicit any for now as wiki response structure is complex
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const selectedPlaces = useSelector((state: any) => state.location.selectedPlaces); // Use any for now until we import RootState
+  const startingPoint = useSelector((state: any) => state.location.startingPoint);
 
   const toggleCard = () => {
     setExpanded(!expanded);
@@ -34,7 +47,7 @@ function TouristSpots({ destination, index }) {
   const handleMoreDetailsClick = () => {
     alert("More details clicked");
   };
-  const handleCheckboxChange = (event, place, index) => {
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, place: any, index: number) => {
     event.stopPropagation(); //prevent event bubbling
     const id = place._id;
     if (selectedPlaces[id]) {
@@ -60,7 +73,7 @@ function TouristSpots({ destination, index }) {
       try {
         const response = await getDestDetails(destination.siteLabel);
         setDetails(response);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       }
     };
@@ -76,7 +89,7 @@ function TouristSpots({ destination, index }) {
         onMouseLeave={handleMouseLeave}
       >
         {/* Check box */}
-        <label for="checkbox" className="checkbox-label"></label>
+        <label htmlFor="checkbox" className="checkbox-label"></label>
         <input
           type="checkbox"
           id="cardCheckbox"
@@ -92,10 +105,10 @@ function TouristSpots({ destination, index }) {
           <LazyImage
             imageUrl={details.thumbnail?.source}
             name={destination.siteLabel}
-            error={error}
+            error={Boolean(error)}
           />
 
-        {/* Description- after clicking card */}
+          {/* Description- after clicking card */}
           <p className="card-description">{details.extract}</p>
           {error && <p className="error">{error}</p>}
           <button

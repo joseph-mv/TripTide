@@ -12,7 +12,11 @@ import BackToTop from "./BackToTop/BackToTop";
  * @param {object} props - Component props
  * @param {React.ReactNode} props.children - Child elements to be rendered inside the component
  */
-const Layout = ({ children }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   //for animation while scrolling first time
   useEffect(() => {
     AOS.init({

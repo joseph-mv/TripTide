@@ -6,7 +6,7 @@ import "./BackToTop.css";
  * -for back to top of page
  * */
 const BackToTop = () => {
-  const [showButton, setShowButton] = useState(false);
+  const [showButton, setShowButton] = useState<boolean>(false);
 
   // Show the button when scrolling down
   const handleScroll = () => {
