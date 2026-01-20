@@ -1,12 +1,27 @@
 import axios from "axios";
 import mustVisitPlaces from "../utils/mustVisitPlaces";
 
-export const topDestinations = async () => {
+interface WikiPlace {
+  name: string;
+  description: string;
+  extract: string;
+  image: {
+    source: string;
+    width: number;
+    height: number;
+  };
+  coordinates: {
+    lat: number;
+    lon: number;
+  };
+}
+
+export const topDestinations = async (): Promise<WikiPlace[]> => {
   const randomIndex = Math.floor(Math.random() * (mustVisitPlaces.length - 25));
   const placeToVisit = mustVisitPlaces.slice(randomIndex, randomIndex + 25);
   // Use Promise.all to wait for all the Wikipedia requests to complete
   const places = await Promise.all(
-    placeToVisit.map(async (destination, index) => {
+    placeToVisit.map(async (destination: { name: string }, index: number) => {
       try {
         const wikiResponse = await axios.get(
           `https://en.wikipedia.org/api/rest_v1/page/summary/${destination.name}`
@@ -17,7 +32,7 @@ export const topDestinations = async () => {
           extract: wikiResponse.data.extract,
           image: wikiResponse.data.thumbnail,
           coordinates: wikiResponse.data.coordinates,
-        };
+        } as WikiPlace;
       } catch (error) {
         console.error(
           `Error fetching Wikipedia summary for index ${index}:`,
@@ -28,20 +43,25 @@ export const topDestinations = async () => {
     })
   );
 
-  return places.filter((place) => place !== null).slice(0, 12);
+  return places.filter((place): place is WikiPlace => place !== null).slice(0, 12);
 };
 
-export const getRoutes = async (start, end) => {
-    try {
-      const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
+interface GeoPoint {
+  latitude: number;
+  longitude: number;
+}
 
-      const response = await axios.get(url);
-      const data = response.data;
-      return data.routes;
-    } catch (error) {
-      console.error("Error fetching directions:", error);
+export const getRoutes = async (start: GeoPoint, end: GeoPoint): Promise<any[]> => {
+  try {
+    const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
 
-      throw new Error(error.response?.data?.message);
-    } 
+    const response = await axios.get(url);
+    const data = response.data;
+    return data.routes;
+  } catch (error: any) {
+    console.error("Error fetching directions:", error);
+
+    throw new Error(error.response?.data?.message);
+  }
 };

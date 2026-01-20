@@ -18,19 +18,29 @@ import { dayAfterNumber } from "../../../utils/dayAfternumbers";
 import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../routes";
 
+import { RootState } from "../../../redux/store";
+import { LocationState, Itinerary } from "../../../types";
+
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
+
+interface ItineraryFormProps {
+  oldItinerary?: Itinerary;
+  oldName?: string;
+  _id?: string;
+}
+
+const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  var coordinates = useSelector((state) => state.location);
-  var formData = useSelector((state) => state.form);
+  var coordinates = useSelector((state: RootState) => state.location) as unknown as LocationState; // Casting as location might be untyped in root yet if not fully updated
+  var formData = useSelector((state: RootState) => state.form);
   console.log(oldItinerary, formData);
   var token = localStorage.getItem("token");
-  const userId = useSelector((store) => store.user.userId);
-  const [map, setMap] = useState(false);
-  const newItinerary = {};
-  const [itinerary, setItinerary] = useState(newItinerary);
-  const [name, setName] = useState(oldName);
+  const userId = useSelector((store: RootState) => store.user.userId);
+  const [map, setMap] = useState<boolean>(false);
+  const newItinerary: Itinerary = {};
+  const [itinerary, setItinerary] = useState<Itinerary>(newItinerary);
+  const [name, setName] = useState<string>(oldName);
   const location = useLocation();
   //creating new Itinerary object
   useEffect(() => {
@@ -90,32 +100,34 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
       return rest;
     });
   };
-  const changeStartDate = (e) => {
-    dispatch({ type: "UPDATE", payload: e.target }); //update start date
+  const changeStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "UPDATE", payload: { name: e.target.name, value: e.target.value } }); //update start date
     const endDate = dayAfterNumber(e.target.value, coordinates.noOfDays);
     dispatch({ type: "UPDATE", payload: { name: "endDate", value: endDate } }); //update end date
 
     // update all Day dates in itinerary
     const updatedItinerary = { ...itinerary };
     Object.keys(updatedItinerary).forEach((Day) => {
-      const number = Day.match(/\d+/)[0];
-      updatedItinerary[Day].date = dayAfterNumber(e.target.value, +number);
+      const number = Day.match(/\d+/)?.[0];
+      if (number) {
+        updatedItinerary[Day].date = dayAfterNumber(e.target.value, +number);
+      }
     });
     setItinerary(updatedItinerary);
   };
 
-  const handleItinerary = async (e) => {
+  const handleItinerary = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
-      navigate(ROUTES.AUTHENTICATE,{ state: location.pathname });
+      navigate(ROUTES.AUTHENTICATE, { state: location.pathname });
       return;
     } else if (isTokenExpired(token)) {
       token = await refreshToken();
       if (!token) {
-        navigate(ROUTES.AUTHENTICATE,{ state: location.pathname });
+        navigate(ROUTES.AUTHENTICATE, { state: location.pathname });
       }
     }
-  
+
 
     const tripItinerary = {
       userId,
@@ -153,7 +165,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
         alert("Your Itinerary has been saved");
         navigate(ROUTES.DASHBOARD);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   return (
     <div className="itineraryDetails">
@@ -183,7 +195,7 @@ const ItineraryForm = ({ oldItinerary, oldName = "", _id }) => {
           )}
 
           <p>
-            <strong>Budget:</strong> {currencySymbols[formData.currency]}{" "}
+            <strong>Budget:</strong> {currencySymbols[formData.currency as keyof typeof currencySymbols]}{" "}
             {formData.budget}{" "}
           </p>
         </div>

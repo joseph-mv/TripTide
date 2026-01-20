@@ -7,32 +7,35 @@ import locationReducer from './reducers/locationReducer';
 import userReducer from './reducers/userReducer';
 
 
-  const formPersistConfig = {
-    key: 'form',
-    storage,
-  };
+const formPersistConfig = {
+  key: 'form',
+  storage,
+};
 
-  // const persistedReducer = persistReducer(formPersistConfig, formReducer);
+// const persistedReducer = persistReducer(formPersistConfig, formReducer);
 
-  // const rootReducer = combineReducers({
-  //   form: persistedReducer,
-  //   location: locationReducer,
-  // });
+// const rootReducer = combineReducers({
+//   form: persistedReducer,
+//   location: locationReducer,
+// });
 
-  // const store = configureStore({
-  //   reducer: rootReducer,
-  // });
+// const store = configureStore({
+//   reducer: rootReducer,
+// });
 
-  const rootReducer=combineReducers({
-    form: formReducer,
-    location: locationReducer,
-    user:userReducer
+const rootReducer = combineReducers({
+  form: formReducer,
+  location: locationReducer,
+  user: userReducer
 
-  })
-  const persistedReducer=persistReducer(formPersistConfig, rootReducer)
-  const store = configureStore({
-    reducer: persistedReducer,
-  });
+})
+const persistedReducer = persistReducer(formPersistConfig, rootReducer)
+const store = configureStore({
+  reducer: persistedReducer,
+});
 const persistor = persistStore(store);
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export { store, persistor };
