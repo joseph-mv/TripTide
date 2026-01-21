@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-export const useCurrentLocation=()=>{
-   const [lng, setLng] = useState(null);
-    const [lat, setLat] = useState(null);
+export const useCurrentLocation = () => {
+  const [lng, setLng] = useState<number | null>(null);
+  const [lat, setLat] = useState<number | null>(null);
   useEffect(() => {
     //navigator is a property of window object
     if (navigator.geolocation) {
@@ -19,5 +19,5 @@ export const useCurrentLocation=()=>{
       console.log("Geolocation is not supported by this browser.");
     }
   }, []);
-  return {lng,lat}
+  return { lng, lat }
 }

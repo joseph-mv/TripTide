@@ -11,7 +11,7 @@ import { getRouteDestinations } from "../../../services/api/destinationServices"
  */
 function SuggestedLocations() {
   const dispatch = useDispatch();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const formData = useSelector((state) => state.form);
   const coordinates = useSelector((state) => state.location);
@@ -25,14 +25,18 @@ function SuggestedLocations() {
         payload: data,
       });
     } catch (error) {
-      setError(error.message);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    dispatch({ type: "RESET_ PLACE" }); 
+    dispatch({ type: "RESET_ PLACE" });
     if (!coordinates.destinations.length && coordinates.distance) {
       fetchData();
     }

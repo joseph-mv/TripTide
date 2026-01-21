@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import { useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import "../../styles/pages/auth/ResetPassword.css";
@@ -15,7 +15,7 @@ const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [otpSent, setOtpSent] = useState(false);// Tracks whether OTP has been sent
- 
+
   return (
     <div className="forgot-password-container">
       <div className="forgot-password-form">
@@ -24,7 +24,7 @@ const ResetPassword = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-           {/* Render Email Form or Password Reset Form based on `otpSent` */}
+          {/* Render Email Form or Password Reset Form based on `otpSent` */}
           {!otpSent ? (
             <EmailForm
               setOtpSent={setOtpSent}
@@ -32,7 +32,7 @@ const ResetPassword = () => {
               setEmail={setEmail}
             />
           ) : (
-            <PasswordResetForm email={email} setError={setError}/>
+            <PasswordResetForm email={email} setError={setError} />
           )}
           {error && <p className="error">{error}</p>}
         </motion.div>

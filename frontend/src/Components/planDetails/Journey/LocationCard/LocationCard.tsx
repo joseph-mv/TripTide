@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
-import "./LocationCard.css"; 
+import "./LocationCard.css";
 import { ROUTES } from "../../../../routes";
 import {
   getCoordinatesAndWikiID,
@@ -38,7 +38,11 @@ const LocationCard = ({ name, dispatchType }) => {
         setDescription(response);
       } catch (error) {
         console.log("Error fetching geocoded suggestions:", error);
-        toast.error(name + " " + error.message);
+        if (error instanceof Error) {
+          toast.error(name + " " + error.message);
+        } else {
+          toast.error(name + " An unexpected error occurred");
+        }
         navigate(ROUTES.TRIP_PLAN);
       }
     };
@@ -50,7 +54,7 @@ const LocationCard = ({ name, dispatchType }) => {
 
     fetchLocationDetails();
     fetchImageForLocation();
-  }, [name,dispatchType]);
+  }, [name, dispatchType]);
 
   return (
     <div className="location-card">

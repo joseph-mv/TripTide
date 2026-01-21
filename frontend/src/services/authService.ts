@@ -44,7 +44,8 @@ export const resetPassword = async (email: string, otp: string, newPassword: str
   }
 }
 
-export const verifyEmail = async (token: string): Promise<{ msg: string, success: boolean }> => {
+export const verifyEmail = async (token: string | null): Promise<{ msg: string, success: boolean }> => {
+  if (!token) return { msg: "Invalid token", success: false };
   try {
     const response = await axiosInstance.get<{ msg: string }>(`/auth/verify-email?token=${token}`);
     return { msg: response.data.msg, success: true };

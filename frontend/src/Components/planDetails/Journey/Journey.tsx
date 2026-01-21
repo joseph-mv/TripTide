@@ -39,7 +39,11 @@ const Journey = () => {
         const response = await getRoutes(trip.startingPoint, trip.destination);
         setRoutes(response);
       } catch (error) {
-        setErrMsg(error.message);
+        if (error instanceof Error) {
+          setErrMsg(error.message);
+        } else {
+          setErrMsg("An unexpected error occurred");
+        }
       }
     };
     get();
@@ -116,8 +120,8 @@ const Journey = () => {
                 formData.transportation === "bike"
                   ? faMotorcycle
                   : formData.transportation === "car"
-                  ? faCarSide
-                  : faVanShuttle
+                    ? faCarSide
+                    : faVanShuttle
               }
             />
           </motion.span>

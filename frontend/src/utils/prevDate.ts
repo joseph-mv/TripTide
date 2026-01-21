@@ -1,4 +1,4 @@
-export function getPrevDate(dateString) {
+export function getPrevDate(dateString: string) {
     // Convert the string to a Date object
     let date = new Date(dateString);
 

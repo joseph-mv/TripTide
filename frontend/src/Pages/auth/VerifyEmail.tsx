@@ -28,7 +28,11 @@ const VerifyEmail = () => {
         const response = await verifyEmail(token);
         setMessage(response.msg);
       } catch (error) {
-        setError(error.message);
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unexpected error occurred");
+        }
       } finally {
         setLoading(false);
       }

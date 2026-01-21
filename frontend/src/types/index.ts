@@ -41,26 +41,60 @@ export interface FormDataState {
     startingPoint: string;
 }
 
-export interface LocationState {
-    startingPoint: string;
-    destination: string;
-    selectedPlaces: Place[];
-    sortedSelectedPlaces?: Place[];
-    distance: string;
-    travelTime: string;
-    noOfDays: number;
-    coordinates: {
-        lat: number;
-        lng: number;
-    };
+export interface Coords {
+    lat: number;
+    lng: number;
 }
 
-export interface UserState {
-    userId: string | null;
-    name?: string;
-    email?: string;
-    token?: string;
+export interface SelectedPlace {
+    place: any;
+    index: number;
+    distFromStart: number;
 }
+
+export interface LocationState {
+    destination: Coords | {};
+    startingPoint: Coords | {};
+    coordinates: Coords[];
+    distance: string;
+    travelTime: string;
+    routeGeometry: any[];
+    selectedPlaces: { [key: string]: SelectedPlace };
+    destinations: any[];
+    noOfDays: number | "";
+    sortedSelectedPlaces: any[];
+}
+
+export type LocationAction =
+    | { type: "SET_DESTINATION"; payload: Coords }
+    | { type: "SET_STARTING_POINT"; payload: Coords }
+    | { type: "COORDINATES"; payload: Coords[] }
+    | { type: "DISTANCE"; payload: string }
+    | { type: "TRAVELTIME"; payload: string }
+    | { type: "ROUTE_GEOMETRY"; payload: any[] }
+    | { type: "NOOFDAYS"; payload: number }
+    | { type: "INC_NO_OF_DAYS" }
+    | { type: "DEC_NO_OF_DAYS" }
+    | { type: "DELETE_PLACE"; payload: string }
+    | { type: "ADD_PLACE"; payload: SelectedPlace; id: string }
+    | { type: "SET_PLACES"; payload: { [key: string]: SelectedPlace } }
+    | { type: "RESET_ PLACE" }
+    | { type: "ADD_DESTINATIONS"; payload: any[] }
+    | { type: "REMOVE_DESTINATIONS" }
+    | { type: "SET_SORTED"; payload: any[] }
+    | { type: "RESET_ LOCATION" };
+
+export interface UserState {
+    userId: string;
+    userName: string;
+    email: string;
+    image: string;
+}
+
+export type UserAction =
+    | { type: "SETUSER"; payload: { userId: string; userName: string; email: string; image: string; token: string; refreshToken: string } }
+    | { type: "CHANGEIMAGE"; payload: string }
+    | { type: "REMOVEUSER" };
 
 export interface AuthResponse {
     status: boolean;

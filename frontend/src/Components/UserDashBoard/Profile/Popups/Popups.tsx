@@ -4,11 +4,29 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Popups.css";
 import { updateProfilePic } from "../../../../services/userService";
 import { useDispatch } from "react-redux";
+import { UserState } from "../../../../types";
+
+interface ButtonPopupProps {
+  handleProfilePicTab: () => void;
+  viewImage: () => void;
+  handleProfilePic: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+interface ImagePopupProps {
+  setIsShowImage: (value: boolean) => void;
+  userData: UserState;
+}
+
+interface ImageChangePopupProps {
+  setIsChangeImage: (value: boolean) => void;
+  selectedImage: string;
+}
+
 export const ButtonPopup = ({
   handleProfilePicTab,
   viewImage,
   handleProfilePic,
-}) => {
+}: ButtonPopupProps) => {
   return (
     <div className="profile-options" onMouseLeave={handleProfilePicTab}>
       <button onClick={viewImage}>
@@ -22,7 +40,7 @@ export const ButtonPopup = ({
   );
 };
 
-export const ImagePopup = ({ setIsShowImage, userData }) => {
+export const ImagePopup = ({ setIsShowImage, userData }: ImagePopupProps) => {
   return (
     <div className="modal-overlay" onClick={() => setIsShowImage(false)}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -42,7 +60,7 @@ export const ImagePopup = ({ setIsShowImage, userData }) => {
   );
 };
 
-export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
+export const ImageChangePopup = ({ setIsChangeImage, selectedImage }: ImageChangePopupProps) => {
   const [zoom, setZoom] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [x, setX] = useState(0);
@@ -67,16 +85,16 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
 
   // })
 
-  const canvasRef = useRef();
-  const imgRef = useRef();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
 
   const closePopup = () => {
     setIsChangeImage(false);
   };
 
-  const handleZoom = (e) => {
-    setZoom(e.target.value / 100);
+  const handleZoom = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setZoom(Number(e.target.value) / 100);
   };
   useEffect(() => {
     if (base64) return;
@@ -89,7 +107,7 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
       img.src = selectedImage;
       img.onload = function () {
         imgRef.current = img;
-        canvas.width =Math.min('400', window.innerWidth*0.5)
+        canvas.width = Math.min(400, window.innerWidth * 0.5)
         canvas.height = canvas.width / (img.width / img.height); //canvas has same aspect ratio of img
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
@@ -132,20 +150,23 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
     }
   }, [selectedImage, zoom, x, y, crop]);
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     setIsDragging(true);
     setXLast(x);
     setYLast(y);
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     if (isDragging) {
-      const x=e?.touches?.[0]?.clientX ?? e.clientX
-      const y=e?.touches?.[0]?.clientY ?? e.clientY
-      
+      const touchEvent = e as React.TouchEvent<HTMLCanvasElement>;
+      const mouseEvent = e as React.MouseEvent<HTMLCanvasElement>;
+      const x = touchEvent.touches?.[0]?.clientX ?? mouseEvent.clientX;
+      const y = touchEvent.touches?.[0]?.clientY ?? mouseEvent.clientY;
+
       const canvas = canvasRef.current;
+      if (!canvas) return;
 
       const rect = canvas.getBoundingClientRect();
       const newX = xLast + x - rect.left - rect.width / 2;
@@ -159,7 +180,7 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
     }
   };
 
-  const handlePointerUp = (e) => {
+  const handlePointerUp = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     setIsDragging(false);
   };
@@ -192,20 +213,20 @@ export const ImageChangePopup = ({ setIsChangeImage, selectedImage }) => {
           onClick={closePopup}
         />
         <div className="image-container">
-        <canvas
-          ref={canvasRef}
-          
-          onMouseDown={handlePointerDown}
-          onMouseMove={handlePointerMove}
-          onMouseUp={handlePointerUp}
-          onTouchStart={handlePointerDown}
-          onTouchMove={handlePointerMove}
-          onTouchEnd={handlePointerUp}
-        >
-          Your browser does not support the cropping image
-        </canvas>
+          <canvas
+            ref={canvasRef}
+
+            onMouseDown={handlePointerDown}
+            onMouseMove={handlePointerMove}
+            onMouseUp={handlePointerUp}
+            onTouchStart={handlePointerDown}
+            onTouchMove={handlePointerMove}
+            onTouchEnd={handlePointerUp}
+          >
+            Your browser does not support the cropping image
+          </canvas>
         </div>
-       
+
 
         <div>
           <input type="range" value={zoom * 100} onChange={handleZoom} />

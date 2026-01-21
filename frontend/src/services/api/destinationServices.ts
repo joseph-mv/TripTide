@@ -3,11 +3,16 @@ import { axiosInstance } from "../api";
 import { jwtCheck } from "../../utils/authUtils";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const NETWORK_ISSUE_MSG="Network issue. Please try again later."
+const NETWORK_ISSUE_MSG = "Network issue. Please try again later."
 
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-export const getRouteDestinations = async (coordinates, activities) => {
+interface CoordinateParams {
+  coordinates: [number, number];
+  distance: number;
+}
+
+export const getRouteDestinations = async (coordinates: CoordinateParams, activities: string[]) => {
   try {
     await jwtCheck()
     const response = await axios.get(`${BASE_URL}/suggestions`, {
@@ -19,11 +24,14 @@ export const getRouteDestinations = async (coordinates, activities) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.error || NETWORK_ISSUE_MSG)
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || NETWORK_ISSUE_MSG)
+    }
+    throw new Error(NETWORK_ISSUE_MSG)
   }
 };
 
-export const getNearbyDestinations = async (form) => {
+export const getNearbyDestinations = async (form: any) => {
   try {
     if (!form.coordinates.length) {
       throw new Error("Please select a place");
@@ -37,11 +45,14 @@ export const getNearbyDestinations = async (form) => {
     }
     return response.data;
   } catch (error) {
-    throw new Error(error.message || "Network issue. Please try again later.");
+    if (error instanceof Error) {
+      throw new Error(error.message || NETWORK_ISSUE_MSG);
+    }
+    throw new Error(NETWORK_ISSUE_MSG);
   }
 };
 
-export const getGeocodedSuggestions = async (query) => {
+export const getGeocodedSuggestions = async (query: string) => {
   try {
     const response = await axios.get(
       `https://api.mapbox.com/search/geocode/v6/forward?q=${query}&types=street%2Clocality%2Cplace%2Cregion%2Cdistrict&language=en&access_token=${mapboxToken}`
@@ -53,7 +64,7 @@ export const getGeocodedSuggestions = async (query) => {
   }
 };
 
-export const getDestDetails = async (siteLabel) => {
+export const getDestDetails = async (siteLabel: string) => {
   try {
     const response = await axios.get(
       `https://en.wikipedia.org/api/rest_v1/page/summary/${siteLabel}`
@@ -67,7 +78,7 @@ export const getDestDetails = async (siteLabel) => {
   }
 };
 
-export const getCoordinatesAndWikiID = async (query) => {
+export const getCoordinatesAndWikiID = async (query: string) => {
   try {
     const response = await getGeocodedSuggestions(query);
     if (!response.length) {
@@ -81,11 +92,14 @@ export const getCoordinatesAndWikiID = async (query) => {
     return { coords, wikiId };
   } catch (error) {
     console.log("Error fetching geocoded suggestions:", error);
-    throw new Error(error.message);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unexpected error occurred");
   }
 };
 
-export const getDestDescription=async(wikidataId)=>{
+export const getDestDescription = async (wikidataId: string) => {
   try {
     const response = await axios.get(
       `https://www.wikidata.org/wiki/Special:EntityData/${wikidataId}.json`
@@ -96,7 +110,7 @@ export const getDestDescription=async(wikidataId)=>{
   }
 }
 
-export const getDestImage=async(name)=>{
+export const getDestImage = async (name: string) => {
   const accessKey = import.meta.env.VITE_UNSPLASH_ACESSS_KEY;
   try {
     const response = await axios.get(

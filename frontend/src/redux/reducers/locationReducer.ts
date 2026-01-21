@@ -1,4 +1,6 @@
-const initialState = {
+import { LocationState, LocationAction } from "../../types";
+
+const initialState: LocationState = {
   destination: {},
   startingPoint: {},
   // midPoint:{},
@@ -8,7 +10,7 @@ const initialState = {
   routeGeometry: [],
   selectedPlaces: {},
   destinations: [],
-  noOfDays: "",
+  noOfDays: 0,
   sortedSelectedPlaces: [],
 };
 
@@ -21,7 +23,7 @@ const ROUTE_GEOMETRY = "ROUTE_GEOMETRY";
 const RESET_STATE = "RESET_ LOCATION";
 const DELETE_PLACE = "DELETE_PLACE";
 const ADD_PLACE = "ADD_PLACE";
-const SET_PLACES="SET_PLACES";
+const SET_PLACES = "SET_PLACES";
 const RESET_PLACE = "RESET_ PLACE";
 const ADD_DESTINATIONS = "ADD_DESTINATIONS";
 const REMOVE_DESTINATIONS = "REMOVE_DESTINATIONS";
@@ -30,7 +32,7 @@ const INC_NO_OF_DAYS = "INC_NO_OF_DAYS";
 const DEC_NO_OF_DAYS = "DEC_NO_OF_DAYS";
 const SET_SORTED = "SET_SORTED";
 
-const locationReducer = (state = initialState, action) => {
+const locationReducer = (state: LocationState = initialState, action: any): LocationState => {
 
   switch (action.type) {
     case SET_DESTINATION:
@@ -73,13 +75,13 @@ const locationReducer = (state = initialState, action) => {
     case INC_NO_OF_DAYS: {
       return {
         ...state,
-        noOfDays: state.noOfDays + 1,
+        noOfDays: (state.noOfDays as number) + 1,
       };
     }
     case DEC_NO_OF_DAYS: {
       return {
         ...state,
-        noOfDays: state.noOfDays-1,
+        noOfDays: (state.noOfDays as number) - 1,
       };
     }
 
@@ -97,8 +99,8 @@ const locationReducer = (state = initialState, action) => {
           [action.id]: action.payload,
         },
       };
-      case SET_PLACES:
-        return{...state,selectedPlaces:action.payload}
+    case SET_PLACES:
+      return { ...state, selectedPlaces: action.payload }
     case RESET_PLACE:
       return {
         ...state,

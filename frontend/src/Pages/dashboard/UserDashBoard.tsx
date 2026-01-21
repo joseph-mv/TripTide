@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ROUTES } from "../../routes";
 import { useNavigate } from "react-router-dom";
@@ -12,31 +12,35 @@ import UserTrip from "../../Components/UserDashBoard/UserTrip/UserTrip";
 import Connections from "../../Components/UserDashBoard/Connections/Connections";
 import OngoingTrips from "../../Components/UserDashBoard/OngoingTrips/OngoingTrips";
 
+import { RootState } from "../../redux/store";
+
 /**
  * UserDashBoard page
  * render content based on the activeTab , shows user information and edit options
  */
 const UserDashboard = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const [trips, setTrips] = useState([]);
   const [activeTab, setActiveTab] = useState("currentTrip");
-  const userData = useSelector((store) => store.user);
+  const userData = useSelector((store: RootState) => store.user);
 
   //fetch all trips of user
   useEffect(() => {
     async function getUser() {
-      try {      
+      try {
         const response = await getUserInformation();
         setTrips(response);
       } catch (error) {
-        console.log(error.message);
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
         navigate(ROUTES.AUTHENTICATE)
       }
     }
     getUser();
   }, []);
 
-  const [upcomingTrips,completedTrips,ongoingTrips]=filterTrips(trips)
+  const [upcomingTrips, completedTrips, ongoingTrips] = filterTrips(trips)
 
   // render content corresponding to activeTab
   const renderContent = () => {
@@ -68,8 +72,8 @@ const UserDashboard = () => {
               {completedTrips
                 .sort(
                   (a, b) =>
-                    new Date(a.details.startDate) -
-                    new Date(b.details.startDate)
+                    new Date(a.details.startDate).getTime() -
+                    new Date(b.details.startDate).getTime()
                 )
                 .map((trip) => (
                   <UserTrip trip={trip} setTrips={setTrips} />

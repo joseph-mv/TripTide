@@ -19,8 +19,8 @@ const ContactPage = () => {
   });
 
   const handleChange = (e) => {
-    const {name,value}=e.target
-    setContactForm({ ...contactForm, [name]:value });
+    const { name, value } = e.target
+    setContactForm({ ...contactForm, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -30,13 +30,17 @@ const ContactPage = () => {
       const response = await contact(contactForm);
       toast.success(response);
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
-      setContactForm({name:'',email:'',subject:'',message:''})
+      setContactForm({ name: '', email: '', subject: '', message: '' })
     }
   };
-  
+
   return (
     <div className="contact-section">
       <h1>Contact Us</h1>
@@ -132,7 +136,7 @@ const ContactPage = () => {
               ></textarea>
             </div>
             <button type="submit" disabled={loading}>
-              {loading ?"Submitting":"Submit"} 
+              {loading ? "Submitting" : "Submit"}
             </button>
           </form>
         </section>

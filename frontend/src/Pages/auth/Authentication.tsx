@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import "../../styles/pages/auth/Authentication.css"; 
+import "../../styles/pages/auth/Authentication.css";
 import LoginForm from "../../Components/auth/LoginForm";
 import SignupForm from "../../Components/auth/SignupForm";
 
@@ -42,8 +42,8 @@ const Authentication = () => {
     >
       {/* Form Section: Contains both signup and login forms */}
       <div className="row">
-        <SignupForm toggleAuthView={toggleAuthView}/>
-        <LoginForm toggleAuthView={toggleAuthView}/>
+        <SignupForm toggleAuthView={toggleAuthView} />
+        <LoginForm toggleAuthView={toggleAuthView} />
       </div>
 
       {/* Content Section: Displays contextual text and images */}

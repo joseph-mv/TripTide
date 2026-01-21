@@ -1,4 +1,4 @@
-export function getNextDate(dateString) {
+export function getNextDate(dateString: string) {
     // Convert the string to a Date object
     let date = new Date(dateString);
 
@@ -7,4 +7,4 @@ export function getNextDate(dateString) {
 
     // Format the date as needed (YYYY-MM-DD)
     return date.toISOString().split('T')[0];
-}
+}   
