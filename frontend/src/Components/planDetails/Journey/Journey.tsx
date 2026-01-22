@@ -17,26 +17,24 @@ import { getRoutes } from "../../../services/tripServices";
 import { formatDuration } from "../../../utils/formatDuration";
 import { selectRouteGeoCoords } from "../../../utils/tripUtils";
 
-/**
- * Journey component 
- * 
- * fetch routes from mapbox api and save in redux
- * shows starting and destination point with routes details.
- * facility for change routes
- */
+import { RootState } from "../../../redux/store";
+
 const Journey = () => {
   const dispatch = useDispatch();
   const [errMsg, setErrMsg] = useState("");
   const [routeNum, setRouteNum] = useState(0);
-  const [routes, setRoutes] = useState([]);
-  const formData = useSelector((state) => state.form);
-  const trip = useSelector((state) => state.location);
+  const [routes, setRoutes] = useState<any[]>([]);
+  const formData = useSelector((state: RootState) => state.form);
+  const trip = useSelector((state: RootState) => state.location);
 
   //Get all routes between starting point and destination.
   useEffect(() => {
     const get = async () => {
       try {
-        const response = await getRoutes(trip.startingPoint, trip.destination);
+        const response = await getRoutes(
+          { latitude: (trip.startingPoint as any).lat, longitude: (trip.startingPoint as any).lng },
+          { latitude: (trip.destination as any).lat, longitude: (trip.destination as any).lng }
+        );
         setRoutes(response);
       } catch (error) {
         if (error instanceof Error) {

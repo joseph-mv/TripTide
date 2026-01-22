@@ -19,11 +19,7 @@ interface SignupFormProps {
   toggleAuthView: () => void;
 }
 
-/**
- * SignupForm component handles user registration with form validation and submission.
- * @param {Object} props - Component props
- * @param {Function} props.toggleAuthView - Function to switch to the sign-in view
- */
+
 const SignupForm: React.FC<SignupFormProps> = ({ toggleAuthView }) => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);

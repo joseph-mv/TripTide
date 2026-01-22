@@ -8,20 +8,19 @@ import Location from "./Location";
 import AddLocations from "./AddLocations";
 import { reverseDate } from "../../../utils/reverseDate";
 import { haversineDistance } from "../../../utils/haversineDistance";
+import { RootState } from "../../../redux/store";
 
-/**
- * Displays a list of the starting point and the selected locations.
- */
-const SelectedLocations = () => { 
+
+const SelectedLocations = () => {
   const dispatch = useDispatch();
-  const formData = useSelector((state) => state.form);
-  const coordinates = useSelector((state) => state.location);
+  const formData = useSelector((state: RootState) => state.form);
+  const coordinates = useSelector((state: RootState) => state.location);
   const [isAddingLocation, setIsAddingLocation] = useState(false);
   const places = coordinates.sortedSelectedPlaces;
 
-  let prevCoord = [
-    coordinates.startingPoint.longitude,
-    coordinates.startingPoint.latitude,
+  let prevCoord: [number, number] = [
+    (coordinates.startingPoint as any).lng || 0,
+    (coordinates.startingPoint as any).lat || 0,
   ];
 
   //sorting selected places by distance from starting point.
@@ -37,7 +36,7 @@ const SelectedLocations = () => {
     });
   }, [coordinates.selectedPlaces]);
 
-  
+
   const toggleAddLocation = function () {
     setIsAddingLocation((prev) => !prev);
   };

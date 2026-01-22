@@ -32,7 +32,7 @@ interface ItineraryFormProps {
 const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "", _id }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  var coordinates = useSelector((state: RootState) => state.location) as unknown as LocationState; // Casting as location might be untyped in root yet if not fully updated
+  var coordinates = useSelector((state: RootState) => state.location) // Casting as location might be untyped in root yet if not fully updated
   var formData = useSelector((state: RootState) => state.form);
   console.log(oldItinerary, formData);
   var token = localStorage.getItem("token");
@@ -42,6 +42,8 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
   const [itinerary, setItinerary] = useState<Itinerary>(newItinerary);
   const [name, setName] = useState<string>(oldName);
   const location = useLocation();
+
+  console.log('itinerary', itinerary);
   //creating new Itinerary object
   useEffect(() => {
     let date = formData.startDate;

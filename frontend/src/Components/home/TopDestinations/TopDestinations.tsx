@@ -6,9 +6,7 @@ import { topDestinations } from "../../../services/tripServices";
 
 import { WikiPlace } from "../../../types";
 
-/**
- * Top destinations section in Home page to show random 12 top destinations
- */
+
 const TopDestinations: React.FC = () => {
   const [destinations, setDestinations] = useState<WikiPlace[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

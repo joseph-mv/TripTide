@@ -7,14 +7,7 @@ interface DesFormProps {
   setActiveInput: (input: string | null) => void;
 }
 
-/**
- * 
- * @param {Object} props - Component props
- * @param {Object} props.form - form of inputs.
- * @param {Function} props.handleChange - Function to update inputs.
- * @param {string} props.activeInput - string to identify active input.
- * @param {Function} props.setActiveInput- Function to update active input.
- */
+
 const DesForm: React.FC<DesFormProps> = ({ form, handleChange, activeInput, setActiveInput }) => {
 
   //only show active input in the map

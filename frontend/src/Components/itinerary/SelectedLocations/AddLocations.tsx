@@ -1,19 +1,20 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { RootState } from "../../../redux/store";
+import { Destination } from "../../../types";
+
 import TouristSpots from "../../common/TouristSpots/TouristSpots";
 
-/**
- * Component to render the AddLocations popup/modal.
- * 
- * @param {Object} props - Component props.
- * @param {Function} props.toggleAddLocation - Function to handle opening/closing popup (toggle logic).
-  * @returns {JSX.Element} AddLocations component.
- */
-const AddLocations = ({ toggleAddLocation }) => {
-  const coordinates = useSelector((store) => store.location);
+interface AddLocationsProps {
+  toggleAddLocation: () => void;
+}
+
+
+const AddLocations = ({ toggleAddLocation }: AddLocationsProps) => {
+  const coordinates = useSelector((store: RootState) => store.location);
   return (
     <div className="addLocationPopup">
       <div className="addContent">
@@ -22,18 +23,18 @@ const AddLocations = ({ toggleAddLocation }) => {
         <FontAwesomeIcon
           onClick={toggleAddLocation}
           className="closeBtn"
-          icon={faWindowClose}
+          icon={faWindowClose as IconProp}
         />
 
         <h1>Add Destinations</h1>
         <div className="addDestinations">
           {coordinates.destinations.length ===
             Object.keys(coordinates.selectedPlaces).length && (
-            <p>No more destinations...</p>
-          )}
+              <p>No more destinations...</p>
+            )}
 
           {/* Destinations */}
-          {coordinates.destinations?.map((destination, index) =>
+          {coordinates.destinations?.map((destination: Destination, index: number) =>
             !coordinates.selectedPlaces[destination._id] ? (
               <TouristSpots
                 addDestination

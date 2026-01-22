@@ -1,13 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import LazyImage from "../../../ui/LazyImage";
-
 import { WikiPlace } from "../../../../types";
 
-/**
- *  A card component displaying a top destination, with a flip interaction.
- * @param {Object} props -Component props
- * @param {Object} destination - An object containing information about the destination to be displayed.
- */
 interface DestinationProps {
   destination: WikiPlace;
 }

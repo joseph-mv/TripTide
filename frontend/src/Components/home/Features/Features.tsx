@@ -4,13 +4,9 @@ import "./Features.css";
 import FeatureCard from "./FeatureCard/FeatureCard";
 import { features } from "../../../config/featuresConfig";
 
-/**
- * feature section in Home page with horizontal scrolling
- */
 const FeatureSection: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /** Add custom horizontal wheel scrolling to scrollContainer */
   useEffect(() => {
     const scrollContainer = scrollRef.current;
 

@@ -8,14 +8,14 @@ import { ROUTES } from "../../../routes";
 import { usePlanMap } from "../../../hooks/usePlanMap";
 import { createMarker } from "../../../utils/createMarker";
 
-/**
- * Map component
- * for showing route and mark selected destinations on the map
- */
+
+import type { Marker } from "mapbox-gl";
+import { RootState } from "../../../redux/store";
+
 function Map() {
   const navigate = useNavigate();
-  const markersRef = useRef({});
-  const coordinates = useSelector((state) => state.location);
+  const markersRef = useRef<Record<string, Marker>>({});
+  const coordinates = useSelector((state: RootState) => state.location);
   const selectedPlaces = coordinates.selectedPlaces;
 
   const { loading, mapContainerRef, mapRef } = usePlanMap(coordinates);
@@ -36,8 +36,8 @@ function Map() {
           const marker = createMarker(
             selectedPlace.place,
             selectedPlace.index - 1
-          ).addTo(mapRef.current);
-          
+          ).addTo(mapRef.current!);
+
           markersRef.current[key] = marker;
         }
       });
@@ -56,8 +56,8 @@ function Map() {
   return (
     <div className="map-container">
       <div className="map-position" ref={mapContainerRef}></div>
-      <button onClick={handlePlan} class={`itinerary-button `}>
-        <i class="fa-solid fa-clipboard-list"></i> <span> Make Itinerary</span>
+      <button onClick={handlePlan} className={`itinerary-button `}>
+        <i className="fa-solid fa-clipboard-list"></i> <span> Make Itinerary</span>
       </button>
     </div>
   );

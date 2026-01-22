@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./MapPopup.css";
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-function MapPopup({ setMap, startingPoint, places }) {
+interface MapPopupProps {
+  setMap: (map: boolean) => void;
+  startingPoint: { longitude: number; latitude: number };
+  places: { place: { location: { coordinates: [number, number] } } }[];
+}
+
+function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
   const coordinates = [[startingPoint.longitude, startingPoint.latitude]];
   // console.log(places);
   places.map((place) => coordinates.push(place.place.location.coordinates));

@@ -17,14 +17,7 @@ interface PasswordResetFormProps {
   setError: (error: string) => void;
 }
 
-/**
- * **PasswordResetForm Component**
- * - Handles OTP verification and password reset.
- *
- * @param {Object} props - Component props
- * @param {string} props.email - The user's email for password reset.
- * @param {Function} props.setError - Function to update error messages.
- */
+
 const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }) => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", ""]); // Stores the OTP digits
@@ -50,9 +43,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
     setError(error);
   }, [error]);
 
-  /**
-   * Handles OTP input changes.
-   */
+
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
     if (isNaN(Number(value)) || value.length > 1) return;
@@ -66,9 +57,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
     }
   };
 
-  /**
-   *  Handles Backspace: Move focus back if current field is empty
-   */
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace") {
       e.preventDefault(); // preventing default on backspace might block deletion if explicit clearing isn't perfect, but keeping existing logic structure

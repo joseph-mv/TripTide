@@ -12,15 +12,7 @@ interface EmailFormProps {
   setEmail: (email: string) => void;
 }
 
-/**
- * **EmailForm Component**
- * - Handles sending OTP to the user's email for password reset.
- *
- * @param {Object} props - Component props
- * @param {Function} props.setOtpSent - Function to update OTP sent status.
- * @param {Function} props.setError - Function to update error messages.
- * @param {Function} props.setEmail - Function to update email state.
- */
+
 const EmailForm: React.FC<EmailFormProps> = ({ setOtpSent, setError, setEmail }) => {
   const { form, handleChange, handleSubmit, loading, error } = useForm({ email: '' }, async () => {
     const response = await forgotPassword(email);

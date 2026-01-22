@@ -5,12 +5,7 @@ import { refreshToken } from "../../utils/refreshToken";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { useDispatch } from "react-redux";
 
-/**
- * **ProtectedRoute Component**
- * - Restricts access to authenticated users.
- * - If `isAuthenticated`, renders the protected content (`children`).
- * - Otherwise, redirects users to the authentication page.
- */
+
 const ProtectedRoute: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();

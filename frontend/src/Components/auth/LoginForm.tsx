@@ -17,11 +17,7 @@ interface LoginFormProps {
   toggleAuthView: () => void;
 }
 
-/**
- * LoginForm component handles user login with email and password.
- * @param {Object} props - Component props
- * @param {Function} props.toggleAuthView - Function to switch to the sign-up view
- */
+
 const LoginForm: React.FC<LoginFormProps> = ({ toggleAuthView }) => {
   const location = useLocation();
   const dispatch = useDispatch();

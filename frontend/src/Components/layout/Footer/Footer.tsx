@@ -1,11 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import "./Footer.css";
 
-/**
- * Footer component with logo, navigation links, social media icons, and copyright info.
- */
+
 const Footer = () => {
   // Footer navigation links
   const footerLinks = [
@@ -44,7 +41,7 @@ const Footer = () => {
           </ul>
         </div>
 
-         {/* Social Media Links */}
+        {/* Social Media Links */}
         <div className="footer-social">
           {socialLinks.map(({ iconClass, url }) => (
             <a
@@ -57,7 +54,7 @@ const Footer = () => {
             </a>
           ))}
         </div>
-        
+
         {/* Info */}
         <div className="footer-info">
           <p>

@@ -7,19 +7,16 @@ import {
   calculateDaysBetweenDates,
   convertTimeStringToIntegerHours,
 } from "../../../../utils/dateUtils.js";
-import {ROUTES} from '../../../../routes.js'
+import { ROUTES } from '../../../../routes.js'
 
 const DAILY_TRAVEL_HOUR = 5;
-/**
- * Displays a warning popup based on travel time and selected date range.
- *
- * @param {Object} props - Props for the warning popup.
- * @param {string} props.travelTime - Estimated travel time in hours and mins (43h 23m).
- * @param {string} props.startDate - Start date of the travel(yyyy-mm-dd).
- * @param {string} props.endDate - End date of the travel(yyyy-mm-dd).
- * @returns {JSX.Element} The warning popup component.
- */
-const WarningPopup = ({ travelTime, startDate, endDate }) => {
+interface WarningPopupProps {
+  travelTime: string;
+  startDate: string;
+  endDate: string;
+}
+
+const WarningPopup: React.FC<WarningPopupProps> = ({ travelTime, startDate, endDate }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const totalHours = convertTimeStringToIntegerHours(travelTime);
@@ -34,9 +31,8 @@ const WarningPopup = ({ travelTime, startDate, endDate }) => {
     });
 
     if (totalHours / DAILY_TRAVEL_HOUR > maxTravelDays) {
-      setMessage(`Your planned travel time of ${travelTime} exceeds our limit of ${
-        maxTravelDays === 1 ? "one day" : `${maxTravelDays} days`
-      }. We recommend traveling 4 to 8 hours per day for a comfortable trip, Happy travels! 🌍✨`);
+      setMessage(`Your planned travel time of ${travelTime} exceeds our limit of ${maxTravelDays === 1 ? "one day" : `${maxTravelDays} days`
+        }. We recommend traveling 4 to 8 hours per day for a comfortable trip, Happy travels! 🌍✨`);
 
       setIsVisible(true);
       document.body.classList.add("fixed-body");

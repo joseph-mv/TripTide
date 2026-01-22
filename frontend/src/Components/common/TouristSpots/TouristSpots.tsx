@@ -1,40 +1,27 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { Destination } from "../../../types";
 
 import "./TouristSpots.css";
 import LazyImage from "../../ui/LazyImage";
 import { haversineDistance } from "../../../utils/haversineDistance";
 import { getDestDetails } from "../../../services/api/destinationServices";
 
-/**
- * TouristSpots component
- * Renders details for a single tourist destination
- * 
- * @param {Object} props
- * @param {Object} props.destination - Destination data to display
- * @param {number} props.index - Index of the destination in the list
- * @returns {JSX.Element}
- */
+
 interface TouristSpotsProps {
-  destination: {
-    _id: string;
-    siteLabel: string;
-    typeLabel: string;
-    location: {
-      coordinates: [number, number]; // [lng, lat]
-    };
-    [key: string]: any;
-  };
+  destination: Destination;
   index: number;
+  addDestination?: boolean;
 }
 
-function TouristSpots({ destination, index }: TouristSpotsProps) {
+function TouristSpots({ destination, index, addDestination }: TouristSpotsProps) {
   const dispatch = useDispatch();
   const [error, setError] = useState<string>("");
   const [details, setDetails] = useState<any>(""); // Explicit any for now as wiki response structure is complex
   const [expanded, setExpanded] = useState<boolean>(false);
-  const selectedPlaces = useSelector((state: any) => state.location.selectedPlaces); // Use any for now until we import RootState
-  const startingPoint = useSelector((state: any) => state.location.startingPoint);
+  const selectedPlaces = useSelector((state: RootState) => state.location.selectedPlaces);
+  const startingPoint = useSelector((state: RootState) => (state.location.startingPoint as any));
 
   const toggleCard = () => {
     setExpanded(!expanded);
@@ -84,7 +71,7 @@ function TouristSpots({ destination, index }: TouristSpotsProps) {
   return (
     <div>
       <div
-        className={`card ${expanded ? "expanded" : ""}`}
+        className={`card ${expanded ? "expanded" : ""} ${addDestination ? "add-mode" : ""}`}
         onClick={toggleCard}
         onMouseLeave={handleMouseLeave}
       >

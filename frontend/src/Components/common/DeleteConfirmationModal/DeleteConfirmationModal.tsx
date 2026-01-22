@@ -1,16 +1,7 @@
 import React from "react";
 import "./DeleteConfirmationModal.css";
 
-/**
- * A reusable modal component for delete confirmation.
- *
- * @param {Object} props - Component props.
- * @param {string} props.content - Content/message to display in the modal.
- * @param {boolean} props.isOpen - Controls visibility of the modal.
- * @param {Function} props.onRequestClose - Function to call when closing the modal.
- * @param {Function} props.onConfirm - Function to call when confirming deletion.
- * @returns {JSX.Element|null} DeleteConfirmationModal component.
- */
+
 interface DeleteConfirmationModalProps {
   content: string;
   isOpen: boolean;

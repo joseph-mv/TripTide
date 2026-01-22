@@ -8,11 +8,20 @@ export interface Place {
     [key: string]: any; // Allow loose typing for now as place objects can be complex from maps APIs
 }
 
+export interface ToDoItem {
+    time: string;
+    activity: string;
+    isChecked: boolean;
+}
+
 export interface DayItinerary {
+    day: number;
     date: string;
     startingPoint?: string;
+    endPoint?: string;
     places?: Place[];
-    // Add other properties as we find them
+    todo: ToDoItem[];
+    notes: string;
     [key: string]: any;
 }
 
@@ -52,6 +61,16 @@ export interface SelectedPlace {
     distFromStart: number;
 }
 
+export interface Destination {
+    _id: string;
+    siteLabel: string;
+    typeLabel: string;
+    location: {
+        coordinates: [number, number]; // [lng, lat]
+    };
+    [key: string]: any;
+}
+
 export interface LocationState {
     destination: Coords | {};
     startingPoint: Coords | {};
@@ -60,9 +79,9 @@ export interface LocationState {
     travelTime: string;
     routeGeometry: any[];
     selectedPlaces: { [key: string]: SelectedPlace };
-    destinations: any[];
-    noOfDays: number | "";
-    sortedSelectedPlaces: any[];
+    destinations: Destination[];
+    noOfDays: number;
+    sortedSelectedPlaces: SelectedPlace[];
 }
 
 export type LocationAction =

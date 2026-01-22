@@ -1,23 +1,24 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 import "./Suggestions.css";
 
-/**
- * Suggestions - A component that renders a list of suggestion items, typically used for autocomplete or geocoding UI.
- *
- * 
- * @param {Object} props - The props for the component.
- * @param {Array<Object>} props.suggestions - The list of suggestion items to display.
- * @param {function} props.setSuggestions - Function to update the suggestions list .
- * @param {number} props.idx - The index of the currently highlighted suggestion .
- * @param {function} props.handleMouseClick - Callback when a suggestion is clicked by the user.
- * 
- * @returns {JSX.Element} A rendered list of suggestion elements.
- */
-function Suggestions({ suggestions, setSuggestions, idx,handleMouseClick }) {
-  const listRef = useRef(null);
+interface Suggestion {
+  properties: {
+    full_address: string;
+  };
+}
 
-  const highlightedItem = listRef.current?.children[idx];
+interface SuggestionsProps {
+  suggestions: Suggestion[];
+  setSuggestions: (suggestions: Suggestion[]) => void;
+  idx: number;
+  handleMouseClick: (suggestions: Suggestion[], index: number) => void;
+}
+
+function Suggestions({ suggestions, setSuggestions, idx, handleMouseClick }: SuggestionsProps) {
+  const listRef = useRef<HTMLUListElement>(null);
+
+  const highlightedItem = listRef.current?.children[idx] as HTMLElement;
   highlightedItem?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
   return (
@@ -27,8 +28,8 @@ function Suggestions({ suggestions, setSuggestions, idx,handleMouseClick }) {
           <li
             key={index}
             className={index === idx ? "highlight" : ""}
-            onClick={(e) => {
-              handleMouseClick(suggestions,index)
+            onClick={() => {
+              handleMouseClick(suggestions, index)
               setSuggestions([]);
             }}
           >

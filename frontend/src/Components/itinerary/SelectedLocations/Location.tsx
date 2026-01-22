@@ -5,24 +5,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./SelectedLocations.css";
 import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/DeleteConfirmationModal";
+import { RootState } from "../../../redux/store";
+import { SelectedPlace } from "../../../types";
 
-/**
- * Renders a location component with distance info and spot details.
- *
- * @param {Object} props - Component props.
- * @param {number} props.distance - Distance to the location.
- * @param {number} props.index - Index of the location in the list.
- * @param {Object} props.spot - Spot data object containing details of the location.
- * @returns {JSX.Element} Rendered Location component.
- */
-const Location = ({ distance, index, spot }) => {
+interface LocationProps {
+  distance: number;
+  index: number;
+  spot: SelectedPlace;
+}
+
+const Location = ({ distance, index, spot }: LocationProps) => {
   const dispatch = useDispatch();
-  var coordinates = useSelector((state) => state.location);
+  var coordinates = useSelector((state: RootState) => state.location);
   const [isDeleteModelOpen, setIsDeleteModelOpen] = useState(false);
   const [deletingIndex, setDeletingIndex] = useState(-1);
   const places = coordinates.sortedSelectedPlaces;
 
-  const handleOpenModal = (index) => {
+  const handleOpenModal = (index: number) => {
     setDeletingIndex(index);
     setIsDeleteModelOpen(true);
   };
@@ -49,7 +48,7 @@ const Location = ({ distance, index, spot }) => {
       {/* Location Details */}
       <div className="spot">
         <div className="spot-header">
-          <span className="spot-index">{index + 1} </span>         
+          <span className="spot-index">{index + 1} </span>
           <button
             className="delete-button"
             onClick={() => handleOpenModal(index)}

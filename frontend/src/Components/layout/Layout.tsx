@@ -8,10 +8,7 @@ import Header from "./Header/Header";
 import ScrollToTop from "./ScrollToTop";
 import BackToTop from "./BackToTop/BackToTop";
 
-/**
- * @param {object} props - Component props
- * @param {React.ReactNode} props.children - Child elements to be rendered inside the component
- */
+
 interface LayoutProps {
   children: React.ReactNode;
 }

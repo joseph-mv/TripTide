@@ -1,13 +1,10 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import PlanButton from "./PlanButton/PlanButton";
 
 import "./Hero.css";
 import { ROUTES } from "../../../routes";
 
-/**
- * Hero section in Home page
- */
+
 function Hero() {
   const navigate = useNavigate();
   return (

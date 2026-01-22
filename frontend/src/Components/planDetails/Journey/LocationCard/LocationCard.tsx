@@ -11,15 +11,12 @@ import {
   getDestImage,
 } from "../../../../services/api/destinationServices";
 
-/**
- * LocationCard component for show starting point or destination.
- *
- * @param {Object} props - Component props.
- * @param {string} props.name - The name of the location.
- * @param {'SET_DESTINATION' | 'SET_STARTING_POINT'} props.dispatchType - The dispatch type indicating the action for this location.
- * @returns {JSX.Element} The rendered LocationCard component.
- */
-const LocationCard = ({ name, dispatchType }) => {
+interface LocationCardProps {
+  name: string;
+  dispatchType: "SET_DESTINATION" | "SET_STARTING_POINT";
+}
+
+const LocationCard: React.FC<LocationCardProps> = ({ name, dispatchType }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState();

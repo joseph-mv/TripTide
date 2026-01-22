@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { AiFillHome, AiOutlineInfoCircle } from "react-icons/ai";
 import "./Header.css";
 import { ROUTES } from "../../../routes";
 import { shadowAnimation, wavingAnimation } from "../../../animation/header";
+import { RootState } from "../../../redux/store";
 
 const navLinks = [
   {
@@ -40,18 +41,9 @@ const navLinks = [
   },
 ];
 
-/**
- * Header for navigation between pages
- */
-import { RootState } from "../../../redux/store";
 
-// ... existing imports
-
-/**
- * Header for navigation between pages
- */
 const Header = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false); // for hamburg button(in smaller screen)
+  const [isOpen, setIsOpen] = useState<boolean>(false); // for Hamburg button (smaller screen)
   const { userName } = useSelector((store: RootState) => store.user);
 
   const toggleMenu = () => {
@@ -63,19 +55,25 @@ const Header = () => {
     setIsOpen((prev) => !prev);
   };
 
+
+
   return (
     <div>
       <header>
 
         {/* Logo */}
-        <div className="logo">
-          <motion.img
-            src="../../../logo/3.png"
-            alt="Logo"
+        <Link to={ROUTES.HOME} className="logo" onClick={() => setIsOpen(false)}>
+          <motion.div
             animate={shadowAnimation}
-            style={{ width: "150px", height: "auto" }}
-          />
-        </div>
+            style={{ width: "150px", height: "auto", display: "flex", alignItems: "center" }}
+          >
+            <img
+              src="/logo/3.png"
+              alt="Logo"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </motion.div>
+        </Link>
 
         {/* Hamburg button */}
         <button className="menu-toggle">
@@ -112,7 +110,9 @@ const Header = () => {
       </header>
 
       {/* Travel flag */}
-      <motion.div className="travelFlag" animate={wavingAnimation} />
+      <motion.div animate={wavingAnimation} >
+        <div className="travelFlag" />
+      </motion.div>
     </div>
   );
 };

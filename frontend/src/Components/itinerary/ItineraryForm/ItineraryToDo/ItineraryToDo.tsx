@@ -1,20 +1,29 @@
 // src/ItineraryToDo.js
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import "./ItineraryToDo.css";
 import { convertTo12HourFormat } from "../../../../utils/convertTo12HourFormat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useSelector } from "react-redux";
 import { reverseDate } from "../../../../utils/reverseDate";
+import { DayItinerary, Itinerary } from "../../../../types";
+import { RootState } from "../../../../redux/store";
 
-const ItineraryToDo = ({ day, item, setItinerary }) => {
+interface ItineraryToDoProps {
+  day: string;
+  item: DayItinerary;
+  setItinerary: React.Dispatch<React.SetStateAction<Itinerary>>;
+}
+
+const ItineraryToDo = ({ day, item, setItinerary }: ItineraryToDoProps) => {
   // console.log((item.todo))
   const [time, setTime] = useState("");
   const [activity, setActivity] = useState("");
-  var coordinates = useSelector((state) => state.location);
+  var coordinates = useSelector((state: RootState) => state.location);
   const places = coordinates.sortedSelectedPlaces;
   // console.log((coordinates))
-  const handleDestination = (e) => {
+  const handleDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItinerary((prev) => ({
       ...prev,
       [day]: { ...prev[day], endPoint: e.target.value },
@@ -31,7 +40,7 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
       }));
     }
   };
-  const handleCheckBox = (e) => {
+  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     let index = parseInt(e.target.id);
 
     setItinerary((prev) => ({
@@ -46,7 +55,7 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
       },
     }));
   };
-  const addItem = (e) => {
+  const addItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (time && activity) {
       // console.log(day)
@@ -62,14 +71,14 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
     }
   };
 
-  const deleteItem = (index) => {
+  const deleteItem = (index: number) => {
     const newTodo = item.todo.filter((_, i) => i !== index);
     setItinerary((prev) => ({
       ...prev,
       [day]: { ...prev[day], todo: newTodo },
     }));
   };
-  const handleNotes = (e) => {
+  const handleNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setItinerary((prev) => ({
       ...prev,
       [day]: { ...prev[day], notes: e.target.value },
@@ -110,7 +119,7 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
           <form onSubmit={addItem}>
             <div className="input-container">
               <div>
-                <FontAwesomeIcon icon={faClock} />:
+                <FontAwesomeIcon icon={faClock as IconProp} />:
                 <input
                   type="time"
                   value={time}
@@ -138,7 +147,7 @@ const ItineraryToDo = ({ day, item, setItinerary }) => {
                 <div className="todo-item">
                   <div className="check">
                     <input
-                      id={index}
+                      id={index.toString()}
                       type="checkbox"
                       checked={item.isChecked}
                       onChange={handleCheckBox}

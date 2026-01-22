@@ -15,14 +15,7 @@ interface DesSpotProps {
   index: number;
 }
 
-/**
- * DesSpot component
- * -fetch details of place form wikipedia and shows image and Description
- *
- * @param {object} props -object contain component props
- * @param {object} props.destination -Object contain destination details
- * @param {number} props.index -index of destination in the array.
- */
+
 function DesSpot({ destination, index }: DesSpotProps) {
   const [details, setDetails] = useState<any>({});
   const [error, setError] = useState<string>("");

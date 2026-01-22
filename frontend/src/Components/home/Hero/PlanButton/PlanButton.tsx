@@ -1,16 +1,10 @@
 import "./PlanButton.css";
 
 
-/**
- * Plan button with hover animation effect
- */
 interface PlanButtonProps {
   className?: string;
 }
 
-/**
- * Plan button with hover animation effect
- */
 const PlanButton: React.FC<PlanButtonProps> = ({ className }) => {
   return (
     <div className={`planButton ${className || ''}`.trim()}>

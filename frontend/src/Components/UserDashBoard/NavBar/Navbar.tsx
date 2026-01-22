@@ -14,19 +14,16 @@ const NAV_TABS = [
   { id: 'accountSettings', label: 'Account Settings' },
 ];
 
-/**
- * Navbar component to switch between travel-related tabs
- *
- * @param {Object} props - Component props
- * @param {string} props.activeTab - Currently active tab ID
- * @param {function} props.setActiveTab - Function to update the active tab
- * @returns {JSX.Element} Navbar UI
- */
-const Navbar = ({activeTab,setActiveTab}) => {
+interface NavbarProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <nav className="navbar">
-    {NAV_TABS.map(({ id, label }) => (
+      {NAV_TABS.map(({ id, label }) => (
         <button
           key={id}
           className={`${activeTab === id ? 'active' : ''}`}
@@ -36,7 +33,7 @@ const Navbar = ({activeTab,setActiveTab}) => {
           {label}
         </button>
       ))}
-  </nav>
+    </nav>
   )
 }
 
