@@ -18,14 +18,7 @@ export default {
     }
   },
 
-  /**
-   * @function getUserItineraries
-   * @description Fetches all itineraries for a specific user.
-   * @param {Object} req - Express request object.
-   * @param {string} req.userId - ID of the authenticated user.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response containing itineraries or an error message.
-   */
+
   getUserItineraries: async (req: Request, res: Response) => {
 
 
@@ -56,15 +49,7 @@ export default {
     }
   },
 
-  /**
-   * @function updateUserProfilePic
-   * @description Updates a user's profile picture.
-   * @param {Object} req - Express request object.
-   * @param {string} req.userId - ID of the authenticated user.
-   * @param {string} req.body.imageData - New profile image URL or base64 data.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response indicating success or failure.
-   */
+
   updateUserProfilePic: async (req: Request, res: Response) => {
     try {
       const { imageData } = req.body;

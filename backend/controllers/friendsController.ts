@@ -3,14 +3,7 @@ import collection from '../config/collection';
 import { Request, Response } from 'express';
 
 export default {
-  /**
-   * @function searchUsers
-   * @description Searches users by name or email with case-insensitive matching.
-   * @param {Object} req - Express request object.
-   * @param {string} req.query.query - Search term.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with matching users or error message.
-   */
+
   searchUsers: async (req: Request, res: Response) => {
     try {
       const { query } = req.query;

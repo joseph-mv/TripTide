@@ -5,17 +5,7 @@ import { getTypeLabels, searchQuery } from '../utils/tripUtils';
 import { TouristLocation } from '../types/models';
 
 export default {
-  /**
-   * @function searchAlong
-   * @description Fetches tourist locations along a route within a given distance.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.query - Query parameters.
-   * @param {Array} req.query.coordinates - List of [longitude, latitude] points forming the route.
-   * @param {string|number} req.query.distance - Search distance along the route.
-   * @param {Object} req.query.activities - User-selected activity filters.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with a list of tourist locations.
-   */
+
   searchAlong: async (req: Request, res: Response) => {
     try {
       // Explicitly cast req.query properties to their expected types
@@ -85,18 +75,7 @@ export default {
     }
   },
 
-  /**
-   * @function getDestinations
-   * @description Fetches destinations based on user-selected location, distance, and types.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.query - Query parameters.
-   * @param {Array} req.query.coordinates - User's selected [longitude, latitude].
-   * @param {string} req.query.distance - Search radius (in km).
-   * @param {Object} req.query.type - Selected types (e.g., beaches, mountains).
-   * @param {Object} req.query.activities - Selected activities (e.g., shopping,adventure).
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with a list of destinations.
-   */
+
   getDestinations: async (req: Request, res: Response) => {
     try {
       const queryParams = req.query as unknown as {

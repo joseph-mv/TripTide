@@ -6,14 +6,7 @@ const { ObjectId } = require("mongodb");
 import { Request, Response } from 'express';
 
 export default {
-  /**
-   * @function addItinerary
-   * @description Adds a new itinerary to the database.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.body - Itinerary data from the client.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response indicating success or failure.
-   */
+
   addItinerary: async (req: Request, res: Response) => {
     try {
       const itineraryData = req.body;
@@ -54,14 +47,7 @@ export default {
     }
   },
 
-  /**
-   * @function deleteItinerary
-   * @description Deletes an itinerary from the database.
-   * @param {Object} req - Express request object.
-   * @param {string} req.query.id - ID of the itinerary to delete.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response indicating success or failure.
-   */
+
   deleteItinerary: async (req: Request, res: Response) => {
     try {
       const { id } = req.query;
@@ -82,15 +68,7 @@ export default {
   },
 
 
-  /**
-   * @function editItinerary
-   * @description Updates an itinerary in the database.
-   * @param {Object} req - Express request object.
-   * @param {string} req.query.id - ID of the itinerary to edit.
-   * @param {Object} req.body - Updated itinerary data.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response indicating success or failure.
-   */
+
   editItinerary: async (req: Request, res: Response) => {
     try {
       const { id } = req.query;

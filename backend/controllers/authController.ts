@@ -18,13 +18,7 @@ interface DecodedToken extends jwt.JwtPayload {
 }
 
 export default {
-  /**
-   * @function signUp
-   * @description Handles user registration, including password hashing and email verification.
-   * @param {Object} req - Express request object containing user data in `req.body`.
-   * @param {Object} res - Express response object.
-   * @returns {Object} - Sends a JSON response with success or error message.
-   */
+
   signUp: async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
 
@@ -79,15 +73,7 @@ export default {
     }
   },
 
-  /**
-   * @function verifyEmail
-   * @description Verifies the user's email by checking the token and updating the verification status.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.query - Query parameters from the request.
-   * @param {string} req.query.token - Email verification token.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with success or error message.
-   */
+
   verifyEmail: async (req: Request, res: Response) => {
     try {
       const { token } = req.query as { token?: string };
@@ -123,16 +109,7 @@ export default {
     }
   },
 
-  /**
-   * @function login
-   * @description Authenticates a user, checks credentials, and returns access and refresh tokens.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.body - Request body containing user credentials.
-   * @param {string} req.body.email - User's email.
-   * @param {string} req.body.password - User's password.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with user details and tokens.
-   */
+
   login: async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
@@ -185,15 +162,7 @@ export default {
         .json({ error: "Something went wrong. Please try again later." });
     }
   },
-  /**
-   * @function forgotPassword
-   * @description Sends a password reset OTP to the user's email.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.body - Request body containing the email.
-   * @param {string} req.body.email - User's email address.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with OTP status.
-   */
+
   forgotPassword: async (req: Request, res: Response) => {
     try {
       const { email } = req.body;
@@ -236,17 +205,7 @@ export default {
       });
     }
   },
-  /**
-   * @function resetPassword
-   * @description Resets the user's password after verifying the OTP.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.body - Request body containing email, OTP, and new password.
-   * @param {string} req.body.email - User's email address.
-   * @param {string} req.body.otp - One-time password for verification.
-   * @param {string} req.body.newPassword - New password to be set.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response indicating success or failure.
-   */
+
   resetPassword: async (req: Request, res: Response) => {
     try {
       const { email, otp, newPassword } = req.body;
@@ -294,15 +253,7 @@ export default {
         .json({ error: "Something went wrong. Please try again later." });
     }
   },
-  /**
-   * @function refreshToken
-   * @description Generates a new access token using a valid refresh token.
-   * @param {Object} req - Express request object.
-   * @param {Object} req.body - Request body containing the refresh token.
-   * @param {string} req.body.refreshToken - Refresh token for verification.
-   * @param {Object} res - Express response object.
-   * @returns {Object} JSON response with new access token or error message.
-   */
+
   refreshToken: async (req: Request, res: Response) => {
     try {
       const { refreshToken } = req.body;

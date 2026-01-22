@@ -1,16 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-/**
- * Middleware to verify and authenticate a JWT token.
- * Extracts the user ID from the token and attaches it to `req.userId`.
- *
- * @param {Object} req - Express request object.
- * @param {Object} req.headers - Headers containing the Authorization token.
- * @param {Object} res - Express response object.
- * @param {Function} next - Express next middleware function.
- * @returns {void} - Calls `next()` if the token is valid, otherwise returns a 401 error.
- */
+
 
 function verifyToken(req: Request, res: Response, next: NextFunction) {
   const token = req.headers["authorization"];

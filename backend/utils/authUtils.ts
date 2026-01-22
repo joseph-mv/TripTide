@@ -48,11 +48,7 @@ TripTide`,
   }
 };
 
-/**
- * Check if a user already exists with the given email.
- * @param {string} email - User's email address.
- * @returns {Promise<any>} - User object if exists, null otherwise.
- */
+
 const checkExistingUser = async (email: string) => {
   const dbInstance = db.get();
   if (!dbInstance) throw new Error("Database not initialized");
@@ -63,11 +59,7 @@ const checkExistingUser = async (email: string) => {
   return user;
 };
 
-/**
- * Hashes the user's password using bcrypt.
- * @param {string} password - Plain text password.
- * @returns {Promise<string>} - Hashed password.
- */
+
 const hashPassword = async (password: string) => {
   const saltRounds = Number(process.env.SALT_ROUNDS) || 10;
   return bcrypt.hash(password, saltRounds);
