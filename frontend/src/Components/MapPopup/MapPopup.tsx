@@ -1,37 +1,48 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./MapPopup.css";
+import { SelectedPlace, Coords } from "../../types";
+
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapPopupProps {
-  setMap: (map: boolean) => void;
-  startingPoint: { longitude: number; latitude: number };
-  places: { place: { location: { coordinates: [number, number] } } }[];
+  setMap: React.Dispatch<React.SetStateAction<boolean>>;
+  startingPoint: Coords;
+  places: SelectedPlace[];
 }
 
 function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
-  const coordinates = [[startingPoint.longitude, startingPoint.latitude]];
-  // console.log(places);
-  places.map((place) => coordinates.push(place.place.location.coordinates));
-  // console.log(coordinates)
-  const mapContainerRef = useRef(null);
-  const mapRef = useRef(null);
+  const coordinates: [number, number][] = [[startingPoint.lng, startingPoint.lat]];
+
+  places.forEach((place) => {
+    if (place.place?.location?.coordinates) {
+      coordinates.push(place.place.location.coordinates);
+    }
+  });
+
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+
   useEffect(() => {
+    if (!mapContainerRef.current) return;
+
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      // center: [77.5, 14],
+      center: [startingPoint.lng, startingPoint.lat],
       zoom: 12,
     });
-    map.addControl(new mapboxgl.FullscreenControl());
 
     mapRef.current = map;
+    map.addControl(new mapboxgl.FullscreenControl());
+
     map.on("load", () => {
       map.addSource("route", {
         type: "geojson",
         data: {
           type: "Feature",
+          properties: {}, // Added missing properties
           geometry: {
             type: "LineString",
             coordinates: coordinates,
@@ -53,27 +64,35 @@ function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
         },
       });
 
-      const bounds = new mapboxgl.LngLatBounds()
-        .extend(coordinates[0])
-        .extend(coordinates[coordinates.length - 1]);
-      map.fitBounds(bounds, { padding: 50 });
+      if (coordinates.length > 0) {
+        const bounds = new mapboxgl.LngLatBounds()
+          .extend(coordinates[0])
+          .extend(coordinates[coordinates.length - 1]);
+        map.fitBounds(bounds, { padding: 50 });
+      }
     });
 
-    return () => map.remove();
-  }, [places]);
+    return () => {
+      map.remove();
+    };
+  }, [places, startingPoint.lat, startingPoint.lng]);
 
   useEffect(() => {
-    Object.keys(places).forEach((key, index) => {
-      const place = places[key];
+    const map = mapRef.current;
+    if (!map) return;
+
+    places.forEach((place, index) => {
+      if (!place.place?.location?.coordinates) return;
+
       const el = document.createElement("div");
       el.className = "marker";
 
       const number = document.createElement("span");
       number.className = "marker-text";
-      number.textContent = index + 1;
+      number.textContent = (index + 1).toString();
 
       const img = document.createElement("img");
-      img.src = "../../../icons/destination.png";
+      img.src = "/icons/destination.png";
       img.className = "marker-image";
 
       el.appendChild(number);
@@ -81,8 +100,8 @@ function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
 
       const marker = new mapboxgl.Marker({ element: el })
         .setLngLat(place.place.location.coordinates)
-        .addTo(mapRef.current);
-      // console.log(index);
+        .addTo(map);
+
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
         `<p style="color: black;">${index + 1} : ${place.place.siteLabel}</p>`
       );
