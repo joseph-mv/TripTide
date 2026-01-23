@@ -4,7 +4,7 @@ interface DesFormProps {
   form: any; // Explicit any for now as generic form state might vary or be complex, ideally matches FormDataState
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   activeInput: string | null;
-  setActiveInput: (input: string | null) => void;
+  setActiveInput: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 

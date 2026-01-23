@@ -1,5 +1,5 @@
 // src/ItineraryToDo.js
-import React, { SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import "./ItineraryToDo.css";
 import { convertTo12HourFormat } from "../../../../utils/convertTo12HourFormat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

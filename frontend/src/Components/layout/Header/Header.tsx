@@ -110,9 +110,7 @@ const Header = () => {
       </header>
 
       {/* Travel flag */}
-      <motion.div animate={wavingAnimation} >
-        <div className="travelFlag" />
-      </motion.div>
+      <motion.div className="travelFlag" animate={wavingAnimation} />
     </div>
   );
 };

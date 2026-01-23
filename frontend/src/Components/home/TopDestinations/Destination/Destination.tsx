@@ -26,7 +26,7 @@ const Destination: React.FC<DestinationProps> = ({ destination }) => {
             <div className="image-container">
               <LazyImage
                 className="destination-image"
-                imageUrl={destination.image?.source}
+                imageUrl={destination.image?.source || ""}
                 name={destination.name}
                 height="150px"
               />

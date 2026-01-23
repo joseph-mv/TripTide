@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import "../styles/pages/Destinations.css";
@@ -10,8 +10,46 @@ import { useDestinationMap } from "../hooks/useDestinationMap";
 import { useCurrentLocation } from "../hooks/useCurrentLocation";
 import DesSpot from "../Components/destinations/DesSpot/DesSpot";
 import { getNearbyDestinations } from "../services/api/destinationServices";
+import { Destination } from "../types";
+import { Marker } from "mapbox-gl";
 
-const initialForm = {
+
+type FormState = {
+  place: string;
+  coordinates: number[];
+  distance: string;
+  type: {
+    "Tourist Attraction": boolean;
+    "Tourist Destination": boolean;
+    "Natural Park": boolean;
+    "Waterfall": boolean;
+    "Nature Reserve": boolean;
+    "Dam": boolean;
+    "Lake": boolean;
+    "Hiking": boolean;
+    "Caves": boolean;
+    "Amusement Park": boolean;
+    "Campsite": boolean;
+    "City": boolean;
+    "Beach": boolean;
+    "Resort": boolean;
+    "Historical monument": boolean;
+    "Museum": boolean;
+    "Zoo": boolean;
+    "Desert": boolean;
+  };
+  activities: {
+    sightseeing: boolean;
+    adventure: boolean;
+    shopping: boolean;
+    relaxation: boolean;
+    cultural: boolean;
+    others: boolean;
+  };
+};
+
+
+const initialForm: FormState = {
   place: "",
   coordinates: [],
   distance: "",
@@ -19,21 +57,21 @@ const initialForm = {
     "Tourist Attraction": true,
     "Tourist Destination": false,
     "Natural Park": false,
-    Waterfall: false,
+    "Waterfall": false,
     "Nature Reserve": false,
-    Dam: false,
-    Lake: false,
-    Hiking: false,
-    Caves: false,
+    "Dam": false,
+    "Lake": false,
+    "Hiking": false,
+    "Caves": false,
     "Amusement Park": false,
-    Campsite: false,
-    City: false,
-    Beach: false,
-    Resort: false,
+    "Campsite": false,
+    "City": false,
+    "Beach": false,
+    "Resort": false,
     "Historical monument": false,
-    Museum: false,
-    Zoo: false,
-    Desert: false,
+    "Museum": false,
+    "Zoo": false,
+    "Desert": false,
   },
   activities: {
     sightseeing: false,
@@ -50,26 +88,26 @@ const initialForm = {
  * based on the radius(distance), activities, or types.
  */
 function Destinations() {
-  const placesRef = useRef(); // Html div element
-  const markersRef = useRef([]); // Array for storing markers in map
-  const [places, setPlaces] = useState([]);
+  const placesRef = useRef<HTMLDivElement>(null); // Html div element
+  const markersRef = useRef<Marker[]>([]); // Array for storing markers in map
+  const [places, setPlaces] = useState<Destination[]>([]);
 
   //For show inputs while click on the buttons at right side of map
-  const [activeInput, setActiveInput] = useState(null);
+  const [activeInput, setActiveInput] = useState<string | null>(null);
 
-  const { form, loading, handleChange, handleSubmit, setForm,error } = useForm(
+  const { form, loading, handleChange, handleSubmit, setForm, error } = useForm(
     initialForm,
     async () => {
       setPlaces([]);
       const response = await getNearbyDestinations(form); //api call
       setPlaces(response);
-      placesRef.current.scrollIntoView({ behavior: "smooth" }); //automatic scroll to places section
+      placesRef.current?.scrollIntoView({ behavior: "smooth" }); //automatic scroll to places section
     }
   );
   useEffect(() => {
-    if(error) toast.error(error)
+    if (error) toast.error(error)
   }, [error])
-  
+
 
   const { lng, lat } = useCurrentLocation();
 
@@ -80,10 +118,11 @@ function Destinations() {
   useEffect(() => {
     if (places.length > 0) {
       places.forEach((place, i) => {
+        if (!mapRef.current) return;
         const marker = createMarker(place, i).addTo(mapRef.current);
         markersRef.current.push(marker);
       });
-
+      if (!mapRef.current) return;
       // Adjust zoom level after marking
       mapRef.current.zoomTo(4, {
         duration: 2000,
@@ -130,7 +169,7 @@ function Destinations() {
       {/* Places after successful response */}
       <div ref={placesRef} className="places">
         {places.map((place, index) => (
-             <DesSpot destination={place} index={index}/>
+          <DesSpot destination={place} index={index} />
         ))}
       </div>
     </div>

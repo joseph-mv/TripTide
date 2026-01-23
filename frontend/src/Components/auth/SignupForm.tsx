@@ -34,7 +34,6 @@ const SignupForm: React.FC<SignupFormProps> = ({ toggleAuthView }) => {
 
   const { name, email, password, confirmPassword } = form;
 
-  console.log({ error })
 
   return (
     <div className="col align-items-center flex-col sign-up">

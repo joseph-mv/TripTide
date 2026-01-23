@@ -1,10 +1,10 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 import "../styles/pages/About.css";
 import { ROUTES } from "../routes";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 const keyPoints = [
   {
@@ -48,7 +48,7 @@ const About = () => {
           <ul>
             {keyPoints.map((keyPoint) => (
               <li>
-                <FontAwesomeIcon icon={regularStar} className="icon" />
+                <FontAwesomeIcon icon={regularStar as IconProp} className="icon" />
                 {keyPoint.point}
               </li>
             ))}
@@ -105,7 +105,7 @@ const About = () => {
           <Link to={ROUTES.CONTACT}>contact us</Link>
         </p>
       </section>
-      
+
       {/* Call to Action */}
       <section className="about-cta">
         <h2>Call to Action</h2>
