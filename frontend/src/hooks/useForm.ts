@@ -5,9 +5,10 @@ export const useForm = <T extends Record<string, any>>(values: T, onSubmit: () =
   const [error, setError] = useState<string>("");
   const [form, setForm] = useState<T>(values);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setError("");
-    const { type, name, value, checked } = event.target;
+    const { type, name, value } = event.target;
+    const checked = 'checked' in event.target ? event.target.checked : false;
     if (type === "checkbox") {
       setForm((prev) => ({
         ...prev,
