@@ -15,14 +15,10 @@ function SuggestedLocations() {
   const [loading, setLoading] = useState(false);
   const formData = useSelector((state: RootState) => state.form);
   const coordinates = useSelector((state: RootState) => state.location);
-
   const fetchData = async () => {
     setLoading(true);
     try {
-      const data = await getRouteDestinations({
-        coordinates: [(coordinates.startingPoint as any).lng, (coordinates.startingPoint as any).lat],
-        distance: parseFloat(coordinates.distance)
-      }, Object.keys(formData.activities).filter(key => (formData.activities as any)[key]));
+      const data = await getRouteDestinations(coordinates, formData.activities);
       dispatch({
         type: "ADD_DESTINATIONS",
         payload: data,

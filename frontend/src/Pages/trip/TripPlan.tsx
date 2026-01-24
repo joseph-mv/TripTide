@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { toast } from "react-toastify";
 import { BiTransferAlt } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -46,14 +47,15 @@ const TripPlan = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const formData = useSelector((state) => state.form);
+  const formData = useSelector((state: RootState) => state.form);
+
 
   // Reset locationReducer state to initial state while navigating back from the plan-details page.
   dispatch({
-    type: "RESET_ LOCATION",
+    type: "RESET_LOCATION",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     dispatch({ type: "UPDATE", payload: e.target });
   };
 
@@ -64,7 +66,7 @@ const TripPlan = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (currentPage === 2) {
       navigate(ROUTES.PLAN_DETAILS);
@@ -83,7 +85,7 @@ const TripPlan = () => {
       <div className="trip-planner-form">
         <AnimatePresence mode="wait">
           <form onSubmit={handleSubmit}>
-            
+
             {/* First form */}
             {currentPage === 1 && (
               <motion.div
@@ -105,7 +107,7 @@ const TripPlan = () => {
                     name="destination"
                     value={formData.destination}
                     handleChange={handleChange}
-                    keyEnter={(suggestions,sugIdx)=>dispatch({
+                    keyEnter={(suggestions, sugIdx) => dispatch({
                       type: "DESTINATION_SUGGESTION",
                       payload: suggestions[sugIdx].properties,
                     })}
@@ -123,7 +125,7 @@ const TripPlan = () => {
                     name="startingPoint"
                     value={formData.startingPoint}
                     handleChange={handleChange}
-                    keyEnter={(suggestions,sugIdx)=>dispatch({
+                    keyEnter={(suggestions, sugIdx) => dispatch({
                       type: "STARTING_SUGGESTION",
                       payload: suggestions[sugIdx].properties,
                     })}
@@ -209,7 +211,7 @@ const TripPlan = () => {
                     value={formData.currency}
                     onChange={handleChange}
                   >
-                    {}
+                    { }
                     {Object.keys(currencySymbols).map((currency) => (
                       <option value={currency}>{currency}</option>
                     ))}

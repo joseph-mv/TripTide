@@ -17,17 +17,14 @@ export interface ToDoItem {
 export interface DayItinerary {
     day: number;
     date: string;
-    startingPoint?: string;
-    endPoint?: string;
-    places?: Place[];
+    startingPoint: string;
+    endPoint: string;
     todo: ToDoItem[];
     notes: string;
     [key: string]: any;
 }
 
-export interface Itinerary {
-    [key: string]: DayItinerary; // Keys are like "Day1", "Day2"
-}
+export type Itinerary = Record<string, DayItinerary>
 
 export interface FormDataState {
     startDate: string;
@@ -51,12 +48,12 @@ export interface FormDataState {
 }
 
 export interface Coords {
-    lat: number;
-    lng: number;
+    latitude: number;
+    longitude: number;
 }
 
 export interface SelectedPlace {
-    place: any;
+    place: Destination;
     index: number;
     distFromStart: number;
 }
@@ -66,19 +63,21 @@ export interface Destination {
     siteLabel: string;
     typeLabel: string;
     location: {
+        type?: string
         coordinates: [number, number]; // [lng, lat]
     };
+    site?: string;
     [key: string]: any;
 }
 
 export interface LocationState {
-    destination: Coords | {};
-    startingPoint: Coords | {};
-    coordinates: Coords[];
+    destination: Coords;
+    startingPoint: Coords;
+    coordinates: [number, number][];
     distance: string;
     travelTime: string;
-    routeGeometry: any[];
-    selectedPlaces: { [key: string]: SelectedPlace };
+    routeGeometry: [number, number][];
+    selectedPlaces: Record<string, SelectedPlace>;
     destinations: Destination[];
     noOfDays: number;
     sortedSelectedPlaces: SelectedPlace[];
@@ -101,7 +100,7 @@ export type LocationAction =
     | { type: "ADD_DESTINATIONS"; payload: any[] }
     | { type: "REMOVE_DESTINATIONS" }
     | { type: "SET_SORTED"; payload: any[] }
-    | { type: "RESET_ LOCATION" };
+    | { type: "RESET_LOCATION" };
 
 export interface UserState {
     userId: string;

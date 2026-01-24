@@ -7,6 +7,9 @@ interface Suggestion {
   properties: {
     full_address: string;
   };
+  geometry: {
+    coordinates: number[];
+  }
 }
 
 interface GeocodedInputProps extends React.InputHTMLAttributes<HTMLInputElement> {

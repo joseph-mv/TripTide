@@ -1,18 +1,15 @@
 import axios from "axios";
 import { axiosInstance } from "../api";
 import { jwtCheck } from "../../utils/authUtils";
+import { FormDataState, LocationState } from "../../types";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const NETWORK_ISSUE_MSG = "Network issue. Please try again later."
 
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-interface CoordinateParams {
-  coordinates: [number, number];
-  distance: number;
-}
 
-export const getRouteDestinations = async (coordinates: CoordinateParams, activities: string[]) => {
+export const getRouteDestinations = async (coordinates: LocationState, activities: FormDataState["activities"]) => {
   try {
     await jwtCheck()
     const response = await axios.get(`${BASE_URL}/suggestions`, {

@@ -32,8 +32,8 @@ const Journey = () => {
     const get = async () => {
       try {
         const response = await getRoutes(
-          { latitude: (trip.startingPoint as any).lat, longitude: (trip.startingPoint as any).lng },
-          { latitude: (trip.destination as any).lat, longitude: (trip.destination as any).lng }
+          { latitude: (trip.startingPoint).latitude, longitude: (trip.startingPoint).longitude },
+          { latitude: (trip.destination).latitude, longitude: (trip.destination).longitude }
         );
         setRoutes(response);
       } catch (error) {

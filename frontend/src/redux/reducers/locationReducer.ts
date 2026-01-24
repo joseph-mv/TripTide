@@ -1,8 +1,8 @@
 import { LocationState, LocationAction } from "../../types";
 
 const initialState: LocationState = {
-  destination: {},
-  startingPoint: {},
+  destination: { latitude: 0, longitude: 0 },
+  startingPoint: { latitude: 0, longitude: 0 },
   // midPoint:{},
   coordinates: [],
   distance: "",
@@ -20,7 +20,7 @@ const COORDINATES = "COORDINATES";
 const DISTANCE = "DISTANCE";
 const TRAVELTIME = "TRAVELTIME";
 const ROUTE_GEOMETRY = "ROUTE_GEOMETRY";
-const RESET_STATE = "RESET_ LOCATION";
+const RESET_STATE = "RESET_LOCATION";
 const DELETE_PLACE = "DELETE_PLACE";
 const ADD_PLACE = "ADD_PLACE";
 const SET_PLACES = "SET_PLACES";

@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
-import {  AiFillHome } from 'react-icons/ai';
+import { AiFillHome } from 'react-icons/ai';
 
 import styles from '../styles/pages/NotFound.module.css';
 import { ROUTES } from '../routes';
@@ -22,7 +21,7 @@ const NotFound = () => {
           Oops! The page you're looking for doesn't exist.
         </p>
         <Link to={ROUTES.HOME} className={styles.homeLink}>
-        <AiFillHome className={styles.homeIcon}/>
+          <AiFillHome className={styles.homeIcon} />
           Back to Home
         </Link>
       </div>

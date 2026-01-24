@@ -19,8 +19,8 @@ const SelectedLocations = () => {
   const places = coordinates.sortedSelectedPlaces;
 
   let prevCoord: [number, number] = [
-    (coordinates.startingPoint as any).lng || 0,
-    (coordinates.startingPoint as any).lat || 0,
+    coordinates.startingPoint.longitude || 0,
+    coordinates.startingPoint.latitude || 0,
   ];
 
   //sorting selected places by distance from starting point.
