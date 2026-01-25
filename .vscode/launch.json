@@ -5,11 +5,29 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Backend (Node.js)",
+            "runtimeExecutable": "node",
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "program": "${workspaceFolder}/backend/server.ts",
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "sourceMaps": true,
+            "restart": true,
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Debug Frontend (Chrome)",
             "url": "http://localhost:5173",
-            "webRoot": "${workspaceFolder}"
+            "webRoot": "${workspaceFolder}/frontend",
+            "sourceMaps": true
         }
     ]
 }

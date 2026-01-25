@@ -1,4 +1,6 @@
-export const filterTrips = (trips) => {
+import { Trip } from "../types";
+
+export const filterTrips = (trips: Trip[]) => {
   const today = new Date(); //current date and time
 
   const upcomingTrips = trips.filter((trip) => {

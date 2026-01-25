@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserTrip from "../UserTrip/UserTrip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,9 +10,10 @@ import {
   faStickyNote,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import { Trip } from "../../../types";
 
-const OngoingTrips = ({ ongoingTrips }) => {
-  const [trips, setTrips] = useState([]);
+const OngoingTrips = ({ ongoingTrips }: { ongoingTrips: Trip[] }) => {
+  const [trips, setTrips] = useState<Trip[]>([]);
 
   useEffect(() => {
     setTrips(ongoingTrips);
@@ -115,10 +116,10 @@ const OngoingTrips = ({ ongoingTrips }) => {
               </li>
             </ul>
           </div>
-          {trips.map((trip) => {
+          {trips.map((trip: Trip) => {
             return (
-              <div>
-                <UserTrip trip={trip} setTrips={setTrips} />
+              <div key={trip._id}>
+                <UserTrip trip={trip} setTrips={setTrips} current={false} />
               </div>
             );
           })}

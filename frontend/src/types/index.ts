@@ -106,7 +106,7 @@ export interface UserState {
     userId: string;
     userName: string;
     email: string;
-    image: string;
+    image: string | null;
 }
 
 export type UserAction =
@@ -136,4 +136,23 @@ export interface WikiPlace {
         lon: number;
     };
     [key: string]: any;
+}
+
+export interface Trip {
+    _id: string;
+    name: string;
+    noOfDays?: number;
+    distance?: number | string;
+    travelTime?: string;
+    details: {
+        startDate: string;
+        endDate: string;
+        startingPoint: string;
+        destination: string;
+        transportation: string;
+        numPeople: number | string;
+        budget: number | string;
+        currency: string;
+        notes: string;
+    };
 }

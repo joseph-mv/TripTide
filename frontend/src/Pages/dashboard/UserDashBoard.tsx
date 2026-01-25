@@ -13,6 +13,7 @@ import Connections from "../../Components/UserDashBoard/Connections/Connections"
 import OngoingTrips from "../../Components/UserDashBoard/OngoingTrips/OngoingTrips";
 
 import { RootState } from "../../redux/store";
+import { Trip } from "../../types";
 
 /**
  * UserDashBoard page
@@ -20,9 +21,11 @@ import { RootState } from "../../redux/store";
  */
 const UserDashboard = () => {
   const navigate = useNavigate()
-  const [trips, setTrips] = useState([]);
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [activeTab, setActiveTab] = useState("currentTrip");
   const userData = useSelector((store: RootState) => store.user);
+  console.log(userData);
+  console.log(trips);
 
   //fetch all trips of user
   useEffect(() => {

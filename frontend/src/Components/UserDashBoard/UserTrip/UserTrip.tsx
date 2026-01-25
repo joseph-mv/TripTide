@@ -8,22 +8,30 @@ import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../routes";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { Trip } from "../../../types";
 
-const UserTrip = ({ trip, setTrips, current }) => {
+interface UserTripProps {
+  trip: Trip;
+  setTrips: React.Dispatch<React.SetStateAction<Trip[]>>
+  current?: boolean;
+}
+
+
+const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
   // console.log(trip)
   var token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const handleOpenModal = (e) => {
+  const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsModalOpen(true);
   };
-  const handleCloseModal = (e) => {
+  const handleCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsModalOpen(false);
   };
 
-  const handleConfirmDelete = async (e) => {
+  const handleConfirmDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
     try {
@@ -33,7 +41,7 @@ const UserTrip = ({ trip, setTrips, current }) => {
           Authorization: token,
         },
       });
-      setTrips((trips) => trips.filter((item) => item._id !== trip._id));
+      setTrips((prev) => prev.filter((item) => item._id !== trip._id));
       return response;
     } catch (error) {
       console.error("Error deleting trip:", error);
@@ -62,7 +70,7 @@ const UserTrip = ({ trip, setTrips, current }) => {
         <FontAwesomeIcon icon={faTrashCan} />
       </button>
       <DeleteConfirmationModal
-        trip={trip.name}
+        content={trip.name}
         isOpen={isModalOpen}
         onRequestClose={handleCloseModal}
         onConfirm={handleConfirmDelete}
