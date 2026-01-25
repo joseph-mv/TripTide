@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Profile.css";
 import { ButtonPopup, ImageChangePopup, ImagePopup } from "./Popups/Popups";
 import { useDispatch } from "react-redux";
@@ -44,14 +44,24 @@ const Profile = ({ userData }: ProfileProps) => {
     dispatch({ type: "REMOVEUSER" })
   };
 
+  const fallbackLetter = userData.userName?.trim().charAt(0)?.toUpperCase() || '?';
 
   return (
     <div className="profile-header">
-      <img
-        src={userData.image}
-        onClick={handleProfilePicTab}
-        alt="Profile"
-      />
+      {userData.image ? (
+        <img
+          src={userData.image}
+          onClick={handleProfilePicTab}
+          alt="Profile"
+        />
+      ) : (
+        <div
+          className="profile-avatar-fallback"
+          onClick={handleProfilePicTab}
+        >
+          {fallbackLetter}
+        </div>
+      )}
 
       {profilePicTab && (
         <ButtonPopup
