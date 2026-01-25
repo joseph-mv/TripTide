@@ -45,11 +45,24 @@ const UserDashboard = () => {
 
   const [upcomingTrips, completedTrips, ongoingTrips] = filterTrips(trips)
 
+  // Handle ongoing trips updates (e.g., when a trip is deleted)
+  const handleOngoingTripsUpdate = (updatedOngoingTrips: Trip[]) => {
+    // Find the deleted trip ID by comparing original and updated ongoing trips
+    const deletedTripId = ongoingTrips.find(
+      (trip) => !updatedOngoingTrips.some((updated) => updated._id === trip._id)
+    )?._id;
+    
+    // Remove the deleted trip from the main trips array
+    if (deletedTripId) {
+      setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== deletedTripId));
+    }
+  };
+
   // render content corresponding to activeTab
   const renderContent = () => {
     switch (activeTab) {
       case "currentTrip":
-        return <OngoingTrips ongoingTrips={ongoingTrips} />;
+        return <OngoingTrips ongoingTrips={ongoingTrips} onTripsUpdate={handleOngoingTripsUpdate} />;
       case "upcomingTrips":
         return (
           <div className="content-section">
@@ -58,8 +71,8 @@ const UserDashboard = () => {
               {upcomingTrips
                 .sort(
                   (a, b) =>
-                    new Date(a.details.startDate) -
-                    new Date(b.details.startDate)
+                    new Date(a.details.startDate).getTime() -
+                    new Date(b.details.startDate).getTime()
                 )
                 .map((trip) => {
                   return <UserTrip trip={trip} setTrips={setTrips} />;

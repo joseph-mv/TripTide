@@ -141,9 +141,18 @@ export interface WikiPlace {
 export interface Trip {
     _id: string;
     name: string;
-    noOfDays?: number;
-    distance?: number | string;
-    travelTime?: string;
+    details: {
+        startDate: string;
+        endDate: string;
+    };
+}
+
+export interface OngoingTrip {
+    _id: string;
+    name: string;
+    noOfDays: number;
+    distance: number | string;
+    travelTime: string;
     details: {
         startDate: string;
         endDate: string;

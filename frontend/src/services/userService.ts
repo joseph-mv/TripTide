@@ -1,6 +1,7 @@
 import axios from "axios"
 import { jwtCheck } from "../utils/authUtils"
 import { axiosInstance } from "./api"
+import { OngoingTrip } from "../types"
 const NETWORK_ISSUE_MSG = "Network issue. Please try again later."
 
 interface ContactFormData {
@@ -72,5 +73,21 @@ export const getItinerary = async (id?: string) => {
 
   } catch (error) {
     console.log(error)
+  }
+}
+
+export const getOngoingTrip = async (id: string): Promise<OngoingTrip> => {
+  try {
+    await jwtCheck();
+    const token = localStorage.getItem("token");
+    const response = await axiosInstance.get(`user/get-ongoing-trip/${id}`, {
+      headers: { Authorization: token },
+    });
+    return response.data as OngoingTrip;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || NETWORK_ISSUE_MSG);
+    }
+    throw new Error(NETWORK_ISSUE_MSG);
   }
 }

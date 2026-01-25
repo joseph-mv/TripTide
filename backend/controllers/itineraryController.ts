@@ -47,6 +47,36 @@ export default {
     }
   },
 
+  getOngoingTrip: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const ongoingTrip = await db
+        .get()
+        .collection(collection.ITINERARY_Collection)
+        .findOne(
+          { _id: new ObjectId(id) },
+          {
+            projection: {
+              _id: 1,
+              name: 1,
+              noOfDays: 1,
+              distance: 1,
+              travelTime: 1,
+              details: 1,
+            },
+          }
+        );
+
+      if (!ongoingTrip) {
+        return res.status(404).json({ error: "Itinerary not found" });
+      }
+      res.status(200).json(ongoingTrip);
+    } catch (error) {
+      console.error("Error fetching ongoing trip:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
 
   deleteItinerary: async (req: Request, res: Response) => {
     try {

@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/contact', userController.contactMessages)
 router.post("/save-itinerary", verifyToken, itineraryController.addItinerary);
 router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
+router.get("/get-ongoing-trip/:id", verifyToken, itineraryController.getOngoingTrip);
 router.get('/get-itinerary/:id', itineraryController.getItinerary)
 router.delete("/delete-itinerary", verifyToken, itineraryController.deleteItinerary);
 router.put("/edit-itinerary", verifyToken, itineraryController.editItinerary);
