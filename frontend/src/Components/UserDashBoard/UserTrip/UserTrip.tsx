@@ -22,17 +22,17 @@ const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
   var token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleOpenModal = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setIsModalOpen(true);
   };
-  const handleCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleCloseModal = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setIsModalOpen(false);
   };
 
-  const handleConfirmDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleConfirmDelete = async (e?: React.MouseEvent) => {
+    e?.stopPropagation();
 
     try {
       const response = await axios.delete(`${BASE_URL}/user/delete-itinerary`, {

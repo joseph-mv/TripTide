@@ -22,7 +22,7 @@ export const filterTrips = (trips: Trip[]) => {
   return [upcomingTrips, completedTrips, ongoingTrips];
 };
 
-export const selectRouteGeoCoords = (routeGeometry) => {
+export const selectRouteGeoCoords = (routeGeometry: { coordinates: [number, number][] }) => {
   const length = routeGeometry.coordinates.length;
   const coordsAlongRoute = [];
   const stepSize = Math.floor(length / 10);

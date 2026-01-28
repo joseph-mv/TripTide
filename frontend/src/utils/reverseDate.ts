@@ -1,5 +1,3 @@
-
-
-export function reverseDate(){
-return this.split('-').reverse().join('-');
+export function reverseDate(this: string): string {
+  return this.split('-').reverse().join('-');
 }

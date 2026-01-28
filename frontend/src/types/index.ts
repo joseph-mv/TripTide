@@ -86,7 +86,7 @@ export interface LocationState {
 export type LocationAction =
     | { type: "SET_DESTINATION"; payload: Coords }
     | { type: "SET_STARTING_POINT"; payload: Coords }
-    | { type: "COORDINATES"; payload: Coords[] }
+    | { type: "COORDINATES"; payload: [number, number][] }
     | { type: "DISTANCE"; payload: string }
     | { type: "TRAVELTIME"; payload: string }
     | { type: "ROUTE_GEOMETRY"; payload: any[] }

@@ -13,7 +13,7 @@ interface MapPopupProps {
 }
 
 function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
-  const coordinates: [number, number][] = [[startingPoint.lng, startingPoint.lat]];
+  const coordinates: [number, number][] = [[startingPoint.longitude, startingPoint.latitude]];
 
   places.forEach((place) => {
     if (place.place?.location?.coordinates) {
@@ -30,7 +30,7 @@ function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [startingPoint.lng, startingPoint.lat],
+      center: [startingPoint.longitude, startingPoint.latitude],
       zoom: 12,
     });
 
@@ -75,7 +75,7 @@ function MapPopup({ setMap, startingPoint, places }: MapPopupProps) {
     return () => {
       map.remove();
     };
-  }, [places, startingPoint.lat, startingPoint.lng]);
+  }, [places, startingPoint.latitude, startingPoint.longitude]);
 
   useEffect(() => {
     const map = mapRef.current;

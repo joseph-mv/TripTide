@@ -6,30 +6,18 @@ import formReducer from './reducers/formReducer';
 import locationReducer from './reducers/locationReducer';
 import userReducer from './reducers/userReducer';
 
-
 const formPersistConfig = {
   key: 'form',
   storage,
 };
 
-// const persistedReducer = persistReducer(formPersistConfig, formReducer);
-
-// const rootReducer = combineReducers({
-//   form: persistedReducer,
-//   location: locationReducer,
-// });
-
-// const store = configureStore({
-//   reducer: rootReducer,
-// });
-
 const rootReducer = combineReducers({
   form: formReducer,
   location: locationReducer,
-  user: userReducer
-
-})
-const persistedReducer = persistReducer(formPersistConfig, rootReducer)
+  user: userReducer,
+});
+// @ts-expect-error redux-persist reducer type incompatible with combineReducers
+const persistedReducer = persistReducer(formPersistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
 });

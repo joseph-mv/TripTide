@@ -1,11 +1,13 @@
-function toRad(value) {
+import { Coords } from "../types";
+
+function toRad(value: number): number {
   return (value * Math.PI) / 180;
 }
 
-function toDeg(value) {
+function toDeg(value: number): number {
   return (value * 180) / Math.PI;
 }
-function haversineDistance(point1, point2) {
+function haversineDistance(point1: Coords, point2: Coords): number {
   const { longitude: lon1, latitude: lat1 } = point1;
   const { longitude: lon2, latitude: lat2 } = point2;
 
@@ -15,14 +17,14 @@ function haversineDistance(point1, point2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c; // Distance in km
   return distance;
 }
-function calculateNewPoint(latitude, longitude, distance, bearing) {
+function calculateNewPoint(latitude: number, longitude: number, distance: number, bearing: number): Coords {
   // console.log(bearing)
   const R = 6371; // Radius of the Earth in km
   const d = distance / R; // Angular distance in radians
@@ -32,7 +34,7 @@ function calculateNewPoint(latitude, longitude, distance, bearing) {
 
   const lat2 = Math.asin(
     Math.sin(lat1) * Math.cos(d) +
-      Math.cos(lat1) * Math.sin(d) * Math.cos(bearing)
+    Math.cos(lat1) * Math.sin(d) * Math.cos(bearing)
   );
   const lon2 =
     lon1 +
@@ -47,19 +49,19 @@ function calculateNewPoint(latitude, longitude, distance, bearing) {
   };
 }
 
-export function getRectangleCorners(point1, point2) {
+export function getRectangleCorners(point1: Coords, point2: Coords) {
   // Calculate the distance between the two points
   const distanceBetweenPoints = haversineDistance(point1, point2);
   // console.log(distanceBetweenPoints);
   const width = Math.max(10, Math.min(distanceBetweenPoints / 20, 200));
-//  console.log('width'+width)
+  //  console.log('width'+width)
   const bearing = Math.atan2(
     Math.sin(toRad(point2.longitude - point1.longitude)) *
-      Math.cos(toRad(point2.latitude)),
+    Math.cos(toRad(point2.latitude)),
     Math.cos(toRad(point1.latitude)) * Math.sin(toRad(point2.latitude)) -
-      Math.sin(toRad(point1.latitude)) *
-        Math.cos(toRad(point2.latitude)) *
-        Math.cos(toRad(point2.longitude - point1.longitude))
+    Math.sin(toRad(point1.latitude)) *
+    Math.cos(toRad(point2.latitude)) *
+    Math.cos(toRad(point2.longitude - point1.longitude))
   );
   // console.log(bearing*180/3.14)
   const nextPoint = calculateNewPoint(

@@ -1,6 +1,6 @@
 export const today = new Date().toISOString().split("T")[0];
 
-export function reverseDate() {
+export function reverseDate(this: string): string {
   return this.split('-').reverse().join('-');
 }
 
@@ -17,7 +17,7 @@ export function calculateDaysBetweenDates(startDate: string, endDate: string) {
   const end = new Date(endDate);
 
   // Calculate the difference in time (in milliseconds)
-  const timeDifference = end - start;
+  const timeDifference = end.getTime() - start.getTime();
 
   // Convert the time difference from milliseconds to days
   const daysDifference = timeDifference / (1000 * 60 * 60 * 24);

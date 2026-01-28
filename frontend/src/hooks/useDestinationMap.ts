@@ -1,22 +1,29 @@
-
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+// @ts-expect-error - no declaration file for @mapbox/mapbox-gl-geocoder
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { useRef, useEffect } from "react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
-
-export const useDestinationMap = (setForm: React.Dispatch<React.SetStateAction<any>>, lng: number | null, lat: number | null) => {
+export const useDestinationMap = (
+  setForm: React.Dispatch<React.SetStateAction<any>>,
+  lng: number | null,
+  lat: number | null
+) => {
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-  const mapContainerRef = useRef<HTMLDivElement | null>(null); //html div for map
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
+    const container = mapContainerRef.current;
+    if (!container) return;
+    const centerLng = lng ?? 0;
+    const centerLat = lat ?? 0;
     const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
+      container,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat], // Initial map center coordinates
-      zoom: 0, // Initial map zoom level
+      center: [centerLng, centerLat],
+      zoom: 0,
     });
     mapRef.current = map;
     map.addControl(new mapboxgl.FullscreenControl(), "bottom-left");
@@ -26,8 +33,7 @@ export const useDestinationMap = (setForm: React.Dispatch<React.SetStateAction<a
       mapboxgl: mapboxgl,
     });
 
-    if (lng && lat) {
-      // Add a marker at the current location
+    if (lng != null && lat != null) {
       setForm((prev: any) => ({
         ...prev,
         coordinates: [lng, lat],
@@ -36,21 +42,18 @@ export const useDestinationMap = (setForm: React.Dispatch<React.SetStateAction<a
       map.setCenter([lng, lat]);
     }
 
-
-
     map.addControl(geocoder, "top-left");
-    geocoder.on("result", (event: any) => {
+    geocoder.on("result", (event: { result: { place_name: string; geometry: { coordinates: [number, number] } } }) => {
       const placeName = event.result.place_name;
-      const coordinates = event.result.geometry.coordinates;
-
+      const coords = event.result.geometry.coordinates;
       setForm((prev: any) => ({
         ...prev,
         place: placeName,
-        coordinates: coordinates,
+        coordinates: coords,
       }));
     });
     return () => map.remove();
   }, [lng, lat]);
 
-  return { mapContainerRef, mapRef }
-}
+  return { mapContainerRef, mapRef };
+};

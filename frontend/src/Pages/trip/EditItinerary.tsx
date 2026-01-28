@@ -7,6 +7,33 @@ import { getItinerary } from "../../services/userService";
 import ItineraryForm from "../../Components/itinerary/ItineraryForm/ItineraryForm";
 import { getRouteDestinations } from "../../services/api/destinationServices";
 import SelectedLocations from "../../Components/itinerary/SelectedLocations/SelectedLocations";
+import { LocationState, Itinerary, FormDataState } from "../../types";
+
+/**
+ * Shape of get-itinerary API response (MongoDB itinerary document).
+ */
+interface ItineraryResponse {
+  _id: string;
+  name: string;
+  itinerary?: Itinerary;
+  details: {
+    startDate?: string;
+    endDate?: string;
+    activities?: FormDataState["activities"];
+    [key: string]: unknown;
+  };
+  places: {
+    startingPoint: { latitude: number; longitude: number };
+    endPoint: { latitude: number; longitude: number };
+    selectedPlaces: Record<string, unknown>;
+  };
+  distance: string;
+  travelTime: string;
+  noOfDays: number;
+  routeGeometry?: { coordinates: [number, number][] };
+  coordinates?: [number, number][];
+  [key: string]: unknown;
+}
 
 /**
  * Edit Itinerary Page
@@ -17,55 +44,53 @@ import SelectedLocations from "../../Components/itinerary/SelectedLocations/Sele
 const EditItinerary = () => {
   const dispatch = useDispatch();
   const { tripId } = useParams();
-  const [trip, setTrip] = useState();
+  const [trip, setTrip] = useState<ItineraryResponse | undefined>(undefined);
 
-  // get itinerary details and update reducers
   useEffect(() => {
     const get = async () => {
-
       const response = await getItinerary(tripId);
-      dispatch({
-        type: "SET_FORM",
-        payload: response.details,
-      });
-      dispatch({
-        type: "SET_PLACES",
-        payload: response.places.selectedPlaces,
-      });
-      dispatch({
-        type: "SET_STARTING_POINT",
-        payload: response.places.startingPoint,
-      });
-      dispatch({
-        type: "SET_DESTINATION",
-        payload: response.places.endPoint,
-      });
-      dispatch({
-        type: "DISTANCE",
-        payload: response.distance,
-      });
-      dispatch({
-        type: "TRAVELTIME",
-        payload: response.travelTime,
-      });
-      dispatch({
-        type: "NOOFDAYS",
-        payload: response.noOfDays,
-      });
-      destinations();
-      setTrip(response);
+      if (!response || typeof response !== "object" || !("details" in response)) {
+        return;
+      }
+      const res = response as ItineraryResponse;
+      dispatch({ type: "SET_FORM", payload: res.details });
+      dispatch({ type: "SET_PLACES", payload: res.places.selectedPlaces });
+      dispatch({ type: "SET_STARTING_POINT", payload: res.places.startingPoint });
+      dispatch({ type: "SET_DESTINATION", payload: res.places.endPoint });
+      dispatch({ type: "DISTANCE", payload: res.distance });
+      dispatch({ type: "TRAVELTIME", payload: res.travelTime });
+      dispatch({ type: "NOOFDAYS", payload: res.noOfDays });
+
+      const coords: LocationState = {
+        destination: res.places.endPoint,
+        startingPoint: res.places.startingPoint,
+        coordinates: res.coordinates ?? res.routeGeometry?.coordinates ?? [],
+        distance: res.distance,
+        travelTime: res.travelTime,
+        routeGeometry: res.routeGeometry?.coordinates ?? [],
+        selectedPlaces: (res.places.selectedPlaces as LocationState["selectedPlaces"]) ?? {},
+        destinations: [],
+        noOfDays: res.noOfDays,
+        sortedSelectedPlaces: [],
+      };
+      const activities = res.details?.activities ?? {
+        sightseeing: false,
+        adventure: false,
+        shopping: false,
+        relaxation: false,
+        cultural: false,
+        others: false,
+      };
+      try {
+        const data = await getRouteDestinations(coords, activities);
+        dispatch({ type: "ADD_DESTINATIONS", payload: data });
+      } catch (e) {
+        console.error("Failed to fetch route destinations:", e);
+      }
+      setTrip(res);
     };
     get();
-  }, []);
-
-// get and update destinations along this route
-  const destinations = async () => {
-    const data = await getRouteDestinations(trip, trip.details.activities);
-    dispatch({
-      type: "ADD_DESTINATIONS",
-      payload: data,
-    });
-  };
+  }, [tripId, dispatch]);
 
   return (
     <div>

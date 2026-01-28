@@ -32,7 +32,7 @@ const INC_NO_OF_DAYS = "INC_NO_OF_DAYS";
 const DEC_NO_OF_DAYS = "DEC_NO_OF_DAYS";
 const SET_SORTED = "SET_SORTED";
 
-const locationReducer = (state: LocationState = initialState, action: any): LocationState => {
+const locationReducer = (state: LocationState = initialState, action: LocationAction): LocationState => {
 
   switch (action.type) {
     case SET_DESTINATION:

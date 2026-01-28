@@ -37,7 +37,6 @@ const UserDashboard = () => {
         if (error instanceof Error) {
           console.log(error.message);
         }
-        navigate(ROUTES.AUTHENTICATE)
       }
     }
     getUser();
@@ -51,7 +50,7 @@ const UserDashboard = () => {
     const deletedTripId = ongoingTrips.find(
       (trip) => !updatedOngoingTrips.some((updated) => updated._id === trip._id)
     )?._id;
-    
+
     // Remove the deleted trip from the main trips array
     if (deletedTripId) {
       setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== deletedTripId));

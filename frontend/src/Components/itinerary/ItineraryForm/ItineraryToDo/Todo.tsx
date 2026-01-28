@@ -1,38 +1,48 @@
-import React from 'react'
+import React from 'react';
 import { convertTo12HourFormat } from '../../../../utils/convertTo12HourFormat';
+import { ToDoItem, Itinerary } from '../../../../types';
 
-function Todo({index,item,setItinerary,day}) {
+interface TodoProps {
+  index: number;
+  item: ToDoItem;
+  setItinerary: React.Dispatch<React.SetStateAction<Itinerary>>;
+  day: string;
+}
 
-    const handleCheckBox = (e) => {
-        let index = parseInt(e.target.id);
-    
+function Todo({ index, item, setItinerary, day }: TodoProps) {
+    const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const idx = parseInt(e.target.id || "0", 10);
         setItinerary((prev) => ({
           ...prev,
           [day]: {
             ...prev[day],
             todo: [
               ...prev[day].todo.map((task, i) => {
-                return i === index ? { ...task, isChecked: !task.isChecked } : task;
+                return i === idx ? { ...task, isChecked: !task.isChecked } : task;
               }),
             ],
           },
         }));
       };
 
-    const deleteItem = (index) => {
-        alert(index)
-        const newTodo = item.todo.filter((_, i) => i !== index);
-        setItinerary((prev) => ({
-          ...prev,
-          [day]: { ...prev[day], todo: newTodo },
-        }));
+    const deleteItem = (idx: number) => {
+        alert(String(idx));
+        setItinerary((prev) => {
+          const dayData = prev[day];
+          if (!dayData) return prev;
+          const newTodo = dayData.todo.filter((_, i) => i !== idx);
+          return {
+            ...prev,
+            [day]: { ...dayData, todo: newTodo },
+          };
+        });
       };
   return (
     <li key={index}>
     <div className="todo-item">
       <div className="check">
         <input
-          id={index}
+          id={String(index)}
           type="checkbox"
           checked={item.isChecked}
           onChange={handleCheckBox}
@@ -43,7 +53,7 @@ function Todo({index,item,setItinerary,day}) {
 
       <span>{item.activity}</span>
 
-      <button onClick={() => deleteItem(index)}>X</button>
+      <button type="button" onClick={() => deleteItem(index)}>X</button>
     </div>
   </li>
   )
