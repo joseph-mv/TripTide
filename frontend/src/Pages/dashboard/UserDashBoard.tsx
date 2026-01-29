@@ -1,8 +1,6 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import { ROUTES } from "../../routes";
-import { useNavigate } from "react-router-dom";
 import { filterTrips } from "../../utils/tripUtils";
 import "../../styles/pages/dashboard/UserDashBoard.css";
 import { getUserInformation } from "../../services/userService";
@@ -20,7 +18,6 @@ import { Trip } from "../../types";
  * render content based on the activeTab , shows user information and edit options
  */
 const UserDashboard = () => {
-  const navigate = useNavigate()
   const [trips, setTrips] = useState<Trip[]>([]);
   const [activeTab, setActiveTab] = useState("currentTrip");
   const userData = useSelector((store: RootState) => store.user);

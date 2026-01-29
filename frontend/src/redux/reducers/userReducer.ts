@@ -8,7 +8,7 @@ const initialState: UserState = {
 
 }
 
-const userReducer = (state: UserState = initialState, action: any): UserState => {
+const userReducer = (state: UserState = initialState, action: UserAction): UserState => {
     switch (action.type) {
         case "SETUSER":
             const { userId, userName, email, image, token, refreshToken } = action.payload
