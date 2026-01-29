@@ -1,0 +1,57 @@
+import axios from "axios";
+import mustVisitPlaces from "../utils/mustVisitPlaces";
+
+import { WikiPlace } from "../types";
+
+// WikiPlace is now imported
+
+
+export const topDestinations = async (): Promise<WikiPlace[]> => {
+  const randomIndex = Math.floor(Math.random() * (mustVisitPlaces.length - 25));
+  const placeToVisit = mustVisitPlaces.slice(randomIndex, randomIndex + 25);
+  // Use Promise.all to wait for all the Wikipedia requests to complete
+  const places = await Promise.all(
+    placeToVisit.map(async (destination: { name: string }, index: number) => {
+      try {
+        const wikiResponse = await axios.get(
+          `https://en.wikipedia.org/api/rest_v1/page/summary/${destination.name}`
+        );
+        return {
+          name: wikiResponse.data.title,
+          description: wikiResponse.data.description,
+          extract: wikiResponse.data.extract,
+          image: wikiResponse.data.thumbnail,
+          coordinates: wikiResponse.data.coordinates,
+        } as WikiPlace;
+      } catch (error) {
+        console.error(
+          `Error fetching Wikipedia summary for index ${index}:`,
+          error
+        );
+        return null;
+      }
+    })
+  );
+
+  return places.filter((place): place is WikiPlace => place !== null).slice(0, 12);
+};
+
+interface GeoPoint {
+  latitude: number;
+  longitude: number;
+}
+
+export const getRoutes = async (start: GeoPoint, end: GeoPoint): Promise<any[]> => {
+  try {
+    const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`;
+
+    const response = await axios.get(url);
+    const data = response.data;
+    return data.routes;
+  } catch (error: any) {
+    console.error("Error fetching directions:", error);
+
+    throw new Error(error.response?.data?.message);
+  }
+};
