@@ -21,8 +21,6 @@ const UserDashboard = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [activeTab, setActiveTab] = useState("currentTrip");
   const userData = useSelector((store: RootState) => store.user);
-  console.log(userData);
-  console.log(trips);
 
   //fetch all trips of user
   useEffect(() => {

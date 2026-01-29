@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Profile.css";
 import { ButtonPopup, ImageChangePopup, ImagePopup } from "./Popups/Popups";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import { UserState } from "../../../types";
 interface ProfileProps {
@@ -10,7 +10,8 @@ interface ProfileProps {
 }
 
 const Profile = ({ userData }: ProfileProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [profilePicTab, setProfilePicTab] = useState(false);
   const [isShowImage, setIsShowImage] = useState(false);
   const [isChangeImage, setIsChangeImage] = useState(false);
@@ -41,7 +42,8 @@ const Profile = ({ userData }: ProfileProps) => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    dispatch({ type: "REMOVEUSER" })
+    dispatch({ type: "REMOVEUSER" });
+    navigate(ROUTES.AUTHENTICATE);
   };
 
   const fallbackLetter = userData.userName?.trim().charAt(0)?.toUpperCase() || '?';
@@ -80,9 +82,9 @@ const Profile = ({ userData }: ProfileProps) => {
         <ImageChangePopup setIsChangeImage={setIsChangeImage} selectedImage={selectedImage} />
 
       )}
-      <Link onClick={handleLogout} className="link" to={ROUTES.AUTHENTICATE}>
-        &nbsp;&nbsp; &nbsp;&nbsp;{"Logout"}
-      </Link>
+      <button type="button" className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
 
     </div>
   );
