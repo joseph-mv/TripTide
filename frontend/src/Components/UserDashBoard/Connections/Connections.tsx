@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Connections.css";
 import { searchFriends } from "../../../services/friendsService";
 import useDebounce from "../../../hooks/useDebounce";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+
+type SearchUser = { _id: string; image?: string; name: string };
+
 const Connections = () => {
   const [query, setQuery] = useState("");
-  const userId=useSelector(store=>store.user.userId)
-  const [searchList, setSearchList] = useState([]);
+  const userId = useSelector((state: RootState) => state.user.userId);
+  const [searchList, setSearchList] = useState<SearchUser[]>([]);
   const debouncedQuery = useDebounce(query, 500);
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
+  };
+
+  const onSearch = async (q: string) => {
+    const list = await searchFriends(q);
+    setSearchList((list as SearchUser[]) || []);
   };
 
   useEffect(() => {
     onSearch(debouncedQuery);
   }, [debouncedQuery]);
-
-  const onSearch = async () => {
-    const list = await searchFriends(debouncedQuery);
-    setSearchList(list);
-  };
 
   return (
     <div className="content-section">

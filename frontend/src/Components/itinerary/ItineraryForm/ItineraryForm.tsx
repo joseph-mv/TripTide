@@ -19,7 +19,7 @@ import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../routes";
 
 import { RootState } from "../../../redux/store";
-import { LocationState, Itinerary } from "../../../types";
+import { Itinerary } from "../../../types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -34,22 +34,20 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
   const dispatch = useDispatch();
   var coordinates = useSelector((state: RootState) => state.location) // Casting as location might be untyped in root yet if not fully updated
   var formData = useSelector((state: RootState) => state.form);
-  console.log(oldItinerary, formData);
   var token = localStorage.getItem("token");
-  const userId = useSelector((store: RootState) => store.user.userId);
+  const userId = useSelector((store: RootState) => store.user?.userId);
   const [map, setMap] = useState<boolean>(false);
   const newItinerary: Itinerary = {};
   const [itinerary, setItinerary] = useState<Itinerary>(newItinerary);
   const [name, setName] = useState<string>(oldName);
   const location = useLocation();
 
-  console.log('itinerary', itinerary);
   //creating new Itinerary object
   useEffect(() => {
-    let date = formData.startDate;
+    let date = formData?.startDate;
     if (!oldItinerary && date) {
       console.log("creating new itineray");
-      for (let i = 0; i < coordinates.noOfDays; i++) {
+      for (let i = 0; i < coordinates?.noOfDays; i++) {
         newItinerary["Day" + (i + 1)] = dailyItinerary(i, date);
         date = getNextDate(date);
       }

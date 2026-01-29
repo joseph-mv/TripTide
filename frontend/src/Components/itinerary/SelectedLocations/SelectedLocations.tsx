@@ -9,6 +9,7 @@ import AddLocations from "./AddLocations";
 import { reverseDate } from "../../../utils/reverseDate";
 import { haversineDistance } from "../../../utils/haversineDistance";
 import { RootState } from "../../../redux/store";
+import type { SelectedPlace } from "../../../types";
 
 
 const SelectedLocations = () => {
@@ -25,9 +26,9 @@ const SelectedLocations = () => {
 
   //sorting selected places by distance from starting point.
   useEffect(() => {
-    let selectedPlaces = Object.values(coordinates.selectedPlaces);
+    let selectedPlaces = Object.values(coordinates.selectedPlaces) as SelectedPlace[];
     selectedPlaces = selectedPlaces.sort(
-      (a, b) => a.distFromStart - b.distFromStart
+      (a: SelectedPlace, b: SelectedPlace) => a.distFromStart - b.distFromStart
     );
 
     dispatch({
@@ -50,7 +51,7 @@ const SelectedLocations = () => {
       </div>
 
       {/* Selected Locations */}
-      {places.map((spot, index) => {
+      {places.map((spot: SelectedPlace, index: number) => {
         const currCoord = spot.place.location.coordinates;
         const distance = haversineDistance(prevCoord, currCoord) * 1.3;
         prevCoord = currCoord;

@@ -7,7 +7,7 @@ import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useSelector } from "react-redux";
 import { reverseDate } from "../../../../utils/reverseDate";
-import { DayItinerary, Itinerary } from "../../../../types";
+import { DayItinerary, Itinerary, SelectedPlace } from "../../../../types";
 import { RootState } from "../../../../redux/store";
 
 interface ItineraryToDoProps {
@@ -110,7 +110,7 @@ const ItineraryToDo = ({ day, item, setItinerary }: ItineraryToDoProps) => {
             />
 
             <datalist id="destinations">
-              {places.map((place, index) => (
+              {places.map((place: SelectedPlace, index: number) => (
                 <option key={index} value={place.place.siteLabel} />
               ))}
             </datalist>
