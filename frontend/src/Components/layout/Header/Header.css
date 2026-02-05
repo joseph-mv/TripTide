@@ -38,7 +38,8 @@ header nav a {
 nav .link {
   color: white;
   font-weight: bold;
-  /* border:2px solid #A40F4A; */
+  display: flex;
+  align-items: center;
 }
 nav .link:hover {
   color: black;
