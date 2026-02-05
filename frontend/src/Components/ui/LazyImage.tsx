@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { ImageSkeleton } from "./ImageSkeleton";
 
 
 interface LazyImageProps {
@@ -13,28 +14,18 @@ interface LazyImageProps {
 }
 
 const LazyImage: React.FC<LazyImageProps> = ({ imageUrl, name, error, className, width = "100%", height = 'auto' }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const handleImageLoad = () => {
-    setLoading(false);
-  };
+ 
   return (
-    <>
-      {loading && !error && imageUrl && (
-        <div ><i style={{ width: '20px', fontSize: '2.2rem', margin: '10% 45%' }} className="fas fa-spinner fa-spin"></i> </div>
-      )}
-
       <LazyLoadImage
+        placeholder={<ImageSkeleton width={width} height={height} />}
+        placeholderSrc="/bg_image/about1.webp"
         src={imageUrl}
         className={className}
         width={width}
         height={height}
         effect="blur"
         alt={name}
-        onLoad={handleImageLoad}
-        onError={handleImageLoad}
       />
-    </>
   );
 };
 
