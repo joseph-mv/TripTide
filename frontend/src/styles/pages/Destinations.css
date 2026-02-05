@@ -34,9 +34,16 @@
 }
 .mapboxgl-ctrl-geocoder--input {
   border: 1px solid #ccc;
-  padding: 0px;
+  /* Restore padding so the left search icon doesn't overlap click area */
+  padding: 6px 36px 6px 32px;
   border-radius: 4px;
   outline: none;
+  box-sizing: border-box;
+}
+
+/* Let clicks pass through the search icon to the input */
+.mapboxgl-ctrl-geocoder--icon-search {
+  pointer-events: none;
 }
 
 .mapboxgl-ctrl-geocoder--suggestion {
