@@ -105,6 +105,7 @@ const TripPlan = () => {
                   <GeocodedInput
                     id="destination"
                     name="destination"
+                    autoFocus={true}
                     value={formData.destination}
                     handleChange={handleChange}
                     keyEnter={(suggestions, sugIdx) => dispatch({
@@ -197,6 +198,7 @@ const TripPlan = () => {
                   <label htmlFor="budget">Budget:</label>
                   <input
                     type="number"
+                    autoFocus={true}
                     id="budget"
                     name="budget"
                     min={1}
