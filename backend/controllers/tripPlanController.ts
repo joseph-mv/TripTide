@@ -1,37 +1,51 @@
 import { Request, Response } from 'express';
+
+interface SearchAlongQuery {
+  coordinates: number[][];
+  distance: string;
+  activities: Record<string, 'false' | 'true'>;
+}
+
+interface GetDestinationsQuery {
+  coordinates: string[];
+  distance: string;
+  type: any;
+  activities: any;
+}
 import db from '../config/connection';
 import collection from '../config/collection';
 import { getTypeLabels, searchQuery } from '../utils/tripUtils';
 import { TouristLocation } from '../types/models';
+import { logger } from '../utils/logger';
+const MAX_WIDTH = 200;
+const MIN_WIDTH = 10;
 
 export default {
 
   searchAlong: async (req: Request, res: Response) => {
     try {
       // Explicitly cast req.query properties to their expected types
-      const query = req.query as unknown as {
-        coordinates: number[][]; // Assumes body parser handles this or needs manual parsing if pure query string
-        distance: string;
-        activities: any;
-      };
+      const query = req.query as unknown as SearchAlongQuery;
 
       const { coordinates, distance, activities } = query;
 
       // 1 Build type filter array
       const typeLabelArr: string[] = ["Tourist Attraction", "Tourist Destination"];
-      getTypeLabels(activities, typeLabelArr);
+      typeLabelArr.push(...getTypeLabels(activities));
 
       // 2 Calculate search width
-      const width = Math.max(10, Math.min(parseFloat(distance) / 20, 200));
+      const width = Math.max(MIN_WIDTH, Math.min(parseFloat(distance) / 20, MAX_WIDTH));
 
       // 3 Use a Set to store unique locations
-      var touristLocations = new Map<string, TouristLocation>();
+      const touristLocations = new Map<string, TouristLocation>();
 
       // 4 Array to hold all the promises for the database queries
       const promises: Promise<void>[] = [];
 
       // 5️ Generate search queries asynchronously
       if (coordinates && Array.isArray(coordinates)) {
+        const dbInstance = db.get();
+
         for (let i = 0; i < coordinates.length - 1; i++) {
           const queryFilter = searchQuery(
             coordinates[i],
@@ -41,7 +55,6 @@ export default {
           );
 
           // Push the promise of the database query to the promises array
-          const dbInstance = db.get();
           if (dbInstance) {
             promises.push(
               dbInstance
@@ -54,6 +67,11 @@ export default {
                       touristLocations.set(element.siteLabel, element);
                     }
                   });
+                }).catch((error: any) => {
+                  logger.error('Error in searchAlong:', error);
+                  throw new Error('Error in searchAlong');
+                }).finally(() => {
+                  logger.info('Search along query completed');
                 })
             );
           }
@@ -68,7 +86,7 @@ export default {
       if (!touristLocations.size) {
         return res.status(404).json({ error: "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search" });
       }
-      res.status(201).json(Array.from(touristLocations.values()));
+      res.status(200).json(Array.from(touristLocations.values()));
     } catch (error) {
       console.error("Error in searchAlong:", error);
       res.status(500).json({ error: "Network issue please try again." });
@@ -78,12 +96,7 @@ export default {
 
   getDestinations: async (req: Request, res: Response) => {
     try {
-      const queryParams = req.query as unknown as {
-        coordinates: string[];
-        distance: string;
-        type: any;
-        activities: any;
-      };
+      const queryParams = req.query as unknown as GetDestinationsQuery;
 
       let { coordinates, distance, type, activities } = queryParams;
 
@@ -92,7 +105,7 @@ export default {
 
       // 1 Generate type labels
       let typeLabelArr: string[] = [];
-      getTypeLabels(activities, typeLabelArr);
+      typeLabelArr.push(...getTypeLabels(activities));
 
       for (let key in type) {
         if (type[key] === "true") {

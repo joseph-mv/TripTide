@@ -1,10 +1,8 @@
 import express from 'express';
-import tripPlanController from '../controllers/tripPlanController'
+import tripPlanController  from '../controllers/tripPlanController'
 
-var router = express.Router();
-router.get('/suggestions',tripPlanController.searchAlong)
+const router = express.Router();
 
-router.get('/destinations' ,tripPlanController.getDestinations)
-
-export default router
-
+router.get('/suggestions', tripPlanController.searchAlong);
+router.get('/destinations', tripPlanController.getDestinations);
+export default router;
