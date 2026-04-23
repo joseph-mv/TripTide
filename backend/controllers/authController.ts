@@ -12,16 +12,32 @@ import {
   hashPassword,
   sendOtp,
 } from '../utils/authUtils';
+import {
+  ForgotPasswordBody,
+  LoginBody,
+  RefreshTokenBody,
+  ResetPasswordBody,
+  SignUpBody,
+  VerifyEmailQuery,
+} from "../validators/auth.schema";
+import { env } from "../config/env";
 
 interface DecodedToken extends jwt.JwtPayload {
   userId?: string;
 }
 
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+  return fallback;
+};
+
 export default {
 
   signUp: async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
-
+    const { name, email, password } = req.validatedBody as SignUpBody;
+    console.log(name, email, password);
     try {
       // 1️ Check if the email is already registered
       if (await checkExistingUser(email)) {
@@ -67,23 +83,17 @@ export default {
 
       // 7️ Return success response
       res.status(201).json(emailResponse);
-    } catch (error: any) {
-      console.log(error.message);
-      res.status(500).json({ error: error.message || "Signup failed!" });
+    } catch (error: unknown) {
+      const message = getErrorMessage(error, "Signup failed!");
+      console.log(message);
+      res.status(500).json({ error: message });
     }
   },
 
 
   verifyEmail: async (req: Request, res: Response) => {
     try {
-      const { token } = req.query as { token?: string };
-
-      // 1 Check if the token is provided
-      if (!token) {
-        return res
-          .status(400)
-          .json({ error: "Verification token is required" });
-      }
+      const { token } = req.validatedQuery as VerifyEmailQuery;
 
       const dbInstance = db.get();
       if (!dbInstance) throw new Error("Database not initialized");
@@ -112,14 +122,7 @@ export default {
 
   login: async (req: Request, res: Response) => {
     try {
-      const { email, password } = req.body;
-
-      // 1 Validate email and password input
-      if (!email || !password) {
-        return res
-          .status(400)
-          .json({ status: false, error: "Email and password are required" });
-      }
+      const { email, password } = req.validatedBody as LoginBody;
 
       // 2 Check if user exists and is verified
       const existingUser = await checkExistingUser(email);
@@ -127,7 +130,7 @@ export default {
       if (!existingUser?.isVerified) {
         return res
           .status(400)
-          .json({ error: "User not found or not verified" });
+          .json({ error: "Invalid email or password" });
       }
 
       // 3 Compare hashed password
@@ -165,7 +168,7 @@ export default {
 
   forgotPassword: async (req: Request, res: Response) => {
     try {
-      const { email } = req.body;
+      const { email } = req.validatedBody as ForgotPasswordBody;
 
       // 1 Check if user exists
       const user = await checkExistingUser(email);
@@ -198,17 +201,18 @@ export default {
 
       // 5 Respond with success
       res.status(200).json(otpRes);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = getErrorMessage(error, "Something went wrong. Please try again ");
       console.log(error);
       res.status(500).json({
-        error: error.message || "Something went wrong. Please try again ",
+        error: message,
       });
     }
   },
 
   resetPassword: async (req: Request, res: Response) => {
     try {
-      const { email, otp, newPassword } = req.body;
+      const { email, otp, newPassword } = req.validatedBody as ResetPasswordBody;
 
       const dbInstance = db.get();
       if (!dbInstance) throw new Error("Database not initialized");
@@ -256,15 +260,10 @@ export default {
 
   refreshToken: async (req: Request, res: Response) => {
     try {
-      const { refreshToken } = req.body;
-
-      // 1️ Validate input
-      if (!refreshToken)
-        return res.status(403).json({ error: "No refresh token provided" });
+      const { refreshToken } = req.validatedBody as RefreshTokenBody;
 
       // 2️ Verify the refresh token
-      const secret = process.env.JWT_REFRESH_SECRET;
-      if (!secret) throw new Error("JWT_REFRESH_SECRET is not defined");
+      const secret = env.JWT_REFRESH_SECRET;
 
       const decoded = jwt.verify(refreshToken, secret) as DecodedToken;
 
