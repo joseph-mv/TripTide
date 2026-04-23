@@ -38,7 +38,7 @@ const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
       const response = await axios.delete(`${BASE_URL}/user/delete-itinerary`, {
         params: { id: trip._id },
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       });
       setTrips((prev) => prev.filter((item) => item._id !== trip._id));

@@ -158,7 +158,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
         url: endpoint,
         data: tripItinerary,
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response.data) {

@@ -30,7 +30,7 @@ export const getUserInformation = async () => {
     await jwtCheck()
     const response = await axiosInstance.get('user/user-dashboard', {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     })
     return response.data
@@ -50,7 +50,7 @@ export const updateProfilePic = async (imageData: string) => {
     const token = localStorage.getItem('token')
     const response = await axiosInstance.put('user/updateProfilePic', { imageData }, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     })
     return response.data
@@ -81,7 +81,7 @@ export const getOngoingTrip = async (id: string): Promise<OngoingTrip> => {
     await jwtCheck();
     const token = localStorage.getItem("token");
     const response = await axiosInstance.get(`user/get-ongoing-trip/${id}`, {
-      headers: { Authorization: token },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data as OngoingTrip;
   } catch (error) {
