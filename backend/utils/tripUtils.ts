@@ -13,10 +13,10 @@ const locationType: LocationTypes = {
   others: ["Zoo", "Desert"],
 };
 
-export const getTypeLabels = (activities: Record<string, 'false' | 'true'>) => {
+export const getTypeLabels = (activities: Record<string, boolean>) => {
   const typeLabelArr: string[] = [];
   Object.keys(activities).forEach((key) => {
-    if (activities[key] === "true") {
+    if (activities[key]) {
       typeLabelArr.push(...(locationType[key] || []));
     }
   });

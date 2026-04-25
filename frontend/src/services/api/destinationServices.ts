@@ -12,13 +12,12 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const getRouteDestinations = async (coordinates: LocationState, activities: FormDataState["activities"]) => {
   try {
     await jwtCheck()
-    const response = await axios.get(`${BASE_URL}/suggestions`, {
-      params: {
+    const response = await axios.post(`${BASE_URL}/suggestions`, {
         coordinates: coordinates.coordinates,
         distance: coordinates.distance,
         activities: activities,
       },
-    });
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -34,7 +33,7 @@ export const getNearbyDestinations = async (form: any) => {
       throw new Error("Please select a place");
     }
 
-    const response = await axiosInstance.get("/destinations", { params: form });
+    const response = await axiosInstance.post("/destinations", form );
     if (!response.data.length) {
       throw new Error(
         "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."

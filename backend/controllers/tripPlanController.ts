@@ -13,7 +13,7 @@ export default {
 
   searchAlong: async (req: Request, res: Response) => {
     try {
-      const { coordinates, distance, activities } = req.validatedQuery as SearchAlongQuery;
+      const { coordinates, distance, activities } = req.validatedBody as SearchAlongQuery;
       console.log('coordinates', coordinates, 'distance', distance, 'activities', activities);
 
       // 1 Build type filter array
@@ -84,7 +84,7 @@ export default {
 
   getDestinations: async (req: Request, res: Response) => {
     try {
-      const { coordinates, distance, type, activities } = req.validatedQuery as GetDestinationsQuery;
+      const { coordinates, distance, type, activities } = req.validatedBody as GetDestinationsQuery;
 
       const parsedCoordinates: [number, number] = [coordinates[0], coordinates[1]];
       const parsedDistance = distance ? parseFloat(distance) : 5;
