@@ -3,17 +3,17 @@ const { ObjectId } = require("mongodb");
 import db from '../config/connection';
 import collection from '../config/collection';
 import { Request, Response } from 'express';
+import { ContactMessage } from '../validators/user.schema';
 
 export default {
 
 
   contactMessages: async (req: Request, res: Response) => {
     try {
-      const formData = req.body
+      const formData = req.validatedBody as ContactMessage
       await db.get().collection(collection.CONTACT_MSG_Collection).insertOne(formData)
       res.status(200).json({ message: 'Your message has been received. We will contact you as soon as possible.' })
     } catch (error) {
-      console.error("Error fetching user itineraries:", error);
       res.status(500).json({ error: "Internal Server error" });
     }
   },
