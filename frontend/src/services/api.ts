@@ -9,3 +9,16 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    const res = response.data;
+    if (res.success === false) {
+      return Promise.reject(new Error(res.message || res.error || 'Unknown error'));
+    }
+    return res.data;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
