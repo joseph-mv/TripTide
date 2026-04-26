@@ -10,4 +10,4 @@ const router = express.Router();
 
 router.post("/suggestions", validate({ body: searchAlongQuerySchema }), tripPlanController.searchAlong);
 router.post("/destinations", validate({ body: getDestinationsQuerySchema }), tripPlanController.getDestinations);
-export default router;
+export default router; 

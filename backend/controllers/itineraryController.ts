@@ -10,6 +10,9 @@ export default {
   addItinerary: async (req: Request, res: Response) => {
     try {
       const itineraryData = req.body;
+      const userId = req.userId;
+      
+      
 
       // 1 Insert data into the database
       const result = await db
