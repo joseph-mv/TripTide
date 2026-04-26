@@ -6,6 +6,7 @@ import { getTypeLabels, searchQuery } from '../utils/tripUtils';
 import { TouristLocation } from '../types/models';
 import { logger } from '../utils/logger';
 import { GetDestinationsQuery, SearchAlongQuery } from "../validators/trip.schema";
+import { successResponse, errorResponse } from '../utils/apiResponse';
 const MAX_WIDTH = 200;
 const MIN_WIDTH = 10;
 
@@ -72,12 +73,12 @@ export default {
 
       // 7 Send response
       if (!touristLocations.size) {
-        return res.status(404).json({ error: "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search" });
+        return errorResponse(res, "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search", 404);
       }
-      res.status(200).json(Array.from(touristLocations.values()));
+      return successResponse(res, Array.from(touristLocations.values()), "Destinations found successfully");
     } catch (error) {
       console.error("Error in searchAlong:", error);
-      res.status(500).json({ error: "Network issue please try again." });
+      return errorResponse(res, "Network issue please try again.", 500, error);
     }
   },
 
@@ -122,12 +123,10 @@ export default {
         .toArray();
 
       // 4 Return results
-      return res.status(200).json(destinations);
+      return successResponse(res, destinations, "Destinations retrieved successfully");
     } catch (error) {
       console.error("Error in getDestinations:", error);
-      return res
-        .status(500)
-        .json({ error: "Internal server error. Please try again later." });
+      return errorResponse(res, "Internal server error. Please try again later.", 500, error);
     }
   },
 };

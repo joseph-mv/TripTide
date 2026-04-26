@@ -4,6 +4,7 @@ import db from '../config/connection';
 import collection from '../config/collection';
 import { Request, Response } from 'express';
 import { ContactMessage } from '../validators/user.schema';
+import { successResponse, errorResponse } from '../utils/apiResponse';
 
 export default {
 
@@ -12,9 +13,9 @@ export default {
     try {
       const formData = req.validatedBody as ContactMessage
       await db.get().collection(collection.CONTACT_MSG_Collection).insertOne(formData)
-      res.status(200).json({ message: 'Your message has been received. We will contact you as soon as possible.' })
+      return successResponse(res, null, 'Your message has been received. We will contact you as soon as possible.')
     } catch (error) {
-      res.status(500).json({ error: "Internal Server error" });
+      return errorResponse(res, "Internal Server error", 500, error);
     }
   },
 
@@ -27,7 +28,7 @@ export default {
 
       // 1️ Validate userId
       if (!userId) {
-        return res.status(400).json({ error: "User ID is required." });
+        return errorResponse(res, "User ID is required.", 400);
       }
 
       // 2️ Fetch itineraries from the database
@@ -38,14 +39,14 @@ export default {
         .toArray();
       // 3️ Check if itineraries exist
       if (!itineraries.length) {
-        return res.status(404).json({ error: "No itineraries found." });
+        return errorResponse(res, "No itineraries found.", 404);
       }
 
       // 4️ Return the itineraries
-      return res.status(200).json(itineraries);
+      return successResponse(res, itineraries, "Itineraries retrieved successfully");
     } catch (err) {
       console.error("Error fetching user itineraries:", err);
-      res.status(500).json({ error: "Internal Server error" }); // Proper error handling
+      return errorResponse(res, "Internal Server error", 500, err); // Proper error handling
     }
   },
 
@@ -66,22 +67,17 @@ export default {
 
       // 2 Check if the profile picture was updated
       if (result.matchedCount === 0) {
-        return res.status(404).json({ error: "User not found." });
+        return errorResponse(res, "User not found.", 404);
       }
       if (result.modifiedCount === 0) {
-        return res
-          .status(200)
-          .json({ message: "No changes made to the profile picture." });
+        return successResponse(res, null, "No changes made to the profile picture.");
       }
 
       // 3 Return success response
-      return res.status(200).json({
-        success: true,
-        message: "Profile picture updated successfully.",
-      });
+      return successResponse(res, null, "Profile picture updated successfully.");
     } catch (error) {
       console.error("Error updating profile picture:", error);
-      return res.status(500).json({ error: "Internal Server Error." });
+      return errorResponse(res, "Internal Server Error.", 500, error);
     }
   },
 

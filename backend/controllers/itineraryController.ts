@@ -4,6 +4,7 @@ import db from '../config/connection';
 import collection from '../config/collection';
 const { ObjectId } = require("mongodb");
 import { Request, Response } from 'express';
+import { successResponse, errorResponse } from '../utils/apiResponse';
 
 export default {
 
@@ -18,11 +19,11 @@ export default {
         .insertOne(itineraryData);
 
       // 2 Return success response
-      return res.status(201).json({ success: true, data: result });
+      return successResponse(res, result, "Itinerary added successfully", { statusCode: 201 });
 
     } catch (error) {
       console.error("Error adding itinerary:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return errorResponse(res, "Internal Server Error", 500, error);
     }
   },
 
@@ -38,12 +39,12 @@ export default {
 
       // If itinerary not found, return 404
       if (!itinerary) {
-        return res.status(404).json({ error: "Itinerary not found" });
+        return errorResponse(res, "Itinerary not found", 404);
       }
-      res.status(200).json(itinerary);
+      return successResponse(res, itinerary);
     } catch (error) {
       console.error("Error fetching itinerary:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      return errorResponse(res, "Internal Server Error", 500, error);
     }
   },
 
@@ -69,12 +70,12 @@ export default {
         );
 
       if (!ongoingTrip) {
-        return res.status(404).json({ error: "Itinerary not found" });
+        return errorResponse(res, "Itinerary not found", 404);
       }
-      res.status(200).json(ongoingTrip);
+      return successResponse(res, ongoingTrip);
     } catch (error) {
       console.error("Error fetching ongoing trip:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      return errorResponse(res, "Internal Server Error", 500, error);
     }
   },
 
@@ -89,11 +90,11 @@ export default {
         .deleteOne({ _id: new ObjectId(id) });
 
       // 2 Return success response
-      return res.status(200).json({ success: true, message: "Itinerary deleted successfully." });
+      return successResponse(res, null, "Itinerary deleted successfully.");
 
     } catch (error) {
       console.error("Error deleting itinerary:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return errorResponse(res, "Internal Server Error", 500, error);
     }
   },
 
@@ -115,11 +116,11 @@ export default {
         );
 
       // 2 Return success response
-      return res.status(200).json({ success: true, message: "Itinerary updated successfully." });
+      return successResponse(res, null, "Itinerary updated successfully.");
 
     } catch (error) {
       console.error("Error updating itinerary:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return errorResponse(res, "Internal Server Error", 500, error);
     }
   },
 
