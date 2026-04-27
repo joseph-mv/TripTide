@@ -38,7 +38,6 @@ export default {
 
   signUp: async (req: Request, res: Response) => {
     const { name, email, password } = req.validatedBody as SignUpBody;
-    console.log(name, email, password);
     try {
       // 1️ Check if the email is already registered
       if (await checkExistingUser(email)) {
@@ -81,10 +80,9 @@ export default {
       );
 
       // 7️ Return success response
-      return successResponse(res, emailResponse, "Signup successful", { statusCode: 201 });
+      return successResponse(res, emailResponse, "Signup successful", {}, 201);
     } catch (error: unknown) {
       const message = getErrorMessage(error, "Signup failed!");
-      console.log(message);
       return errorResponse(res, message, 500, error);
     }
   },
@@ -136,7 +134,6 @@ export default {
         existingUser.password
       );
       if (!isPasswordValid) {
-        console.log("no user");
         return errorResponse(res, "Invalid email or password", 400);
       }
 
@@ -146,7 +143,6 @@ export default {
 
       // 5 Send response
       return successResponse(res, {
-        status: true,
         userName: existingUser.name,
         userId: existingUser._id,
         image: existingUser.image || null, // Ensuring null if no image is found

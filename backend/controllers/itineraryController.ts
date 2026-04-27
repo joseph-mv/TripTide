@@ -19,7 +19,7 @@ export default {
         .insertOne(itineraryData);
 
       // 2 Return success response
-      return successResponse(res, result, "Itinerary added successfully", { statusCode: 201 });
+      return successResponse(res, result, "Itinerary added successfully", {}, 201);
 
     } catch (error) {
       console.error("Error adding itinerary:", error);

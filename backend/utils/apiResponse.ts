@@ -4,9 +4,10 @@ export const successResponse = <T>(
   res: Response,
   data: T,
   message: string = "Success",
-  meta: Record<string, any> = {}
+  meta: Record<string, any> = {},
+  statusCode: number = 200
 ) => {
-  return res.status(200).json({
+  return res.status(statusCode).json({
     success: true,
     message,
     data,
