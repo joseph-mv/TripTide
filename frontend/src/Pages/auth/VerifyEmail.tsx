@@ -4,7 +4,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 import "../../styles/pages/auth/VerifyEmail.css";
 import { verifyEmail } from "../../services/authService";
-import { ROUTES } from "../../routes";
+import { ROUTES } from "../../constants/routes";
 
 /**
  * **Verify email Page**

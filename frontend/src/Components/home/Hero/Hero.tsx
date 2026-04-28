@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import PlanButton from "./PlanButton/PlanButton";
 
 import "./Hero.css";
-import { ROUTES } from "../../../routes";
+import { ROUTES } from "../../../constants/routes";
 
 
 function Hero() {

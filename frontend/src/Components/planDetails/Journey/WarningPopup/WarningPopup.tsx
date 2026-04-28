@@ -7,7 +7,7 @@ import {
   calculateDaysBetweenDates,
   convertTimeStringToIntegerHours,
 } from "../../../../utils/dateUtils.js";
-import { ROUTES } from '../../../../routes.js'
+import { ROUTES } from '../../../../constants/routes.js'
 
 const DAILY_TRAVEL_HOUR = 5;
 interface WarningPopupProps {

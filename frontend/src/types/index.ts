@@ -115,12 +115,14 @@ export type UserAction =
     | { type: "REMOVEUSER" };
 
 export interface AuthResponse {
-    status: boolean;
-    msg: string;
-    token?: string;
-    user?: any;
-    error?: string;
+    userId: string;
+    userName: string;
+    email: string;
+    image: string | null;
+    token: string;
+    refreshToken: string;
 }
+
 
 export interface WikiPlace {
     name: string;

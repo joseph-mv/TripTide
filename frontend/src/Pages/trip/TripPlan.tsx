@@ -12,7 +12,7 @@ import {
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { ROUTES } from "../../routes";
+import { ROUTES } from "../../constants/routes";
 import "../../styles/pages/trip/TripPlan.css";
 import GeocodedInput from "../../Components/tripPlan/GeocodedInput";
 import { currencySymbols, validateDateRange, today } from "../../utils";

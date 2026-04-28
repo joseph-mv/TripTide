@@ -6,7 +6,7 @@ import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/Delete
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";
-import { ROUTES } from "../../../routes";
+import { ROUTES } from "../../../constants/routes";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 import { Trip } from "../../../types";
 
