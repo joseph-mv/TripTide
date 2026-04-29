@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 import "./LocationCard.css";
-import { ROUTES } from "../../../../constants/routes";
+import { ROUTES } from "../../../../routes";
 import {
   getCoordinatesAndWikiID,
   getDestDescription,

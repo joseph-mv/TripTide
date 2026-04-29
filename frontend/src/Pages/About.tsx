@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 import "../styles/pages/About.css";
-import { ROUTES } from "../constants/routes";
+import { ROUTES } from "../routes";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 const keyPoints = [

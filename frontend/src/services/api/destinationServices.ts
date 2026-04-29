@@ -1,10 +1,10 @@
 import axios from "axios";
-import { api } from "../api";
+import { axiosInstance } from "../api";
 import { jwtCheck } from "../../utils/authUtils";
-import { FormDataState, LocationState, NearbyDestinationsForm } from "../../types";
-import { NETWORK_ISSUE_MSG } from "../../constants/api";
+import { FormDataState, LocationState } from "../../types";
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
+const NETWORK_ISSUE_MSG = "Network issue. Please try again later."
 
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -12,33 +12,40 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const getRouteDestinations = async (coordinates: LocationState, activities: FormDataState["activities"]) => {
   try {
     await jwtCheck()
-    const response = await api.post(`${BASE_URL}/suggestions`, {
+    const response = await axios.get(`${BASE_URL}/suggestions`, {
+      params: {
         coordinates: coordinates.coordinates,
         distance: coordinates.distance,
         activities: activities,
       },
-    );
+    });
     return response.data;
-  } catch (error: any) {
-    throw new Error(error ?? NETWORK_ISSUE_MSG);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || NETWORK_ISSUE_MSG)
+    }
+    throw new Error(NETWORK_ISSUE_MSG)
   }
 };
 
-export const getNearbyDestinations = async (form: NearbyDestinationsForm) => {
+export const getNearbyDestinations = async (form: any) => {
   try {
     if (!form.coordinates.length) {
       throw new Error("Please select a place");
     }
 
-    const response = await api.post("/destinations", form );
+    const response = await axiosInstance.get("/destinations", { params: form });
     if (!response.data.length) {
       throw new Error(
         "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."
       );
     }
     return response.data;
-  } catch (error: any) {
-    throw new Error(error ?? NETWORK_ISSUE_MSG);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message || NETWORK_ISSUE_MSG);
+    }
+    throw new Error(NETWORK_ISSUE_MSG);
   }
 };
 

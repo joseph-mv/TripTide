@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import "./Map.css";
-import { ROUTES } from "../../../constants/routes";
+import { ROUTES } from "../../../routes";
 import { usePlanMap } from "../../../hooks/usePlanMap";
 import { createMarker } from "../../../utils/createMarker";
 

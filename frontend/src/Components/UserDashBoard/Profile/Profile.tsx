@@ -3,7 +3,7 @@ import "./Profile.css";
 import { ButtonPopup, ImageChangePopup, ImagePopup } from "./Popups/Popups";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../constants/routes";
+import { ROUTES } from "../../../routes";
 import { UserState } from "../../../types";
 interface ProfileProps {
   userData: UserState;
