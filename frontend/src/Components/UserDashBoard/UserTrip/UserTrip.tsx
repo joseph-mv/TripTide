@@ -6,7 +6,7 @@ import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/Delete
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";
-import { ROUTES } from "../../../constants/routes";
+import { ROUTES } from "../../../routes";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 import { Trip } from "../../../types";
 
@@ -38,7 +38,7 @@ const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
       const response = await axios.delete(`${BASE_URL}/user/delete-itinerary`, {
         params: { id: trip._id },
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       });
       setTrips((prev) => prev.filter((item) => item._id !== trip._id));

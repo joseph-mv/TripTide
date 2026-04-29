@@ -3,7 +3,7 @@ import { AlertCircle } from 'lucide-react';
 import { AiFillHome } from 'react-icons/ai';
 
 import styles from '../styles/pages/NotFound.module.css';
-import { ROUTES } from '../constants/routes';
+import { ROUTES } from '../routes';
 /**
  * NotFound Component:
  *  Renders a 404 "Page Not Found" error message when the application's router

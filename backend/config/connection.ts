@@ -8,7 +8,7 @@ const state: State = {
     db: null
 };
 
-export const connect = async function (done: (err: Error | null) => void) {
+export const connect = async function (done: (err?: any) => void) {
     const url = process.env.MONGO_URI;
     if (!url) {
         return done(new Error("MONGO_URI not set"));
@@ -19,10 +19,10 @@ export const connect = async function (done: (err: Error | null) => void) {
         const client = await MongoClient.connect(url);
         // Access the newly created database with the desired name
         state.db = client.db(dbName);
-        done(null);
+        done();
     } catch (error) {
         console.error("Connection error:", error);
-        done(error as Error);
+        done(error);
     }
 };
 

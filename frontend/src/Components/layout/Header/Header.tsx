@@ -9,7 +9,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { AiFillHome, AiOutlineInfoCircle } from "react-icons/ai";
 
 import "./Header.css";
-import { ROUTES } from "../../../constants/routes";
+import { ROUTES } from "../../../routes";
 import { shadowAnimation, wavingAnimation } from "../../../animation/header";
 import { RootState } from "../../../redux/store";
 

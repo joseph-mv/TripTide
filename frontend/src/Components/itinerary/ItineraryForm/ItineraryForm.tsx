@@ -16,7 +16,7 @@ import { getPrevDate } from "../../../utils/prevDate";
 import { today } from "../../../utils/date";
 import { dayAfterNumber } from "../../../utils/dayAfternumbers";
 import { reverseDate } from "../../../utils/reverseDate";
-import { ROUTES } from "../../../constants/routes";
+import { ROUTES } from "../../../routes";
 
 import { RootState } from "../../../redux/store";
 import { Itinerary } from "../../../types";
@@ -158,7 +158,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
         url: endpoint,
         data: tripItinerary,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       });
       if (response.data) {

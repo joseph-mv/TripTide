@@ -12,7 +12,7 @@ import {
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { ROUTES } from "../../constants/routes";
+import { ROUTES } from "../../routes";
 import "../../styles/pages/trip/TripPlan.css";
 import GeocodedInput from "../../Components/tripPlan/GeocodedInput";
 import { currencySymbols, validateDateRange, today } from "../../utils";
@@ -105,7 +105,6 @@ const TripPlan = () => {
                   <GeocodedInput
                     id="destination"
                     name="destination"
-                    autoFocus={true}
                     value={formData.destination}
                     handleChange={handleChange}
                     keyEnter={(suggestions, sugIdx) => dispatch({
@@ -198,7 +197,6 @@ const TripPlan = () => {
                   <label htmlFor="budget">Budget:</label>
                   <input
                     type="number"
-                    autoFocus={true}
                     id="budget"
                     name="budget"
                     min={1}

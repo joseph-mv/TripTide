@@ -47,14 +47,6 @@ export interface FormDataState {
     startingPoint: string;
 }
 
-export interface NearbyDestinationsForm {
-    coordinates: [number, number];
-    distance: string;
-    type: { [key: string]: boolean };
-    activities: { [key: string]: boolean };
-}
-
-
 export interface Coords {
     latitude: number;
     longitude: number;
@@ -123,14 +115,12 @@ export type UserAction =
     | { type: "REMOVEUSER" };
 
 export interface AuthResponse {
-    userId: string;
-    userName: string;
-    email: string;
-    image: string | null;
-    token: string;
-    refreshToken: string;
+    status: boolean;
+    msg: string;
+    token?: string;
+    user?: any;
+    error?: string;
 }
-
 
 export interface WikiPlace {
     name: string;

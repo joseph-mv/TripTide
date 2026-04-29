@@ -1,13 +1,10 @@
 import express from 'express';
-import tripPlanController  from '../controllers/tripPlanController'
-import { validate } from "../middleware/validate";
-import {
-  getDestinationsQuerySchema,
-  searchAlongQuerySchema,
-} from "../validators/trip.schema";
+import tripPlanController from '../controllers/tripPlanController'
 
-const router = express.Router();
+var router = express.Router();
+router.get('/suggestions',tripPlanController.searchAlong)
 
-router.post("/suggestions", validate({ body: searchAlongQuerySchema }), tripPlanController.searchAlong);
-router.post("/destinations", validate({ body: getDestinationsQuerySchema }), tripPlanController.getDestinations);
-export default router;
+router.get('/destinations' ,tripPlanController.getDestinations)
+
+export default router
+
