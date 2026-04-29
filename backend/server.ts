@@ -9,6 +9,7 @@ import tripRouter from "./routes/tripPlanRoutes";
 import authRouter from "./routes/authRoutes";
 import userRouter from "./routes/userRoutes";
 import friendsRouter from "./routes/friendsRoutes";
+import errorHandler from "./middleware/errorHandler";
 
 const PORT = env.PORT;
 const app = express();
@@ -41,7 +42,5 @@ app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/friends", friendsRouter);
 
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  logger.error(err.stack);
-  res.status(500).send({ message: 'Something broke!', error: err.message });
-});
+// Error handling middleware
+app.use(errorHandler);

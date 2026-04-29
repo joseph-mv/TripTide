@@ -16,7 +16,7 @@ import { getPrevDate } from "../../../utils/prevDate";
 import { today } from "../../../utils/date";
 import { dayAfterNumber } from "../../../utils/dayAfternumbers";
 import { reverseDate } from "../../../utils/reverseDate";
-import { ROUTES } from "../../../routes";
+import { ROUTES } from "../../../constants/routes";
 
 import { RootState } from "../../../redux/store";
 import { Itinerary } from "../../../types";
