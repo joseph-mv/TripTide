@@ -17,7 +17,7 @@ import {
   UserDashboard,
   VerifyEmail,
 } from "./Pages";
-import { ROUTES } from "./routes";
+import { ROUTES } from "./constants/routes";
 import Layout from "./Components/layout/Layout";
 import ProtectedRoute from "./Components/auth/ProtectedRoute";
 

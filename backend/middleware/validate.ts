@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError, ZodTypeAny } from "zod";
+import { errorResponse } from "../utils/apiResponse";
 
 type ValidationSchema = {
   body?: ZodTypeAny;
@@ -52,13 +53,9 @@ export const validate = (schemas: ValidationSchema) => {
         req.validatedParams = parsedParams.data;
       }
     }
-    console.log(validationErrors)
 
     if (validationErrors.length > 0) {
-      res.status(400).json({
-        success: false,
-        error: validationErrors[0].message,
-      });
+      errorResponse(res, validationErrors[0].message, 400, validationErrors);
       return;
     }
 

@@ -1,0 +1,1 @@
+export const NETWORK_ISSUE_MSG = "Network issue. Please try again later."

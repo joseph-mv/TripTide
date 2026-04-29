@@ -1,23 +1,20 @@
-import { axiosInstance } from "./api"
+import { api } from "./api"
+import { NETWORK_ISSUE_MSG } from "../constants/api";
 
 export const searchFriends = async (query: string) => {
     if (!query) return []
     try {
         const token = localStorage.getItem("token");
 
-        const response = await axiosInstance.get("friends/search_users", {
+        const response = await api.get("friends/search_users", {
             params: { query },
             headers: {
                 Authorization: `Bearer ${token}`, // Ensuring proper format
             },
         });
-        return response.data; // Return the API response data
+        return response; // Return the API response data
 
     } catch (error: any) {
-        console.error("Error searching friends:", error);
-
-        throw new Error(
-            error.response?.data?.message || "Something went wrong. Please try again."
-        );
+        throw new Error(error ?? NETWORK_ISSUE_MSG);
     }
 };
