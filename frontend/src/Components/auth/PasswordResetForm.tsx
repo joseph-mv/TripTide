@@ -43,6 +43,11 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
     setError(error);
   }, [error]);
 
+  useEffect(()=>{
+    if(newPassword !== confirmPassword) setError("Passwords do not match")
+    else setError('')
+  })
+
 
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
@@ -55,6 +60,28 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
     if (index < otp.length - 1) {
       document.getElementById(`otp-${index + 1}`)?.focus();
     }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text");
+    
+    // Extract only digits from pasted data
+    const digits = pastedData.replace(/\D/g, "").split("");
+    
+    // Create new OTP array
+    const newOtp = [...otp];
+    digits.forEach((digit, i) => {
+      if (i < otp.length) {
+        newOtp[i] = digit;
+      }
+    });
+    
+    setOtp(newOtp);
+    
+    // Focus the next empty field or the last field
+    const nextIndex = Math.min(digits.length, otp.length - 1);
+    document.getElementById(`otp-${nextIndex}`)?.focus();
   };
 
 
@@ -84,6 +111,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
             value={digit}
             onChange={(e) => handleOtpChange(e, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
+            onPaste={handlePaste}
             maxLength={1}
             required
             autoFocus={index === 0}

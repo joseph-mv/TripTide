@@ -1,37 +1,38 @@
 import { Request, Response } from 'express';
+
 import db from '../config/connection';
 import collection from '../config/collection';
 import { getTypeLabels, searchQuery } from '../utils/tripUtils';
 import { TouristLocation } from '../types/models';
+import { logger } from '../utils/logger';
+import { GetDestinationsQuery, SearchAlongQuery } from "../validators/trip.schema";
+import { successResponse, errorResponse } from '../utils/apiResponse';
+const MAX_WIDTH = 200;
+const MIN_WIDTH = 10;
 
 export default {
 
   searchAlong: async (req: Request, res: Response) => {
     try {
-      // Explicitly cast req.query properties to their expected types
-      const query = req.query as unknown as {
-        coordinates: number[][]; // Assumes body parser handles this or needs manual parsing if pure query string
-        distance: string;
-        activities: any;
-      };
-
-      const { coordinates, distance, activities } = query;
+      const { coordinates, distance, activities } = req.validatedBody as SearchAlongQuery;
 
       // 1 Build type filter array
       const typeLabelArr: string[] = ["Tourist Attraction", "Tourist Destination"];
-      getTypeLabels(activities, typeLabelArr);
+      typeLabelArr.push(...getTypeLabels(activities));
 
       // 2 Calculate search width
-      const width = Math.max(10, Math.min(parseFloat(distance) / 20, 200));
+      const width = Math.max(MIN_WIDTH, Math.min(parseFloat(distance) / 20, MAX_WIDTH));
 
       // 3 Use a Set to store unique locations
-      var touristLocations = new Map<string, TouristLocation>();
+      const touristLocations = new Map<string, TouristLocation>();
 
       // 4 Array to hold all the promises for the database queries
       const promises: Promise<void>[] = [];
 
       // 5️ Generate search queries asynchronously
       if (coordinates && Array.isArray(coordinates)) {
+        const dbInstance = db.get();
+
         for (let i = 0; i < coordinates.length - 1; i++) {
           const queryFilter = searchQuery(
             coordinates[i],
@@ -41,19 +42,24 @@ export default {
           );
 
           // Push the promise of the database query to the promises array
-          const dbInstance = db.get();
           if (dbInstance) {
             promises.push(
               dbInstance
                 .collection(collection.TOURIST_Collection)
                 .find(queryFilter)
                 .toArray()
-                .then((response: any[]) => { // Using any[] for raw mongo response, ideally stricttyped
-                  response.forEach((element: TouristLocation) => {
-                    if (element.siteLabel && !touristLocations.has(element.siteLabel)) {
-                      touristLocations.set(element.siteLabel, element);
+                .then((response) => {
+                  response.forEach((element) => {
+                    const location = element as unknown as TouristLocation;
+                    if (location.siteLabel && !touristLocations.has(location.siteLabel)) {
+                      touristLocations.set(location.siteLabel, location);
                     }
                   });
+                }).catch((error: unknown) => {
+                  logger.error('Error in searchAlong:', error);
+                  throw new Error('Error in searchAlong');
+                }).finally(() => {
+                  logger.info('Search along query completed');
                 })
             );
           }
@@ -66,36 +72,29 @@ export default {
 
       // 7 Send response
       if (!touristLocations.size) {
-        return res.status(404).json({ error: "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search" });
+        return errorResponse(res, "Oops! We couldn't find any destinations that match your chosen activities. Please try selecting different activities or refining your search", 404);
       }
-      res.status(201).json(Array.from(touristLocations.values()));
+      return successResponse(res, Array.from(touristLocations.values()), "Destinations found successfully");
     } catch (error) {
       console.error("Error in searchAlong:", error);
-      res.status(500).json({ error: "Network issue please try again." });
+      return errorResponse(res, "Network issue please try again.", 500, error);
     }
   },
 
 
   getDestinations: async (req: Request, res: Response) => {
     try {
-      const queryParams = req.query as unknown as {
-        coordinates: string[];
-        distance: string;
-        type: any;
-        activities: any;
-      };
+      const { coordinates, distance, type, activities } = req.validatedBody as GetDestinationsQuery;
 
-      let { coordinates, distance, type, activities } = queryParams;
-
-      const parsedCoordinates = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
+      const parsedCoordinates: [number, number] = [coordinates[0], coordinates[1]];
       const parsedDistance = distance ? parseFloat(distance) : 5;
 
       // 1 Generate type labels
       let typeLabelArr: string[] = [];
-      getTypeLabels(activities, typeLabelArr);
+      typeLabelArr.push(...getTypeLabels(activities));
 
-      for (let key in type) {
-        if (type[key] === "true") {
+      for (const key in type) {
+        if (type[key]) {
           typeLabelArr.push(key);
         }
       }
@@ -123,12 +122,10 @@ export default {
         .toArray();
 
       // 4 Return results
-      return res.status(200).json(destinations);
+      return successResponse(res, destinations, "Destinations retrieved successfully");
     } catch (error) {
       console.error("Error in getDestinations:", error);
-      return res
-        .status(500)
-        .json({ error: "Internal server error. Please try again later." });
+      return errorResponse(res, "Internal server error. Please try again later.", 500, error);
     }
   },
 };

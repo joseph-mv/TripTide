@@ -3,11 +3,13 @@ import express from 'express';
 import userController from '../controllers/userController';
 import verifyToken from '../middleware/authMiddleware';
 import itineraryController from '../controllers/itineraryController';
+import { validate } from '../middleware/validate';
+import { contactMessageSchema } from '../validators/user.schema';
 
 const router = express.Router();
 
 
-router.post('/contact', userController.contactMessages)
+router.post('/contact', validate({ body: contactMessageSchema }), userController.contactMessages);
 router.post("/save-itinerary", verifyToken, itineraryController.addItinerary);
 router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
 router.get("/get-ongoing-trip/:id", verifyToken, itineraryController.getOngoingTrip);

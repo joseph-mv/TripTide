@@ -13,12 +13,14 @@ const locationType: LocationTypes = {
   others: ["Zoo", "Desert"],
 };
 
-export const getTypeLabels = (activities: Record<string, any>, typeLabelArr: string[]) => {
+export const getTypeLabels = (activities: Record<string, boolean>) => {
+  const typeLabelArr: string[] = [];
   Object.keys(activities).forEach((key) => {
-    if (activities[key] === "true") {
+    if (activities[key]) {
       typeLabelArr.push(...(locationType[key] || []));
     }
   });
+  return typeLabelArr;
 };
 
 export const searchQuery = (firstCoordinate: number[], secondCoordinate: number[], width: number, typeLabelArr: string[]) => {

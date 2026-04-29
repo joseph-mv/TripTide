@@ -12,22 +12,36 @@ import {
   hashPassword,
   sendOtp,
 } from '../utils/authUtils';
+import { successResponse, errorResponse } from '../utils/apiResponse';
+import {
+  ForgotPasswordBody,
+  LoginBody,
+  RefreshTokenBody,
+  ResetPasswordBody,
+  SignUpBody,
+  VerifyEmailQuery,
+} from "../validators/auth.schema";
+import { env } from "../config/env";
 
 interface DecodedToken extends jwt.JwtPayload {
   userId?: string;
 }
 
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+  return fallback;
+};
+
 export default {
 
   signUp: async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
-
+    const { name, email, password } = req.validatedBody as SignUpBody;
     try {
       // 1️ Check if the email is already registered
       if (await checkExistingUser(email)) {
-        return res
-          .status(400)
-          .json({ error: "Oops, the email is already used. Try another" });
+        return errorResponse(res, "Oops, the email is already used. Try another", 400);
       }
 
       // 2️ Hash the password securely before storing in DB
@@ -57,7 +71,7 @@ export default {
         .insertOne(newUser);
 
       if (!result.insertedId)
-        return res.status(500).json({ error: "Failed to register user!" });
+        return errorResponse(res, "Failed to register user!", 500);
 
       // 6️ Send verification email with a unique token
       const emailResponse = await sendVerificationEmail(
@@ -66,24 +80,17 @@ export default {
       );
 
       // 7️ Return success response
-      res.status(201).json(emailResponse);
-    } catch (error: any) {
-      console.log(error.message);
-      res.status(500).json({ error: error.message || "Signup failed!" });
+      return successResponse(res, null, "Signup successful. A verification email has been sent to " + email + ".", {}, 201);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error, "Signup failed!");
+      return errorResponse(res, message, 500, error);
     }
   },
 
 
   verifyEmail: async (req: Request, res: Response) => {
     try {
-      const { token } = req.query as { token?: string };
-
-      // 1 Check if the token is provided
-      if (!token) {
-        return res
-          .status(400)
-          .json({ error: "Verification token is required" });
-      }
+      const { token } = req.validatedQuery as VerifyEmailQuery;
 
       const dbInstance = db.get();
       if (!dbInstance) throw new Error("Database not initialized");
@@ -98,36 +105,27 @@ export default {
 
       // 2 If no user is found , return an error
       if (!user?.isVerified) {
-        return res.status(400).json({ error: "Invalid or expired token" });
+        return errorResponse(res, "Invalid or expired token", 400);
       }
 
       // 3 Send a success response
-      res.status(200).json({ msg: "Email verified successfully" });
+      return successResponse(res, null, "Email verified successfully");
     } catch (error) {
       console.error("Email Verification Error:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      return errorResponse(res, "Internal Server Error", 500, error);
     }
   },
 
 
   login: async (req: Request, res: Response) => {
     try {
-      const { email, password } = req.body;
-
-      // 1 Validate email and password input
-      if (!email || !password) {
-        return res
-          .status(400)
-          .json({ status: false, error: "Email and password are required" });
-      }
+      const { email, password } = req.validatedBody as LoginBody;
 
       // 2 Check if user exists and is verified
       const existingUser = await checkExistingUser(email);
 
       if (!existingUser?.isVerified) {
-        return res
-          .status(400)
-          .json({ error: "User not found or not verified" });
+        return errorResponse(res, "Invalid email or password", 400);
       }
 
       // 3 Compare hashed password
@@ -136,8 +134,7 @@ export default {
         existingUser.password
       );
       if (!isPasswordValid) {
-        console.log("no user");
-        return res.status(400).json({ error: "Invalid email or password" });
+        return errorResponse(res, "Invalid email or password", 400);
       }
 
       // 4 Generate tokens
@@ -145,32 +142,29 @@ export default {
       const refreshToken = generateRefreshToken({ userId: existingUser._id.toString() });
 
       // 5 Send response
-      return res.status(200).json({
-        status: true,
+      return successResponse(res, {
         userName: existingUser.name,
         userId: existingUser._id,
         image: existingUser.image || null, // Ensuring null if no image is found
         email: existingUser.email,
         token,
         refreshToken,
-      });
+      }, "Login successful");
     } catch (error) {
       console.error("Login Error:", error);
 
-      return res
-        .status(500)
-        .json({ error: "Something went wrong. Please try again later." });
+      return errorResponse(res, "Something went wrong. Please try again later.", 500, error);
     }
   },
 
   forgotPassword: async (req: Request, res: Response) => {
     try {
-      const { email } = req.body;
+      const { email } = req.validatedBody as ForgotPasswordBody;
 
       // 1 Check if user exists
       const user = await checkExistingUser(email);
       if (!user) {
-        return res.status(404).json({ error: "No user found with this email" });
+        return errorResponse(res, "No user found with this email", 404);
       }
 
       // 2 Generate a 4-digit OTP and set expiration time (1 hour)
@@ -197,18 +191,17 @@ export default {
       const otpRes = await sendOtp(email, otp);
 
       // 5 Respond with success
-      res.status(200).json(otpRes);
-    } catch (error: any) {
+      return successResponse(res, null, "OTP sent successfully. An OTP has been sent to " + email + ".");
+    } catch (error: unknown) {
+      const message = getErrorMessage(error, "Something went wrong. Please try again ");
       console.log(error);
-      res.status(500).json({
-        error: error.message || "Something went wrong. Please try again ",
-      });
+      return errorResponse(res, message, 500, error);
     }
   },
 
   resetPassword: async (req: Request, res: Response) => {
     try {
-      const { email, otp, newPassword } = req.body;
+      const { email, otp, newPassword } = req.validatedBody as ResetPasswordBody;
 
       const dbInstance = db.get();
       if (!dbInstance) throw new Error("Database not initialized");
@@ -223,9 +216,7 @@ export default {
         });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ error: "Invalid OTP or OTP has expired" });
+        return errorResponse(res, "Invalid OTP or OTP has expired", 400);
       }
 
       // 2 Hash the new password
@@ -245,43 +236,34 @@ export default {
         );
 
       // 4 Return success response
-      res.status(200).json({ msg: "Password has been reset successfully." });
+      return successResponse(res, null, "Password has been reset successfully.");
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({ error: "Something went wrong. Please try again later." });
+      return errorResponse(res, "Something went wrong. Please try again later.", 500, error);
     }
   },
 
   refreshToken: async (req: Request, res: Response) => {
     try {
-      const { refreshToken } = req.body;
-
-      // 1️ Validate input
-      if (!refreshToken)
-        return res.status(403).json({ error: "No refresh token provided" });
+      const { refreshToken } = req.validatedBody as RefreshTokenBody;
 
       // 2️ Verify the refresh token
-      const secret = process.env.JWT_REFRESH_SECRET;
-      if (!secret) throw new Error("JWT_REFRESH_SECRET is not defined");
+      const secret = env.JWT_REFRESH_SECRET;
 
       const decoded = jwt.verify(refreshToken, secret) as DecodedToken;
 
       if (!decoded || !decoded.userId) {
-        return res.status(401).json({ error: "Invalid refresh token." });
+        return errorResponse(res, "Invalid refresh token.", 401);
       }
 
       // 3 Generate a new access token
       const newAccessToken = generateAccessToken({ userId: decoded.userId });
 
       // 4️ Send the new token
-      res.json({ token: newAccessToken });
+      return successResponse(res, { token: newAccessToken }, "Token refreshed successfully");
     } catch (error) {
       console.error("Refresh token error:", error);
-      return res
-        .status(500)
-        .json({ error: "Something went wrong. Please try again later." });
+      return errorResponse(res, "Something went wrong. Please try again later.", 500, error);
     }
   },
 };

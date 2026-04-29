@@ -1,5 +1,5 @@
 // src/ItineraryToDo.js
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./ItineraryToDo.css";
 import { convertTo12HourFormat } from "../../../../utils/convertTo12HourFormat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +18,7 @@ interface ItineraryToDoProps {
 
 const ItineraryToDo = ({ day, item, setItinerary }: ItineraryToDoProps) => {
   // console.log((item.todo))
+  const timeRef = useRef<HTMLInputElement>(null);
   const [time, setTime] = useState("");
   const [activity, setActivity] = useState("");
   var coordinates = useSelector((state: RootState) => state.location);
@@ -69,6 +70,9 @@ const ItineraryToDo = ({ day, item, setItinerary }: ItineraryToDoProps) => {
         },
       }));
     }
+    if (timeRef.current) {
+      timeRef.current.focus();
+    }
   };
 
   const deleteItem = (index: number) => {
@@ -103,6 +107,7 @@ const ItineraryToDo = ({ day, item, setItinerary }: ItineraryToDoProps) => {
           <div className="destination">
             <input
               onChange={handleDestination}
+              autoFocus={true}
               list="destinations"
               id="destination"
               name="destination"
@@ -121,6 +126,7 @@ const ItineraryToDo = ({ day, item, setItinerary }: ItineraryToDoProps) => {
               <div>
                 <FontAwesomeIcon icon={faClock as IconProp} />:
                 <input
+                  ref={timeRef}
                   type="time"
                   value={time}
                   onChange={(e) => {

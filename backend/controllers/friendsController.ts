@@ -1,6 +1,7 @@
 import db from '../config/connection';
 import collection from '../config/collection';
 import { Request, Response } from 'express';
+import { successResponse, errorResponse } from '../utils/apiResponse';
 
 export default {
 
@@ -10,7 +11,7 @@ export default {
 
       // 1️ Validate the query parameter
       if (!query || (typeof query === "string" && query.trim() === "")) {
-        return res.status(400).json({ error: "Query parameter is required." });
+        return errorResponse(res, "Query parameter is required.", 400);
       }
 
       // 2️ Search for users by name or email
@@ -31,10 +32,10 @@ export default {
         return { status: 404, data: { message: "No users found" } }; // Return 404 if no users found
       }
 
-      return res.status(200).json(users);
+      return successResponse(res, users, "Users found successfully");
     } catch (error) {
       console.error("Error searching users:", error);
-      res.status(500).json({ error: "Internal server error" });
+      return errorResponse(res, "Internal server error", 500, error);
     }
   },
 };
