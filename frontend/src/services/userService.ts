@@ -58,7 +58,7 @@ export const getItinerary = async (id?: string) => {
   try {
     await jwtCheck();
     const response = await api.get(`/user/get-itinerary/${id}`)
-    return response
+    return response.data
   } catch (error: any) {
     throw new Error(error ?? NETWORK_ISSUE_MSG);
   }
@@ -71,7 +71,7 @@ export const getOngoingTrip = async (id: string): Promise<OngoingTrip> => {
     const response = await api.get(`user/get-ongoing-trip/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response;
+    return response.data;
   } catch (error: any) {
     throw new Error(error ?? NETWORK_ISSUE_MSG);
   }

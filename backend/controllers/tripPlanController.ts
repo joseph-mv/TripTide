@@ -15,7 +15,6 @@ export default {
   searchAlong: async (req: Request, res: Response) => {
     try {
       const { coordinates, distance, activities } = req.validatedBody as SearchAlongQuery;
-      console.log('coordinates', coordinates, 'distance', distance, 'activities', activities);
 
       // 1 Build type filter array
       const typeLabelArr: string[] = ["Tourist Attraction", "Tourist Destination"];

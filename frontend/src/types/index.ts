@@ -47,6 +47,14 @@ export interface FormDataState {
     startingPoint: string;
 }
 
+export interface NearbyDestinationsForm {
+    coordinates: [number, number];
+    distance: string;
+    type: { [key: string]: boolean };
+    activities: { [key: string]: boolean };
+}
+
+
 export interface Coords {
     latitude: number;
     longitude: number;

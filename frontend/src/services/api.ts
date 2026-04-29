@@ -20,13 +20,16 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    const res: Response = response.data;
+    const res= response.data;
     if (res.success === false) {
       return Promise.reject(new Error(res.message || res.error || 'Unknown error'));
     }
-    return res.data;
+    return res;
   },
   (error) => {
+    if (error.response?.status === 401) {
+      // logout user or refresh token
+    }
     return Promise.reject(error.response?.data?.message ?? 'Unknown error');
   }
 );
@@ -34,10 +37,10 @@ axiosInstance.interceptors.response.use(
 import { AxiosInstance} from "axios";
 
 type CustomAxiosInstance = Omit<AxiosInstance, "get" | "post" | "put" | "delete"> & {
-  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
-  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
-  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
-  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  get(url: string, config?: AxiosRequestConfig): Promise<Response>;
+  post(url: string, data?: any, config?: AxiosRequestConfig): Promise<Response>;
+  put(url: string, data?: any, config?: AxiosRequestConfig): Promise<Response>;
+  delete(url: string, config?: AxiosRequestConfig): Promise<Response>;
 };
 
 export const api = axiosInstance as CustomAxiosInstance;

@@ -80,7 +80,7 @@ export default {
       );
 
       // 7️ Return success response
-      return successResponse(res, emailResponse, "Signup successful", {}, 201);
+      return successResponse(res, null, "Signup successful. A verification email has been sent to " + email + ".", {}, 201);
     } catch (error: unknown) {
       const message = getErrorMessage(error, "Signup failed!");
       return errorResponse(res, message, 500, error);
@@ -191,7 +191,7 @@ export default {
       const otpRes = await sendOtp(email, otp);
 
       // 5 Respond with success
-      return successResponse(res, otpRes, "OTP sent successfully");
+      return successResponse(res, null, "OTP sent successfully. An OTP has been sent to " + email + ".");
     } catch (error: unknown) {
       const message = getErrorMessage(error, "Something went wrong. Please try again ");
       console.log(error);
