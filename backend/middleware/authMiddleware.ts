@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import { errorResponse } from '../utils/apiResponse';
 
 function parseBearerToken(authHeader?: string): string | null {
   if (!authHeader) return null;
@@ -24,14 +25,14 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   
   if (!authHeader) {
-    return res.status(401).json({ error: "No token provided" });
+    return errorResponse(res, "No token provided", 401);
   }
   // Extract the token whether it has the "Bearer " prefix or not
   const token = parseBearerToken(authHeader);
 
 
   if (!token) {
-    return res.status(401).json({ error: "Invalid token format" });
+    return errorResponse(res, "Invalid token format", 401);
   }
 
   try {
@@ -45,7 +46,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
     next(); // Proceed to the next middleware
   } catch (error: any) {
     console.error("JWT Verification Error:", error.message);
-    return res.status(401).json({ error: "Invalid or expired token" });
+    return errorResponse(res, "Invalid or expired token", 401, error);
   }
 }
 

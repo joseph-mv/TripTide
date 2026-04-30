@@ -14,23 +14,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendVerificationEmail = async (email: string, verificationToken: string) => {
+const sendVerificationEmail = async (name: string, email: string, verificationToken: string) => {
   const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
   console.log(verificationLink)
   const mailOptions = {
     from: `TripTide <${process.env.EMAIL_USER}>`,
     to: email,
     subject: "Email Verification - TripTide",
-    text: `Dear User,
+    text: `Dear ${name},
 
-Thank you for signing up with TripTide. Please click the link below to verify your email address:
+      Thank you for signing up with TripTide. Please click the link below to verify your email address:
 
-${verificationLink}
+      ${verificationLink}
 
-If you did not sign up for an account, please ignore this email.
+      If you did not sign up for an account, please ignore this email.
 
-Best regards,
-TripTide`,
+      Best regards,
+      TripTide`,
     html: `
       <p>Dear User,</p>
       <p>Thank you for signing up with TripTide. Please click the link below to verify your email address:</p>
@@ -42,7 +42,7 @@ TripTide`,
 
   try {
     await transporter.sendMail(mailOptions);
-    return { msg: "A verification email has been sent to " + email + "." };
+    // return { msg: "A verification email has been sent to " + email + "." };
   } catch (error) {
     return { error: " An Error occurred , try again " };
   }

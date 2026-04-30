@@ -74,7 +74,8 @@ export default {
         return errorResponse(res, "Failed to register user!", 500);
 
       // 6️ Send verification email with a unique token
-      const emailResponse = await sendVerificationEmail(
+      await sendVerificationEmail(
+        name,
         email,
         verificationToken
       );
