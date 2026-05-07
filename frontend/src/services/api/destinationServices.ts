@@ -38,7 +38,7 @@ export const getNearbyDestinations = async (form: NearbyDestinationsForm) => {
     }
     return response.data;
   } catch (error: any) {
-    throw new Error(error ?? NETWORK_ISSUE_MSG);
+    throw new Error(error?.message ?? error ?? NETWORK_ISSUE_MSG);
   }
 };
 

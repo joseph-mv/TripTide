@@ -11,6 +11,7 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
   JSON_BODY_LIMIT: z.string().default("1mb"),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  OTP_EXPIRATION_TIME: z.coerce.number().int().min(1).default(3600000),
 }); 
 
 export type Env = z.infer<typeof envSchema>;

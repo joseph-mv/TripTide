@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const coordinateSchema = z.array(z.coerce.number()).length(2).refine(
-  ([lat, lng]) =>
+  ([lng, lat]) =>
     lat >= -90 && lat <= 90 &&
     lng >= -180 && lng <= 180,
   "Invalid latitude or longitude"
@@ -18,15 +18,17 @@ const booleanRecordSchema = z.record(
 
 
 
+const distanceSchema = z.coerce.number("Distance must be a valid number").min(0, "Distance must be greater than 0");
+
 export const searchAlongQuerySchema = z.object({
   coordinates: z.array(coordinateSchema),
-  distance: z.coerce.string("Distance must be a valid number"),
+  distance: distanceSchema,
   activities: booleanRecordSchema
 });
 
 export const getDestinationsQuerySchema = z.object({
   coordinates: coordinateSchema,
-  distance: z.coerce.string("Distance must be a valid number"),
+  distance: distanceSchema,
   type: booleanRecordSchema,
   activities: booleanRecordSchema
 });

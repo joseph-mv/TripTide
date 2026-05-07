@@ -48,7 +48,7 @@ export interface FormDataState {
 }
 
 export interface NearbyDestinationsForm {
-    coordinates: [number, number];
+    coordinates: number[];
     distance: string;
     type: { [key: string]: boolean };
     activities: { [key: string]: boolean };

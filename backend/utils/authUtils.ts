@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import db from '../config/connection';
 import collection from '../config/collection';
+import crypto from 'crypto';
+
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -65,6 +67,12 @@ const hashPassword = async (password: string) => {
   return bcrypt.hash(password, saltRounds);
 };
 
+const generateOtp = (length: number = 4): string => {
+  const min = 10 ** (length - 1);
+  const max = 10 ** length;
+  return crypto.randomInt(min, max).toString();
+}
+
 const sendOtp = async (email: string, otp: string) => {
 
   const mailOptions = {
@@ -101,7 +109,7 @@ const sendOtp = async (email: string, otp: string) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    return { msg: 'An Otp has been sent to ' + email + '.' };
+    // return { msg: 'An Otp has been sent to ' + email + '.' };
   } catch (error) {
     console.error(error)
     throw new Error(' Failed to send OTP. Please try again.')
@@ -109,5 +117,5 @@ const sendOtp = async (email: string, otp: string) => {
 };
 
 // Exporting functions individually
-export { sendVerificationEmail, checkExistingUser, hashPassword, sendOtp };
+export { sendVerificationEmail, checkExistingUser, hashPassword, sendOtp, generateOtp };
 export default { sendVerificationEmail, checkExistingUser, hashPassword, sendOtp }; // Keep default for backward compatibility if needed, but prefer named
