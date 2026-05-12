@@ -15,15 +15,13 @@ import {
 const router = express.Router();
 
 
-router.post('/contact', validate({ body: contactMessageSchema }), userController.contactMessages);
-router.post("/save-itinerary", verifyToken, validate({ body: saveItinerarySchema }), itineraryController.addItinerary);
-router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
-router.get("/get-ongoing-trip/:id", verifyToken, validate({ params: idParamSchema }), itineraryController.getOngoingTrip);
-router.get('/get-itinerary/:id', validate({ params: idParamSchema }), itineraryController.getItinerary);
-router.delete("/delete-itinerary", verifyToken, validate({ query: idQuerySchema }), itineraryController.deleteItinerary);
-router.put("/edit-itinerary", verifyToken, validate({ query: idQuerySchema, body: saveItinerarySchema }), itineraryController.editItinerary);
-router.put("/updateProfilePic", verifyToken, validate({ body: updateProfilePicSchema }), userController.updateUserProfilePic);
+router.post('/contact-messages', validate({ body: contactMessageSchema }), userController.contactMessages);
+router.post("/itineraries", verifyToken, validate({ body: saveItinerarySchema }), itineraryController.addItinerary);
+router.get("/dashboard", verifyToken, userController.getUserItineraries);
+router.get("/itineraries/ongoing/:id", verifyToken, validate({ params: idParamSchema }), itineraryController.getOngoingTrip);
+router.get('/itineraries/:id', validate({ params: idParamSchema }), itineraryController.getItinerary);
+router.delete("/itineraries/:id", verifyToken, validate({ params: idParamSchema }), itineraryController.deleteItinerary);
+router.put("/itineraries/:id", verifyToken, validate({ params: idParamSchema, body: saveItinerarySchema }), itineraryController.editItinerary);
+router.put("/profile-picture", verifyToken, validate({ body: updateProfilePicSchema }), userController.updateUserProfilePic);
 
 export default router;
-
-

@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
   tls: {
-    rejectUnauthorized: false, // For development only
+    rejectUnauthorized: process.env.NODE_ENV === 'production', // For development only
   },
 });
 
@@ -46,7 +46,7 @@ const sendVerificationEmail = async (name: string, email: string, verificationTo
     await transporter.sendMail(mailOptions);
     // return { msg: "A verification email has been sent to " + email + "." };
   } catch (error) {
-    return { error: " An Error occurred , try again " };
+    throw new Error(" An Error occurred , try again ");
   }
 };
 

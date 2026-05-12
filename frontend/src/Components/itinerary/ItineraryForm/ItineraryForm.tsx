@@ -148,8 +148,8 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
 
     try {
       const endpoint = _id
-        ? `${BASE_URL}/user/edit-itinerary?id=${_id}` // PUT for editing
-        : `${BASE_URL}/user/save-itinerary`; // POST for new itinerary
+                ? `${BASE_URL}/api/users/itineraries/${_id}` // PUT for editing
+        : `${BASE_URL}/api/users/itineraries`; // POST for new itinerary
 
       const method = _id ? "put" : "post"; // Dynamically set method
 

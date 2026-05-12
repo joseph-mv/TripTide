@@ -35,8 +35,7 @@ const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
     e?.stopPropagation();
 
     try {
-      const response = await axios.delete(`${BASE_URL}/user/delete-itinerary`, {
-        params: { id: trip._id },
+      const response = await axios.delete(`${BASE_URL}/api/users/itineraries/${trip._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

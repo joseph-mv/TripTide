@@ -11,21 +11,7 @@ import userRouter from "./routes/userRoutes";
 import friendsRouter from "./routes/friendsRoutes";
 import errorHandler from "./middleware/errorHandler";
 
-const PORT = env.PORT;
 const app = express();
-
-// Start server and then connect to DB
-app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
-  db.connect((err: Error | null) => {
-    if (err) {
-      logger.error("Database connection error:", err);
-      process.exit(1); // Exit the process with an error code
-    } else {
-      logger.info("Database connected successfully");
-    }
-  });
-});
 
 // Middleware
 app.use(requestLogger);
@@ -37,10 +23,23 @@ app.use(cors({
 app.use(express.json({ limit: env.JSON_BODY_LIMIT }));
 
 // Routes
-app.use("/", tripRouter);
-app.use("/auth", authRouter);
-app.use("/user", userRouter);
-app.use("/friends", friendsRouter);
+app.use("/api/trips", tripRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
+app.use("/api/friends", friendsRouter);
 
 // Error handling middleware
 app.use(errorHandler);
+
+const PORT = env.PORT;
+app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+  db.connect((err: Error | null) => {
+    if (err) {
+      logger.error("Database connection error:", err);
+      process.exit(1); // Exit the process with an error code
+    } else {
+      logger.info("Database connected successfully");
+    }
+  });
+});

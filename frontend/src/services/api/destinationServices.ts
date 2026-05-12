@@ -12,7 +12,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const getRouteDestinations = async (coordinates: LocationState, activities: FormDataState["activities"]) => {
   try {
     await jwtCheck()
-    const response = await api.post(`${BASE_URL}/suggestions`, {
+    const response = await api.post(`${BASE_URL}/api/trips/suggestions`, {
         coordinates: coordinates.coordinates,
         distance: coordinates.distance,
         activities: activities,
@@ -30,7 +30,7 @@ export const getNearbyDestinations = async (form: NearbyDestinationsForm) => {
       throw new Error("Please select a place");
     }
 
-    const response = await api.post("/destinations", form );
+    const response = await api.post("/api/trips/destinations", form );
     if (!response.data.length) {
       throw new Error(
         "We couldn't find any locations that match your criteria. Please try adjusting your destination or explore different options."

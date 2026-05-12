@@ -84,7 +84,7 @@ export default {
 
   deleteItinerary: async (req: Request, res: Response) => {
     try {
-      const { id } = req.query;
+      const { id } = req.params;
 
       // 1 Delete the itinerary
       const result = await db
@@ -105,7 +105,7 @@ export default {
 
   editItinerary: async (req: Request, res: Response) => {
     try {
-      const { id } = req.query;
+      const { id } = req.params;
       const itinerary = req.body;
       console.log(itinerary)
       // 1 Update the itinerary
