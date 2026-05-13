@@ -2,12 +2,12 @@ import express from 'express';
 import tripPlanController  from '../controllers/tripPlanController'
 import { validate } from "../middleware/validate";
 import {
-  getDestinationsQuerySchema,
-  searchAlongQuerySchema,
+  getDestinationsBodySchema,
+  searchAlongBodySchema,
 } from "../validators/trip.schema";
 
 const router = express.Router();
 
-router.post("/suggestions", validate({ body: searchAlongQuerySchema }), tripPlanController.searchAlong);
-router.post("/destinations", validate({ body: getDestinationsQuerySchema }), tripPlanController.getDestinations);
+router.post("/suggestions", validate({ body: searchAlongBodySchema }), tripPlanController.searchAlong);
+router.post("/destinations", validate({ body: getDestinationsBodySchema }), tripPlanController.getDestinations);
 export default router; 

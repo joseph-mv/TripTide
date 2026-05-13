@@ -20,18 +20,18 @@ const booleanRecordSchema = z.record(
 
 const distanceSchema = z.coerce.number("Distance must be a valid number").min(0, "Distance must be greater than 0");
 
-export const searchAlongQuerySchema = z.object({
+export const searchAlongBodySchema = z.object({
   coordinates: z.array(coordinateSchema),
   distance: distanceSchema,
   activities: booleanRecordSchema
 });
 
-export const getDestinationsQuerySchema = z.object({
+export const getDestinationsBodySchema = z.object({
   coordinates: coordinateSchema,
   distance: distanceSchema,
   type: booleanRecordSchema,
   activities: booleanRecordSchema
 });
 
-export type SearchAlongQuery = z.infer<typeof searchAlongQuerySchema>;
-export type GetDestinationsQuery = z.infer<typeof getDestinationsQuerySchema>;
+export type SearchAlongQuery = z.infer<typeof searchAlongBodySchema>;
+export type GetDestinationsQuery = z.infer<typeof getDestinationsBodySchema>;

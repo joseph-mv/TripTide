@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { refreshToken } from "../../utils/refreshToken";
+import { refreshToken } from "../../services/authService";
 import { isTokenExpired } from "../../utils/isTokenExpired";
 import { useDispatch } from "react-redux";
 

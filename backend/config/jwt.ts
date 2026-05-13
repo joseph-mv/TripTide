@@ -4,8 +4,8 @@ interface UserPayload {
   userId: string;
 }
 
-const EXPIRATION_TIME = "60s";
-const REFRESH_EXPIRATION_TIME = "120s";
+const EXPIRATION_TIME = "1800s";
+const REFRESH_EXPIRATION_TIME = "7d";
 
 
 export const generateAccessToken = (user: UserPayload) => {

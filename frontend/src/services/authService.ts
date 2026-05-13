@@ -37,7 +37,7 @@ export const resetPassword = async (email: string, otp: string, newPassword: str
       otp,
       newPassword,
     });
-    return response.data.msg;
+    return response.message;
   } catch (error: any) {
     throw new Error(error ?? NETWORK_ISSUE_MSG);
   }
@@ -51,4 +51,23 @@ export const verifyEmail = async (token: string | null): Promise<{ msg: string, 
   } catch (error: any) {
     throw new Error(error ?? NETWORK_ISSUE_MSG);
   }
-}
+};
+
+// Function to refresh access token
+export const refreshToken = async () => {
+
+  const refreshToken = localStorage.getItem('refreshToken');
+  try {
+    const response = await api.post('/api/auth/refresh-token', { refreshToken });
+    const newAccessToken = response.data.token;
+    
+    // Update the access token in storage
+    localStorage.setItem('token', newAccessToken);
+    return newAccessToken;
+  } catch (error) {
+    console.log('error',error)
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    return null;
+  }
+};

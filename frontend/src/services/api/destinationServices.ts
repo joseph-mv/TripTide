@@ -7,12 +7,10 @@ const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const getRouteDestinations = async (coordinates: LocationState, activities: FormDataState["activities"]) => {
   try {
-    await jwtCheck()
-    const response = await api.post(`${BASE_URL}/api/trips/suggestions`, {
+    const response = await api.post('/api/trips/suggestions', {
         coordinates: coordinates.coordinates,
         distance: coordinates.distance,
         activities: activities,

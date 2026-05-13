@@ -84,7 +84,7 @@ export interface LocationState {
     coordinates: [number, number][];
     distance: string;
     travelTime: string;
-    routeGeometry: [number, number][];
+    routeGeometry: { type: "LineString", coordinates: [number, number][] };
     selectedPlaces: Record<string, SelectedPlace>;
     destinations: Destination[];
     noOfDays: number;
