@@ -7,7 +7,7 @@ const initialState: LocationState = {
   coordinates: [],
   distance: "",
   travelTime: "",
-  routeGeometry: [],
+  routeGeometry: { type: "LineString", coordinates: [] },
   selectedPlaces: {},
   destinations: [],
   noOfDays: 0,

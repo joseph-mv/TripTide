@@ -227,7 +227,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
         <input
           type="text"
           onChange={(e) => setName(e.target.value)}
-          value={oldName || name}
+          value={name}
           placeholder="Enter itinerary name"
           required
         />

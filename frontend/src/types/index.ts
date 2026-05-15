@@ -97,7 +97,7 @@ export type LocationAction =
     | { type: "COORDINATES"; payload: [number, number][] }
     | { type: "DISTANCE"; payload: string }
     | { type: "TRAVELTIME"; payload: string }
-    | { type: "ROUTE_GEOMETRY"; payload: any[] }
+    | { type: "ROUTE_GEOMETRY"; payload: { type: "LineString", coordinates: [number, number][] } }
     | { type: "NOOFDAYS"; payload: number }
     | { type: "INC_NO_OF_DAYS" }
     | { type: "DEC_NO_OF_DAYS" }
