@@ -21,18 +21,25 @@ const today = new Date();
 // Reset time to midnight
 today.setHours(0, 0, 0, 0);
 
-const dateSchema = z.coerce
-  .date()
-  .min(today, "Date cannot be in the past");
+const dateSchema =(isEdit: boolean) =>{
+  if (isEdit) {
+    return z.coerce
+    .date()
+  } else {
+    return z.coerce
+    .date()
+    .min( today , "Date cannot be in the past");
+  }
+} 
 
-export const saveItinerarySchema = z.object({
+export const ItinerarySchema = (isEdit: boolean) => z.object({
   userId: z.string().min(1, "userId is required"),
   name: z.string().min(1, "Itinerary name is required"),
   itinerary: z.record(
     z.string(),
     z.object({
       day: z.number(),
-      date: dateSchema,
+      date: dateSchema(isEdit),
       startingPoint: z.string(),
       endPoint: z.string(),
       todo: z.array(
@@ -72,8 +79,8 @@ export const saveItinerarySchema = z.object({
   coordinates: z.array(z.tuple([z.number(), z.number()])).optional(),
   details: z.object({
     destination: z.string(),
-    startDate: dateSchema,
-    endDate: dateSchema,
+    startDate: dateSchema(isEdit),
+    endDate: dateSchema(isEdit),
     budget: z.union([z.number(), z.string()]),
     currency: z.string(),
     transportation: z.string(),
@@ -97,6 +104,7 @@ export const saveItinerarySchema = z.object({
   ),
   createdAt: z.union([z.string(), z.date()]).optional(),
 });
+
 
 export const updateProfilePicSchema = z.object({
   imageData: z.string().min(1, "Image data is required"),

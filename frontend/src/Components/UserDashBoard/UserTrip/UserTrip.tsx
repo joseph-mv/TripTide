@@ -3,7 +3,7 @@ import "./UserTrip.css"; // Import the CSS file
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/DeleteConfirmationModal";
-import { api } from "../../../services/api";
+import { deleteItinerary } from "../../../services/userService";
 import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../constants/routes";
@@ -33,7 +33,7 @@ const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
     e?.stopPropagation();
 
     try {
-      const response = await api.delete(`/api/users/itineraries/${trip._id}`);
+      const response = await deleteItinerary(trip._id);
       setTrips((prev) => prev.filter((item) => item._id !== trip._id));
       return response;
     } catch (error) {

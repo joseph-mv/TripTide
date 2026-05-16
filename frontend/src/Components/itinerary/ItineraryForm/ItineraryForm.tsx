@@ -7,7 +7,7 @@ import { getNextDate } from "../../../utils/nextDate";
 import MapPopup from "../../MapPopup/MapPopup";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { api } from "../../../services/api";
+import { createItinerary, updateItinerary } from "../../../services/userService";
 import { refreshToken } from "../../../services/authService";
 import { currencySymbols } from "../../../utils/currencySymbols";
 import { dailyItinerary } from "../../../utils/dailyItinerary";
@@ -18,8 +18,9 @@ import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../constants/routes";
 
 import { RootState } from "../../../redux/store";
-import { Itinerary } from "../../../types";
+import { Itinerary, ItineraryData } from "../../../types";
 import { isTokenExpired } from "../../../utils/isTokenExpired";
+import { toast } from "react-toastify";
 
 
 interface ItineraryFormProps {
@@ -128,7 +129,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
     }
 
 
-    const tripItinerary = {
+    const tripItinerary: ItineraryData = {
       userId,
       name,
       itinerary: itinerary,
@@ -146,18 +147,21 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
     };
 
     try {
-      const endpoint = _id
-                ? `/api/users/itineraries/${_id}` // PUT for editing
-        : `/api/users/itineraries`; // POST for new itinerary
-
       const response = _id
-    ? await api.put(endpoint, tripItinerary)
-    : await api.post(endpoint, tripItinerary);
-      if (response.data) {
-        alert("Your Itinerary has been saved");
+    ? await updateItinerary(_id, tripItinerary)
+    : await createItinerary(tripItinerary);
+      if (response) {
+        toast.success("Your Itinerary has been saved");
         navigate(ROUTES.DASHBOARD);
       }
-    } catch (error) { }
+    } catch (error) { 
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+      throw error; // Re-throw to let useForm handle the error state
+    }
   };
   return (
     <div className="itineraryDetails">

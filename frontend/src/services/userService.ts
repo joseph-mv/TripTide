@@ -1,6 +1,6 @@
 import { jwtCheck } from "../utils/authUtils"
 import { api } from "./api"
-import { OngoingTrip } from "../types"
+import { OngoingTrip, ItineraryData } from "../types"
 import { NETWORK_ISSUE_MSG } from "../constants/api";
 
 interface ContactFormData {
@@ -76,3 +76,33 @@ export const getOngoingTrip = async (id: string): Promise<OngoingTrip> => {
     throw new Error(error ?? NETWORK_ISSUE_MSG);
   }
 }
+
+export const deleteItinerary = async (tripId: string) => {
+  try {
+    await jwtCheck();
+    const response = await api.delete(`/api/users/itineraries/${tripId}`);
+    return response;
+  } catch (error: any) {
+    throw new Error(error ?? NETWORK_ISSUE_MSG);
+  }
+}
+
+export const createItinerary = async (tripItinerary: ItineraryData) => {
+  try {
+    await jwtCheck();
+    const response = await api.post(`/api/users/itineraries`, tripItinerary);
+    return response.message;
+  } catch (error: any) {
+    throw new Error(error ?? NETWORK_ISSUE_MSG);
+  }
+};
+
+export const updateItinerary = async (_id: string, tripItinerary: ItineraryData) => {
+  try {
+    await jwtCheck();
+    const response = await api.put(`/api/users/itineraries/${_id}`, tripItinerary);
+    return response.message;
+  } catch (error: any) {
+    throw new Error(error ?? NETWORK_ISSUE_MSG);
+  }
+};

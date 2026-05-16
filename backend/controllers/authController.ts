@@ -101,7 +101,7 @@ export default {
         .collection(collection.User_Collection)
         .findOneAndUpdate(
           { verificationToken: token },
-          { $set: { isVerified: true } },
+          { $set: { isVerified: true, verificationToken: null } },
           { returnDocument: "after" } // Returns updated document
         );
 

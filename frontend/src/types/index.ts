@@ -157,6 +157,23 @@ export interface Trip {
     };
 }
 
+export interface ItineraryData {
+    userId: string | undefined;
+    name: string;
+    itinerary: Itinerary;
+    places: {
+        startingPoint: any;
+        endPoint: any;
+        selectedPlaces: any;
+    };
+    distance: string;
+    travelTime: string;
+    noOfDays: number;
+    coordinates: any;
+    details: FormDataState;
+    createdAt: Date;
+}
+
 export interface OngoingTrip {
     _id: string;
     name: string;
