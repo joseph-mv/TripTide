@@ -48,7 +48,7 @@ export interface FormDataState {
 }
 
 export interface NearbyDestinationsForm {
-    coordinates: [number, number];
+    coordinates: number[];
     distance: string;
     type: { [key: string]: boolean };
     activities: { [key: string]: boolean };
@@ -84,7 +84,7 @@ export interface LocationState {
     coordinates: [number, number][];
     distance: string;
     travelTime: string;
-    routeGeometry: [number, number][];
+    routeGeometry: { type: "LineString", coordinates: [number, number][] };
     selectedPlaces: Record<string, SelectedPlace>;
     destinations: Destination[];
     noOfDays: number;
@@ -97,7 +97,7 @@ export type LocationAction =
     | { type: "COORDINATES"; payload: [number, number][] }
     | { type: "DISTANCE"; payload: string }
     | { type: "TRAVELTIME"; payload: string }
-    | { type: "ROUTE_GEOMETRY"; payload: any[] }
+    | { type: "ROUTE_GEOMETRY"; payload: { type: "LineString", coordinates: [number, number][] } }
     | { type: "NOOFDAYS"; payload: number }
     | { type: "INC_NO_OF_DAYS" }
     | { type: "DEC_NO_OF_DAYS" }
@@ -155,6 +155,23 @@ export interface Trip {
         startDate: string;
         endDate: string;
     };
+}
+
+export interface ItineraryData {
+    userId: string | undefined;
+    name: string;
+    itinerary: Itinerary;
+    places: {
+        startingPoint: any;
+        endPoint: any;
+        selectedPlaces: any;
+    };
+    distance: string;
+    travelTime: string;
+    noOfDays: number;
+    coordinates: any;
+    details: FormDataState;
+    createdAt: Date;
 }
 
 export interface OngoingTrip {

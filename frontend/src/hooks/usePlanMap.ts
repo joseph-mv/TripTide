@@ -42,10 +42,7 @@ export const usePlanMap = (coordinates: LocationState) => {
         data: {
           type: "Feature",
           properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: routeGeometry.length ? routeGeometry : [start, end],
-          },
+          geometry: routeGeometry,
         },
       });
 

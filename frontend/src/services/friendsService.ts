@@ -6,7 +6,7 @@ export const searchFriends = async (query: string) => {
     try {
         const token = localStorage.getItem("token");
 
-        const response = await api.get("friends/search_users", {
+        const response = await api.get("/api/friends/search", {
             params: { query },
             headers: {
                 Authorization: `Bearer ${token}`, // Ensuring proper format

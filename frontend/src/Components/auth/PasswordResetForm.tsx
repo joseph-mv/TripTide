@@ -24,9 +24,8 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { form, handleChange, error, handleSubmit, loading } = useForm(
-    initialForm,
-    async () => {
+  const onSubmit = async () => {
+    try {
       if (newPassword !== confirmPassword) {
         setError("Passwords do not match.");
         return;
@@ -34,7 +33,19 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ email, setError }
       const response = await resetPassword(email, otp.join(""), newPassword);
       toast.success(response);
       navigate("/authenticate");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+      throw error; // Re-throw to let useForm handle the error state
     }
+  };
+
+  const { form, handleChange, error, handleSubmit, loading } = useForm(
+    initialForm,
+    onSubmit
   );
 
   const { newPassword, confirmPassword } = form;

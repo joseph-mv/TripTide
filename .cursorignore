@@ -1,0 +1,60 @@
+# Ignoring dependencies
+node_modules/
+
+# Ignoring build outputs
+build/
+dist/
+.next/
+out/
+.vercel/
+.netlify/
+coverage/
+
+# Ignoring logs and temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.cache/
+.eslintcache
+tmp/
+
+# Ignoring IDE-specific files and directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignoring OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignoring test coverage folders
+coverage/
+
+# Ignoring large generated assets (adjust as needed)
+# For example, if you have a 'public/assets' folder with large images, you might add:
+# public/assets/
+
+# Ignoring lock files (optional, as they are often needed for consistent builds)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignoring package manager caches
+.npm/
+.yarn/
+.pnpm-store/
+
+# Ignoring TypeScript build files
+*.tsbuildinfo
+
+# Ignoring Vite / Webpack cache folders
+.vite/
+.webpack/

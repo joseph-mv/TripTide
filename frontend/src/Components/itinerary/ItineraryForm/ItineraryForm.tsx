@@ -7,9 +7,8 @@ import { getNextDate } from "../../../utils/nextDate";
 import MapPopup from "../../MapPopup/MapPopup";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { isTokenExpired } from "../../../utils/isTokenExpired";
-import { refreshToken } from "../../../utils/refreshToken";
+import { createItinerary, updateItinerary } from "../../../services/userService";
+import { refreshToken } from "../../../services/authService";
 import { currencySymbols } from "../../../utils/currencySymbols";
 import { dailyItinerary } from "../../../utils/dailyItinerary";
 import { getPrevDate } from "../../../utils/prevDate";
@@ -19,9 +18,10 @@ import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../constants/routes";
 
 import { RootState } from "../../../redux/store";
-import { Itinerary } from "../../../types";
+import { Itinerary, ItineraryData } from "../../../types";
+import { isTokenExpired } from "../../../utils/isTokenExpired";
+import { toast } from "react-toastify";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface ItineraryFormProps {
   oldItinerary?: Itinerary;
@@ -121,7 +121,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
     if (!token) {
       navigate(ROUTES.AUTHENTICATE, { state: location.pathname });
       return;
-    } else if (isTokenExpired(token)) {
+    } else if (isTokenExpired (token)) {
       token = await refreshToken();
       if (!token) {
         navigate(ROUTES.AUTHENTICATE, { state: location.pathname });
@@ -129,7 +129,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
     }
 
 
-    const tripItinerary = {
+    const tripItinerary: ItineraryData = {
       userId,
       name,
       itinerary: itinerary,
@@ -147,25 +147,21 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
     };
 
     try {
-      const endpoint = _id
-        ? `${BASE_URL}/user/edit-itinerary?id=${_id}` // PUT for editing
-        : `${BASE_URL}/user/save-itinerary`; // POST for new itinerary
-
-      const method = _id ? "put" : "post"; // Dynamically set method
-
-      const response = await axios({
-        method,
-        url: endpoint,
-        data: tripItinerary,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data) {
-        alert("Your Itinerary has been saved");
+      const response = _id
+    ? await updateItinerary(_id, tripItinerary)
+    : await createItinerary(tripItinerary);
+      if (response) {
+        toast.success("Your Itinerary has been saved");
         navigate(ROUTES.DASHBOARD);
       }
-    } catch (error) { }
+    } catch (error) { 
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+      throw error; // Re-throw to let useForm handle the error state
+    }
   };
   return (
     <div className="itineraryDetails">
@@ -235,7 +231,7 @@ const ItineraryForm: React.FC<ItineraryFormProps> = ({ oldItinerary, oldName = "
         <input
           type="text"
           onChange={(e) => setName(e.target.value)}
-          value={oldName || name}
+          value={name}
           placeholder="Enter itinerary name"
           required
         />

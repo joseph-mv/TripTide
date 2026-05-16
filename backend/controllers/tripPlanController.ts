@@ -7,8 +7,12 @@ import { TouristLocation } from '../types/models';
 import { logger } from '../utils/logger';
 import { GetDestinationsQuery, SearchAlongQuery } from "../validators/trip.schema";
 import { successResponse, errorResponse } from '../utils/apiResponse';
+
 const MAX_WIDTH = 200;
 const MIN_WIDTH = 10;
+const DEFAULT_DISTANCE = 5;
+const DIAMETER_OF_EARTH = 6378.1;
+const WIDTH_FACTOR = 20;
 
 export default {
 
@@ -21,7 +25,7 @@ export default {
       typeLabelArr.push(...getTypeLabels(activities));
 
       // 2 Calculate search width
-      const width = Math.max(MIN_WIDTH, Math.min(parseFloat(distance) / 20, MAX_WIDTH));
+      const width = Math.max(MIN_WIDTH, Math.min(distance / WIDTH_FACTOR, MAX_WIDTH));
 
       // 3 Use a Set to store unique locations
       const touristLocations = new Map<string, TouristLocation>();
@@ -87,7 +91,7 @@ export default {
       const { coordinates, distance, type, activities } = req.validatedBody as GetDestinationsQuery;
 
       const parsedCoordinates: [number, number] = [coordinates[0], coordinates[1]];
-      const parsedDistance = distance ? parseFloat(distance) : 5;
+      const parsedDistance =  distance ?? DEFAULT_DISTANCE;
 
       // 1 Generate type labels
       let typeLabelArr: string[] = [];
@@ -105,7 +109,7 @@ export default {
         typeLabel: { $in: typeLabelArr },
         "location.coordinates": {
           $geoWithin: {
-            $centerSphere: [parsedCoordinates, parsedDistance / 6378.1],
+            $centerSphere: [parsedCoordinates, parsedDistance / DIAMETER_OF_EARTH],
           },
         },
       };

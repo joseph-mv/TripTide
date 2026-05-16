@@ -11,6 +11,7 @@ import {
   checkExistingUser,
   hashPassword,
   sendOtp,
+  generateOtp,
 } from '../utils/authUtils';
 import { successResponse, errorResponse } from '../utils/apiResponse';
 import {
@@ -74,7 +75,8 @@ export default {
         return errorResponse(res, "Failed to register user!", 500);
 
       // 6️ Send verification email with a unique token
-      const emailResponse = await sendVerificationEmail(
+      await sendVerificationEmail(
+        name,
         email,
         verificationToken
       );
@@ -99,7 +101,7 @@ export default {
         .collection(collection.User_Collection)
         .findOneAndUpdate(
           { verificationToken: token },
-          { $set: { isVerified: true } },
+          { $set: { isVerified: true, verificationToken: null } },
           { returnDocument: "after" } // Returns updated document
         );
 
@@ -166,12 +168,10 @@ export default {
       if (!user) {
         return errorResponse(res, "No user found with this email", 404);
       }
+      
+      const otp = generateOtp();
+      const expirationTime = Date.now() + env.OTP_EXPIRATION_TIME;
 
-      // 2 Generate a 4-digit OTP and set expiration time (1 hour)
-      const otp = crypto.randomInt(1000, 9999).toString();
-      const expirationTime = Date.now() + 3600000;
-
-      // 3 Store OTP and expiration time in the database
       const dbInstance = db.get();
       if (!dbInstance) throw new Error("Database not initialized");
 
@@ -187,10 +187,8 @@ export default {
           }
         );
 
-      // 4 Send OTP via email
       const otpRes = await sendOtp(email, otp);
 
-      // 5 Respond with success
       return successResponse(res, null, "OTP sent successfully. An OTP has been sent to " + email + ".");
     } catch (error: unknown) {
       const message = getErrorMessage(error, "Something went wrong. Please try again ");

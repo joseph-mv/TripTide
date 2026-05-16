@@ -1,4 +1,4 @@
-import { refreshToken } from "./refreshToken";
+import { refreshToken } from "../services/authService";
 import { isTokenExpired } from "./isTokenExpired";
 
 

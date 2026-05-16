@@ -4,20 +4,24 @@ import userController from '../controllers/userController';
 import verifyToken from '../middleware/authMiddleware';
 import itineraryController from '../controllers/itineraryController';
 import { validate } from '../middleware/validate';
-import { contactMessageSchema } from '../validators/user.schema';
+import { 
+  contactMessageSchema,
+  idParamSchema,
+  idQuerySchema,
+  ItinerarySchema,
+  updateProfilePicSchema
+} from '../validators/user.schema';
 
 const router = express.Router();
 
 
-router.post('/contact', validate({ body: contactMessageSchema }), userController.contactMessages);
-router.post("/save-itinerary", verifyToken, itineraryController.addItinerary);
-router.get("/user-dashboard", verifyToken, userController.getUserItineraries);
-router.get("/get-ongoing-trip/:id", verifyToken, itineraryController.getOngoingTrip);
-router.get('/get-itinerary/:id', itineraryController.getItinerary)
-router.delete("/delete-itinerary", verifyToken, itineraryController.deleteItinerary);
-router.put("/edit-itinerary", verifyToken, itineraryController.editItinerary);
-router.put("/updateProfilePic", verifyToken, userController.updateUserProfilePic);
+router.post('/contact-messages', validate({ body: contactMessageSchema }), userController.contactMessages);
+router.post("/itineraries", verifyToken, validate({ body: ItinerarySchema(false) }), itineraryController.addItinerary);
+router.get("/dashboard", verifyToken, userController.getUserItineraries);
+router.get("/itineraries/ongoing/:id", verifyToken, validate({ params: idParamSchema }), itineraryController.getOngoingTrip);
+router.get('/itineraries/:id', validate({ params: idParamSchema }), itineraryController.getItinerary);
+router.delete("/itineraries/:id", verifyToken, validate({ params: idParamSchema }), itineraryController.deleteItinerary);
+router.put("/itineraries/:id", verifyToken, validate({ params: idParamSchema, body: ItinerarySchema(true) }), itineraryController.editItinerary);
+router.put("/profile-picture", verifyToken, validate({ body: updateProfilePicSchema }), userController.updateUserProfilePic);
 
 export default router;
-
-

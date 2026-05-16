@@ -5,7 +5,7 @@ var router = express.Router();
 
 
 
-router.get('/search_users', friendsController.searchUsers)
+router.get('/search', friendsController.searchUsers)
 
 export default router
 

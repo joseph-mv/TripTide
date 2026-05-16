@@ -3,11 +3,10 @@ import "./UserTrip.css"; // Import the CSS file
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../common/DeleteConfirmationModal/DeleteConfirmationModal";
-import axios from "axios";
+import { deleteItinerary } from "../../../services/userService";
 import { useNavigate } from "react-router-dom";
 import { reverseDate } from "../../../utils/reverseDate";
 import { ROUTES } from "../../../constants/routes";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 import { Trip } from "../../../types";
 
 interface UserTripProps {
@@ -19,7 +18,6 @@ interface UserTripProps {
 
 const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
   // console.log(trip)
-  var token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const handleOpenModal = (e?: React.MouseEvent) => {
@@ -35,12 +33,7 @@ const UserTrip = ({ trip, setTrips, current }: UserTripProps) => {
     e?.stopPropagation();
 
     try {
-      const response = await axios.delete(`${BASE_URL}/user/delete-itinerary`, {
-        params: { id: trip._id },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await deleteItinerary(trip._id);
       setTrips((prev) => prev.filter((item) => item._id !== trip._id));
       return response;
     } catch (error) {

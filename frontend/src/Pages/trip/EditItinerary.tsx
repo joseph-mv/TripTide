@@ -30,7 +30,6 @@ interface ItineraryResponse {
   distance: string;
   travelTime: string;
   noOfDays: number;
-  routeGeometry?: { coordinates: [number, number][] };
   coordinates?: [number, number][];
   [key: string]: unknown;
 }
@@ -64,15 +63,16 @@ const EditItinerary = () => {
       const coords: LocationState = {
         destination: res.places.endPoint,
         startingPoint: res.places.startingPoint,
-        coordinates: res.coordinates ?? res.routeGeometry?.coordinates ?? [],
+        coordinates: res.coordinates ?? [],
         distance: res.distance,
         travelTime: res.travelTime,
-        routeGeometry: res.routeGeometry?.coordinates ?? [],
+        routeGeometry: { type: "LineString", coordinates: res.coordinates ?? [] },
         selectedPlaces: (res.places.selectedPlaces as LocationState["selectedPlaces"]) ?? {},
         destinations: [],
         noOfDays: res.noOfDays,
         sortedSelectedPlaces: [],
       };
+
       const activities = res.details?.activities ?? {
         sightseeing: false,
         adventure: false,
@@ -96,11 +96,15 @@ const EditItinerary = () => {
     <div>
       <div className="itineraryContainer">
         <SelectedLocations />
-        <ItineraryForm
-          oldItinerary={trip?.itinerary}
-          oldName={trip?.name}
-          _id={trip?._id}
-        />
+        {
+          trip ?
+            <ItineraryForm
+              oldItinerary={trip?.itinerary}
+              oldName={trip?.name}
+              _id={trip?._id}
+            />
+            : <div className="loader"></div>
+        }
       </div>
     </div>
   );

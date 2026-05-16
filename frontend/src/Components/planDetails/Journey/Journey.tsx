@@ -67,7 +67,7 @@ const Journey = () => {
 
       dispatch({
         type: "DISTANCE",
-        payload: distance + " KM",
+        payload: distance,
       });
 
       dispatch({

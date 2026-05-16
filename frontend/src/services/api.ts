@@ -12,10 +12,18 @@ export type Response = {
 // Create an Axios instance
 export const axiosInstance = axios.create({
   baseURL: BASE_URL, // Set your backend API URL
-  timeout: 10000, // Optional: timeout in milliseconds
+  // timeout: 10000, // Optional: timeout in milliseconds
   headers: {
     "Content-Type": "application/json",
   },
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 axiosInstance.interceptors.response.use(

@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import db from '../config/connection';
 import collection from '../config/collection';
+import crypto from 'crypto';
+
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -10,27 +12,27 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
   tls: {
-    rejectUnauthorized: false, // For development only
+    rejectUnauthorized: process.env.NODE_ENV === 'production', // For development only
   },
 });
 
-const sendVerificationEmail = async (email: string, verificationToken: string) => {
+const sendVerificationEmail = async (name: string, email: string, verificationToken: string) => {
   const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
   console.log(verificationLink)
   const mailOptions = {
     from: `TripTide <${process.env.EMAIL_USER}>`,
     to: email,
     subject: "Email Verification - TripTide",
-    text: `Dear User,
+    text: `Dear ${name},
 
-Thank you for signing up with TripTide. Please click the link below to verify your email address:
+      Thank you for signing up with TripTide. Please click the link below to verify your email address:
 
-${verificationLink}
+      ${verificationLink}
 
-If you did not sign up for an account, please ignore this email.
+      If you did not sign up for an account, please ignore this email.
 
-Best regards,
-TripTide`,
+      Best regards,
+      TripTide`,
     html: `
       <p>Dear User,</p>
       <p>Thank you for signing up with TripTide. Please click the link below to verify your email address:</p>
@@ -42,9 +44,9 @@ TripTide`,
 
   try {
     await transporter.sendMail(mailOptions);
-    return { msg: "A verification email has been sent to " + email + "." };
+    // return { msg: "A verification email has been sent to " + email + "." };
   } catch (error) {
-    return { error: " An Error occurred , try again " };
+    throw new Error(" An Error occurred , try again ");
   }
 };
 
@@ -64,6 +66,12 @@ const hashPassword = async (password: string) => {
   const saltRounds = Number(process.env.SALT_ROUNDS) || 10;
   return bcrypt.hash(password, saltRounds);
 };
+
+const generateOtp = (length: number = 4): string => {
+  const min = 10 ** (length - 1);
+  const max = 10 ** length;
+  return crypto.randomInt(min, max).toString();
+}
 
 const sendOtp = async (email: string, otp: string) => {
 
@@ -101,7 +109,7 @@ const sendOtp = async (email: string, otp: string) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    return { msg: 'An Otp has been sent to ' + email + '.' };
+    // return { msg: 'An Otp has been sent to ' + email + '.' };
   } catch (error) {
     console.error(error)
     throw new Error(' Failed to send OTP. Please try again.')
@@ -109,5 +117,5 @@ const sendOtp = async (email: string, otp: string) => {
 };
 
 // Exporting functions individually
-export { sendVerificationEmail, checkExistingUser, hashPassword, sendOtp };
+export { sendVerificationEmail, checkExistingUser, hashPassword, sendOtp, generateOtp };
 export default { sendVerificationEmail, checkExistingUser, hashPassword, sendOtp }; // Keep default for backward compatibility if needed, but prefer named

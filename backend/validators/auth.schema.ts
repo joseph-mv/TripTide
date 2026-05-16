@@ -13,7 +13,7 @@ export const verifyEmailQuerySchema = z.object({
 export const loginSchema = z.object({
   email: z.string().trim().email(),
   password: z.string().min(1, "Password is required"),
-});
+}).strict();
 
 export const forgotPasswordSchema = z.object({
   email: z.string().trim().email(),
