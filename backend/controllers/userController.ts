@@ -22,27 +22,21 @@ export default {
 
   getUserItineraries: async (req: Request, res: Response) => {
 
-
     try {
       const userId = req.userId;
 
-      // 1️ Validate userId
-      if (!userId) {
-        return errorResponse(res, "User ID is required.", 400);
-      }
-
-      // 2️ Fetch itineraries from the database
+      // 1 Fetch itineraries from the database
       const itineraries = await db
         ?.get()
         .collection(collection.ITINERARY_Collection)
         .find({ userId }, { projection: { _id: 1, name: 1, "details.startDate": 1, 'details.endDate': 1 } })
         .toArray();
-      // 3️ Check if itineraries exist
+      // 2 Check if itineraries exist
       if (!itineraries.length) {
         return errorResponse(res, "No itineraries found.", 404);
       }
 
-      // 4️ Return the itineraries
+      // 3 Return the itineraries
       return successResponse(res, itineraries, "Itineraries retrieved successfully");
     } catch (err) {
       console.error("Error fetching user itineraries:", err);

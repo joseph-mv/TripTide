@@ -112,3 +112,4 @@ export const updateProfilePicSchema = z.object({
 
 export type IdParam = z.infer<typeof idParamSchema>;
 export type ContactMessage = z.infer<typeof contactMessageSchema>;
+export type ItineraryData = z.infer<ReturnType<typeof ItinerarySchema>>;

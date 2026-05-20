@@ -5,16 +5,19 @@ import collection from '../config/collection';
 const { ObjectId } = require("mongodb");
 import { Request, Response } from 'express';
 import { successResponse, errorResponse } from '../utils/apiResponse';
+import { ItineraryData } from '../validators/user.schema';
 
 export default {
 
   addItinerary: async (req: Request, res: Response) => {
     try {
-      const itineraryData = req.body;
+      const itineraryData = req.body as ItineraryData;
       const userId = req.userId;
       
+      if(userId !== itineraryData.userId) {
+        return errorResponse(res, "Unauthorized", 401);
+      }
       
-
       // 1 Insert data into the database
       const result = await db
         .get()
@@ -33,12 +36,13 @@ export default {
   getItinerary: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      const userId = req.userId;
 
       // Query MongoDB using Native Driver
       const itinerary = await db
         .get()
         .collection(collection.ITINERARY_Collection)
-        .findOne({ _id: new ObjectId(id) });
+        .findOne({ _id: new ObjectId(id), userId: userId });
 
       // If itinerary not found, return 404
       if (!itinerary) {
@@ -54,12 +58,13 @@ export default {
   getOngoingTrip: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      const userId = req.userId;
 
       const ongoingTrip = await db
         .get()
         .collection(collection.ITINERARY_Collection)
         .findOne(
-          { _id: new ObjectId(id) },
+          { _id: new ObjectId(id), userId: userId },
           {
             projection: {
               _id: 1,
@@ -85,12 +90,17 @@ export default {
   deleteItinerary: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      const userId = req.userId;
 
       // 1 Delete the itinerary
       const result = await db
         .get()
         .collection(collection.ITINERARY_Collection)
-        .deleteOne({ _id: new ObjectId(id) });
+        .deleteOne({ _id: new ObjectId(id), userId: userId });
+
+      if(result.deletedCount === 0) {
+        return errorResponse(res, "Itinerary not found", 404);
+      }
 
       // 2 Return success response
       return successResponse(res, null, "Itinerary deleted successfully.");
@@ -101,22 +111,28 @@ export default {
     }
   },
 
-
-
   editItinerary: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const itinerary = req.body;
-      console.log(itinerary)
+      const itineraryData = req.body as ItineraryData;
+      const userId = req.userId;
+      
+      if(userId !== itineraryData.userId) {
+        return errorResponse(res, "Unauthorized", 401);
+      }
       // 1 Update the itinerary
       const result = await db
         .get()
         .collection(collection.ITINERARY_Collection)
         .updateOne(
-          { _id: new ObjectId(id) },
-          { $set: itinerary },
+          { _id: new ObjectId(id), userId: userId },
+          { $set: itineraryData },
           { upsert: false } // Prevents insert if document is not found
         );
+
+        if(result.modifiedCount === 0) {
+          return errorResponse(res, "Itinerary not found", 404);
+        }
 
       // 2 Return success response
       return successResponse(res, null, "Itinerary updated successfully.");
